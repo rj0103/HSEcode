@@ -104,7 +104,13 @@ typedef enum
 								GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
 extern HSE_STAT_t HSE_Status;
+extern hseSrvResponse_t HSE_FormatKeyCatalogsResponse;
 extern hseSrvResponse_t HSE_ImportKeyResponse;
+extern hseKeyInfo_t     HSE_AesKeyInfo;
+extern hseSrvResponse_t HSE_GetAesKeyInfoResponse;
+extern hseSrvResponse_t HSE_AesEncryptResponse;
+extern hseSrvResponse_t HSE_AesDecryptResponse;
+extern bool             HSE_AesRoundTripMatch;
 
 /*==================================================================================================
                                      FUNCTION PROTOTYPES
@@ -120,6 +126,9 @@ hseSrvResponse_t HSE_ActivateAllMuInstances(void);
 bool HSE_genreateSHA(uint8_t* in_databuf, uint32_t in_databufLen, uint8_t* resultbuf, uint8_t resultbuf_length );
 hseSrvResponse_t HSE_FormatHseKeyCatalogs(void);
 hseSrvResponse_t HSE_ImportAESKey(void);
+hseSrvResponse_t HSE_GetAesKeyInfo(void);
+hseSrvResponse_t HSE_AesEncrypt(const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length);
+hseSrvResponse_t HSE_AesDecrypt(const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length);
 #ifdef ERASE_HSE
 bool HSE_EraseHSE(void);
 #endif //ERASE_HSE

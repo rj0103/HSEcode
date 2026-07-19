@@ -68,8 +68,8 @@ extern "C"
 	/* Table containing RAM key catalog entries */
 	static hseKeyGroupCfgEntry_t Hse_aRamKeyCatalog[] =
 	{
-	    /* RamKeyGroup_RamKey */
-	    {HSE_ALL_MU_MASK, HSE_KEY_OWNER_CUST, HSE_KEY_TYPE_AES, 4U, HSE_KEY128_BITS, {0U, 0U}},
+	    /* RamKeyGroup_RamKey. RAM key group owner must always be HSE_KEY_OWNER_ANY. */
+	    {HSE_ALL_MU_MASK, HSE_KEY_OWNER_ANY, HSE_KEY_TYPE_AES, 4U, HSE_KEY128_BITS, {0U, 0U}},
 	    /* Marker to end the key catalog */
 	    {0U, 0U, 0U, 0U, 0U, {0U, 0U}}
 	};
@@ -81,7 +81,7 @@ extern "C"
 *                                          LOCAL MACROS
 ==================================================================================================*/
 #define UTEST_START_DATA 0xFFFFFFFFFFFFFFFFUL
-#define AES_RAM_KEY_HANDLE GET_KEY_HANDLE(HSE_KEY_CATALOG_ID_RAM,1,0)
+#define AES_RAM_KEY_HANDLE GET_KEY_HANDLE(HSE_KEY_CATALOG_ID_RAM,0,0)
 
 #define HSE_INVALID_KEY_HANDLE ((hseKeyHandle_t)0xFFFFFFFFUL)
 
@@ -113,8 +113,24 @@ extern "C"
 	static const uint8_t aes128_key0[16] = {0xAA, 0xBB, 0xCC, 0xDD, 0xDD, 0xCC, 0xBB, 0xAA,
 			0xAA, 0xBB, 0xCC, 0xDD, 0xDD, 0xCC, 0xBB, 0xAA};
 
+	/* Holds the raw response of the last HSE_FormatHseKeyCatalogs() call, for inspection */
+	hseSrvResponse_t HSE_FormatKeyCatalogsResponse = HSE_SRV_RSP_GENERAL_ERROR;
+
 	/* Holds the raw response of the last HSE_ImportAESKey() call, for inspection */
 	hseSrvResponse_t HSE_ImportKeyResponse = HSE_SRV_RSP_GENERAL_ERROR;
+
+	/* Holds the stored key properties (flags/type/bit length) read back by HSE_GetAesKeyInfo(), for inspection.
+	   Never contains the raw key value - HSE does not return that for symmetric keys. */
+	hseKeyInfo_t     HSE_AesKeyInfo;
+	hseSrvResponse_t HSE_GetAesKeyInfoResponse = HSE_SRV_RSP_GENERAL_ERROR;
+
+	/* AES ECB round-trip self-test buffers/results, for inspection */
+	static const uint8_t AesTestPlainText[APP_AES128_ECB_PLAIN_TEXT_SIZE] = "GSLU_APP_AESTST";
+	static uint8_t        AesTestCipherText[APP_AES128_ECB_CIPHER_TEXT_SIZE]  = {0};
+	static uint8_t        AesTestDecryptedText[APP_AES128_ECB_PLAIN_TEXT_SIZE] = {0};
+	hseSrvResponse_t HSE_AesEncryptResponse = HSE_SRV_RSP_GENERAL_ERROR;
+	hseSrvResponse_t HSE_AesDecryptResponse = HSE_SRV_RSP_GENERAL_ERROR;
+	bool             HSE_AesRoundTripMatch  = false;
 
 	/*==================================================================================================
 	*                                    LOCAL FUNCTION PROTOTYPES
@@ -203,11 +219,22 @@ extern "C"
 		    /* =============================================================================================================================== */
 		    /*      Format HSE Nvm and Ram key catalogs                                                                                             */
 		    /* =============================================================================================================================== */
-			status = HSE_FormatHseKeyCatalogs();
+			HSE_FormatKeyCatalogsResponse = HSE_FormatHseKeyCatalogs();
+			status = (HSE_SRV_RSP_OK == HSE_FormatKeyCatalogsResponse);
 		    /* =============================================================================================================================== */
 		    /*    Import a key in the  RAM key slot                                                                                         */
 		    /* =============================================================================================================================== */
 			HSE_ImportKeyResponse = HSE_ImportAESKey();
+		    /* =============================================================================================================================== */
+		    /*    Read back the stored key's properties to confirm it was actually imported, before using it                                   */
+		    /* =============================================================================================================================== */
+			HSE_GetAesKeyInfoResponse = HSE_GetAesKeyInfo();
+		    /* =============================================================================================================================== */
+		    /*    Encrypt/decrypt round-trip test using the imported RAM AES key                                                                */
+		    /* =============================================================================================================================== */
+			HSE_AesEncryptResponse = HSE_AesEncrypt(AesTestPlainText, AesTestCipherText, sizeof(AesTestPlainText));
+			HSE_AesDecryptResponse = HSE_AesDecrypt(AesTestCipherText, AesTestDecryptedText, sizeof(AesTestCipherText));
+			HSE_AesRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesTestDecryptedText, sizeof(AesTestPlainText)));
 
 		}
 		// TODO: Protect against failed INIT
@@ -589,6 +616,118 @@ extern "C"
 		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
 
 		return RetVal;
+	}
+
+
+	/*!
+	 * @brief       Reads back the stored properties of AES_RAM_KEY_HANDLE (flags, key type, bit length) without
+	 *              exposing the raw key value. Confirms the key was actually stored by HSE_ImportAESKey().
+	 *              Result is left in HSE_AesKeyInfo for inspection.
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_GetAesKeyInfo(void)
+	{
+		hseSrvDescriptor_t*   pHseSrvDescriptor;
+		hseGetKeyInfoSrv_t*   pGetKeyInfoReq;
+		hseSrvResponse_t      RetVal      = HSE_SRV_RSP_GENERAL_ERROR;
+		uint8                 u8MuChannel = Hse_Ip_GetFreeChannel(MU0_INSTANCE_U8);
+
+		memset(&HSE_AesKeyInfo, 0, sizeof(HSE_AesKeyInfo));
+
+		/* Optimize a bit the code by storing the address of the channel's descriptor in a pointer */
+		pHseSrvDescriptor = &Hse_aSrvDescriptor[u8MuChannel];
+		memset(pHseSrvDescriptor, 0, sizeof(hseSrvDescriptor_t));
+		pGetKeyInfoReq = &(pHseSrvDescriptor->hseSrv.getKeyInfoReq);
+
+		/* Create the service request for HSE by setting the descriptor's members */
+		pHseSrvDescriptor->srvId    = HSE_SRV_ID_GET_KEY_INFO;
+		pGetKeyInfoReq->keyHandle   = AES_RAM_KEY_HANDLE;
+		pGetKeyInfoReq->pKeyInfo    = (HOST_ADDR)&HSE_AesKeyInfo;
+
+		/* Build the request to be sent to Hse Ip layer */
+		HseIp_aRequest[u8MuChannel].eReqType   = HSE_IP_REQTYPE_SYNC;
+		HseIp_aRequest[u8MuChannel].u32Timeout = TIMEOUT_TICKS_U32;
+
+		/* Send the request to Hse Ip layer */
+		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
+
+		return RetVal;
+	}
+
+
+	/*!
+	 * @brief       Runs a one-pass AES-128 ECB cipher operation using the RAM key imported by HSE_ImportAESKey().
+	 * @details     Shared by HSE_AesEncrypt() and HSE_AesDecrypt(); not exposed outside this file.
+	 *
+	 * @param[in]   direction   HSE_CIPHER_DIR_ENCRYPT or HSE_CIPHER_DIR_DECRYPT
+	 * @param[in]   pInput      Source buffer (plaintext for encrypt, ciphertext for decrypt)
+	 * @param[out]  pOutput     Destination buffer (ciphertext for encrypt, plaintext for decrypt)
+	 * @param[in]   length      Length in bytes of pInput/pOutput; must be a multiple of 16 (AES block size)
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	static hseSrvResponse_t HSE_AesCipherECB(hseCipherDir_t direction, const uint8_t* pInput, uint8_t* pOutput, uint32_t length)
+	{
+		hseSrvDescriptor_t* pHseSrvDescriptor;
+		hseSymCipherSrv_t*  pCipherReq;
+		hseSrvResponse_t    RetVal      = HSE_SRV_RSP_GENERAL_ERROR;
+		uint8               u8MuChannel = Hse_Ip_GetFreeChannel(MU0_INSTANCE_U8);
+
+		/* Optimize a bit the code by storing the address of the channel's descriptor in a pointer */
+		pHseSrvDescriptor = &Hse_aSrvDescriptor[u8MuChannel];
+		memset(pHseSrvDescriptor, 0, sizeof(hseSrvDescriptor_t));
+		pCipherReq = &(pHseSrvDescriptor->hseSrv.symCipherReq);
+
+		/* Create the service request for HSE by setting the descriptor's members */
+		pHseSrvDescriptor->srvId    = HSE_SRV_ID_SYM_CIPHER;
+		pCipherReq->accessMode      = HSE_ACCESS_MODE_ONE_PASS;
+		pCipherReq->cipherAlgo      = HSE_CIPHER_ALGO_AES;
+		pCipherReq->cipherBlockMode = HSE_CIPHER_BLOCK_MODE_ECB;
+		pCipherReq->cipherDir       = direction;
+		pCipherReq->sgtOption       = HSE_SGT_OPTION_NONE;
+		pCipherReq->keyHandle       = AES_RAM_KEY_HANDLE;
+		pCipherReq->pIV             = 0U; /* ignored for ECB */
+		pCipherReq->inputLength     = length;
+		pCipherReq->pInput          = (HOST_ADDR)pInput;
+		pCipherReq->pOutput         = (HOST_ADDR)pOutput;
+
+		/* Build the request to be sent to Hse Ip layer */
+		HseIp_aRequest[u8MuChannel].eReqType   = HSE_IP_REQTYPE_SYNC;
+		HseIp_aRequest[u8MuChannel].u32Timeout = TIMEOUT_TICKS_U32;
+
+		/* Send the request to Hse Ip layer */
+		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
+
+		return RetVal;
+	}
+
+	/*!
+	 * @brief       Encrypts pPlainText with the AES-128 RAM key (AES_RAM_KEY_HANDLE) using ECB mode.
+	 *
+	 * @param[in]   pPlainText   Plaintext buffer, length must be a multiple of 16 bytes
+	 * @param[out]  pCipherText  Output buffer for the ciphertext, same length as pPlainText
+	 * @param[in]   length       Length in bytes of both buffers
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_AesEncrypt(const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length)
+	{
+		return HSE_AesCipherECB(HSE_CIPHER_DIR_ENCRYPT, pPlainText, pCipherText, length);
+	}
+
+	/*!
+	 * @brief       Decrypts pCipherText with the AES-128 RAM key (AES_RAM_KEY_HANDLE) using ECB mode.
+	 *
+	 * @param[in]   pCipherText  Ciphertext buffer, length must be a multiple of 16 bytes
+	 * @param[out]  pPlainText   Output buffer for the recovered plaintext, same length as pCipherText
+	 * @param[in]   length       Length in bytes of both buffers
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_AesDecrypt(const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length)
+	{
+		return HSE_AesCipherECB(HSE_CIPHER_DIR_DECRYPT, pCipherText, pPlainText, length);
 	}
 
 
