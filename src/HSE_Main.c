@@ -233,11 +233,22 @@ extern "C"
 
 			status = HSE_genreateSHA((uint8_t*)inbuff_SHA,strlen(inbuff_SHA),SHA_Result,sizeof(SHA_Result));
 
+#ifdef RUN_FORMAT_KEY_CATALOGS_IN_INIT
 		    /* =============================================================================================================================== */
-		    /*      Format HSE Nvm and Ram key catalogs                                                                                             */
+		    /*      Format HSE Nvm and Ram key catalogs. This is a one-time provisioning step: once HSE_STATUS_INSTALL_OK is set, the         */
+		    /*      catalogs already exist, so skip re-formatting (it would wipe existing keys, and repeated NVM reformats can also fail      */
+		    /*      with HSE_SRV_RSP_NOT_ENOUGH_SPACE). Only run it on a genuinely blank/never-provisioned HSE.                               */
 		    /* =============================================================================================================================== */
-			HSE_FormatKeyCatalogsResponse = HSE_FormatHseKeyCatalogs();
+			if (0U != (HseStatus & HSE_STATUS_INSTALL_OK))
+			{
+				HSE_FormatKeyCatalogsResponse = HSE_SRV_RSP_OK; /* already installed - nothing to do */
+			}
+			else
+			{
+				HSE_FormatKeyCatalogsResponse = HSE_FormatHseKeyCatalogs();
+			}
 			status = (HSE_SRV_RSP_OK == HSE_FormatKeyCatalogsResponse);
+#endif // RUN_FORMAT_KEY_CATALOGS_IN_INIT
 		    /* =============================================================================================================================== */
 		    /*    Import a key in the  RAM key slot                                                                                         */
 		    /* =============================================================================================================================== */
@@ -252,6 +263,12 @@ extern "C"
 			HSE_AesEncryptResponse = HSE_AesEncrypt(AesTestPlainText, AesTestEncryptedData, sizeof(AesTestPlainText));
 			HSE_AesDecryptResponse = HSE_AesDecrypt(AesTestEncryptedData, AesTestDecryptedText, sizeof(AesTestEncryptedData));
 			HSE_AesRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesTestDecryptedText, sizeof(AesTestPlainText)));
+#ifdef ERASE_NVM_KEYS
+		    /* =============================================================================================================================== */
+		    /*    DEV ONLY: wipe the NVM test key so it gets freshly re-provisioned below. Undefine ERASE_NVM_KEYS for normal persistent use.  */
+		    /* =============================================================================================================================== */
+			(void)HSE_EraseNvmAesKey();
+#endif // ERASE_NVM_KEYS
 		    /* =============================================================================================================================== */
 		    /*    Import a persistent AES key into the NVM key catalog (only actually writes on the first boot)                               */
 		    /* =============================================================================================================================== */
@@ -780,6 +797,49 @@ extern "C"
 		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
 
 		/* Refresh the cached key info now that the key has (hopefully) been written */
+		HSE_GetNvmAesKeyInfoResponse = HSE_GetNvmAesKeyInfo();
+
+		return RetVal;
+	}
+
+
+	/*!
+	 * @brief       Erases just the NVM key group holding AES_NVM_KEY_HANDLE, leaving the RAM catalog and
+	 *              any other NVM key groups untouched.
+	 * @details     Not called automatically anywhere - RAM keys already clear themselves on every reset,
+	 *              but the NVM key persists across reset/reflash, so call this manually (e.g. temporarily
+	 *              from HSE_Init(), or from a debugger) whenever you want to wipe the NVM test key and let
+	 *              HSE_ImportNvmAESKey() re-provision it from scratch on the next boot. Requires CUST
+	 *              SuperUser rights for this group's owner (already granted by default in CUST_DEL life
+	 *              cycle, which is what HSE_STATUS_CUST_SUPER_USER being set confirms).
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_EraseNvmAesKey(void)
+	{
+		hseSrvDescriptor_t*  pHseSrvDescriptor;
+		hseEraseKeySrv_t*    pEraseKeyReq;
+		hseSrvResponse_t     RetVal      = HSE_SRV_RSP_GENERAL_ERROR;
+		uint8                u8MuChannel = Hse_Ip_GetFreeChannel(MU0_INSTANCE_U8);
+
+		/* Optimize a bit the code by storing the address of the channel's descriptor in a pointer */
+		pHseSrvDescriptor = &Hse_aSrvDescriptor[u8MuChannel];
+		memset(pHseSrvDescriptor, 0, sizeof(hseSrvDescriptor_t));
+		pEraseKeyReq = &(pHseSrvDescriptor->hseSrv.eraseKeyReq);
+
+		/* Create the service request for HSE by setting the descriptor's members */
+		pHseSrvDescriptor->srvId       = HSE_SRV_ID_ERASE_KEY;
+		pEraseKeyReq->keyHandle        = AES_NVM_KEY_HANDLE;
+		pEraseKeyReq->eraseKeyOptions  = HSE_ERASE_KEYGROUP_ON_MU_IF;
+
+		/* Build the request to be sent to Hse Ip layer */
+		HseIp_aRequest[u8MuChannel].eReqType   = HSE_IP_REQTYPE_SYNC;
+		HseIp_aRequest[u8MuChannel].u32Timeout = TIMEOUT_TICKS_U32;
+
+		/* Send the request to Hse Ip layer */
+		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
+
+		/* Refresh the cached key info so HSE_NvmAesKeyInfo/HSE_GetNvmAesKeyInfoResponse reflect the erase */
 		HSE_GetNvmAesKeyInfoResponse = HSE_GetNvmAesKeyInfo();
 
 		return RetVal;
