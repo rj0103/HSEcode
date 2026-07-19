@@ -111,6 +111,12 @@ extern hseSrvResponse_t HSE_GetAesKeyInfoResponse;
 extern hseSrvResponse_t HSE_AesEncryptResponse;
 extern hseSrvResponse_t HSE_AesDecryptResponse;
 extern bool             HSE_AesRoundTripMatch;
+extern hseSrvResponse_t HSE_ImportNvmKeyResponse;
+extern hseKeyInfo_t     HSE_NvmAesKeyInfo;
+extern hseSrvResponse_t HSE_GetNvmAesKeyInfoResponse;
+extern hseSrvResponse_t HSE_AesEncryptNvmResponse;
+extern hseSrvResponse_t HSE_AesDecryptNvmResponse;
+extern bool             HSE_AesNvmRoundTripMatch;
 
 /*==================================================================================================
                                      FUNCTION PROTOTYPES
@@ -129,6 +135,10 @@ hseSrvResponse_t HSE_ImportAESKey(void);
 hseSrvResponse_t HSE_GetAesKeyInfo(void);
 hseSrvResponse_t HSE_AesEncrypt(const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length);
 hseSrvResponse_t HSE_AesDecrypt(const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length);
+hseSrvResponse_t HSE_ImportNvmAESKey(void);
+hseSrvResponse_t HSE_GetNvmAesKeyInfo(void);
+hseSrvResponse_t HSE_AesEncryptNvm(const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length);
+hseSrvResponse_t HSE_AesDecryptNvm(const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length);
 #ifdef ERASE_HSE
 bool HSE_EraseHSE(void);
 #endif //ERASE_HSE

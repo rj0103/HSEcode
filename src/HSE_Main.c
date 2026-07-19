@@ -82,6 +82,7 @@ extern "C"
 ==================================================================================================*/
 #define UTEST_START_DATA 0xFFFFFFFFFFFFFFFFUL
 #define AES_RAM_KEY_HANDLE GET_KEY_HANDLE(HSE_KEY_CATALOG_ID_RAM,0,0)
+#define AES_NVM_KEY_HANDLE GET_KEY_HANDLE(HSE_KEY_CATALOG_ID_NVM,0,0)
 
 #define HSE_INVALID_KEY_HANDLE ((hseKeyHandle_t)0xFFFFFFFFUL)
 
@@ -126,11 +127,27 @@ extern "C"
 
 	/* AES ECB round-trip self-test buffers/results, for inspection */
 	static const uint8_t AesTestPlainText[APP_AES128_ECB_PLAIN_TEXT_SIZE] = "GSLU_APP_AESTST";
-	static uint8_t        AesTestCipherText[APP_AES128_ECB_CIPHER_TEXT_SIZE]  = {0};
+	static uint8_t        AesTestEncryptedData[APP_AES128_ECB_CIPHER_TEXT_SIZE]  = {0};
 	static uint8_t        AesTestDecryptedText[APP_AES128_ECB_PLAIN_TEXT_SIZE] = {0};
 	hseSrvResponse_t HSE_AesEncryptResponse = HSE_SRV_RSP_GENERAL_ERROR;
 	hseSrvResponse_t HSE_AesDecryptResponse = HSE_SRV_RSP_GENERAL_ERROR;
 	bool             HSE_AesRoundTripMatch  = false;
+
+	/* Holds the raw response of the last HSE_ImportNvmAESKey() call, for inspection */
+	hseSrvResponse_t HSE_ImportNvmKeyResponse = HSE_SRV_RSP_GENERAL_ERROR;
+
+	/* Holds the stored key properties read back for AES_NVM_KEY_HANDLE, for inspection.
+	   Also used by HSE_ImportNvmAESKey() to detect a key already provisioned by a previous boot,
+	   since (unlike the RAM key) the NVM key persists across reset. */
+	hseKeyInfo_t     HSE_NvmAesKeyInfo;
+	hseSrvResponse_t HSE_GetNvmAesKeyInfoResponse = HSE_SRV_RSP_GENERAL_ERROR;
+
+	/* AES ECB round-trip self-test buffers/results for the NVM key, for inspection */
+	static uint8_t   AesNvmTestEncryptedData[APP_AES128_ECB_CIPHER_TEXT_SIZE]  = {0};
+	static uint8_t   AesNvmTestDecryptedText[APP_AES128_ECB_PLAIN_TEXT_SIZE] = {0};
+	hseSrvResponse_t HSE_AesEncryptNvmResponse = HSE_SRV_RSP_GENERAL_ERROR;
+	hseSrvResponse_t HSE_AesDecryptNvmResponse = HSE_SRV_RSP_GENERAL_ERROR;
+	bool             HSE_AesNvmRoundTripMatch  = false;
 
 	/*==================================================================================================
 	*                                    LOCAL FUNCTION PROTOTYPES
@@ -232,9 +249,19 @@ extern "C"
 		    /* =============================================================================================================================== */
 		    /*    Encrypt/decrypt round-trip test using the imported RAM AES key                                                                */
 		    /* =============================================================================================================================== */
-			HSE_AesEncryptResponse = HSE_AesEncrypt(AesTestPlainText, AesTestCipherText, sizeof(AesTestPlainText));
-			HSE_AesDecryptResponse = HSE_AesDecrypt(AesTestCipherText, AesTestDecryptedText, sizeof(AesTestCipherText));
+			HSE_AesEncryptResponse = HSE_AesEncrypt(AesTestPlainText, AesTestEncryptedData, sizeof(AesTestPlainText));
+			HSE_AesDecryptResponse = HSE_AesDecrypt(AesTestEncryptedData, AesTestDecryptedText, sizeof(AesTestEncryptedData));
 			HSE_AesRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesTestDecryptedText, sizeof(AesTestPlainText)));
+		    /* =============================================================================================================================== */
+		    /*    Import a persistent AES key into the NVM key catalog (only actually writes on the first boot)                               */
+		    /* =============================================================================================================================== */
+			HSE_ImportNvmKeyResponse = HSE_ImportNvmAESKey();
+		    /* =============================================================================================================================== */
+		    /*    Encrypt/decrypt round-trip test using the imported NVM AES key                                                                */
+		    /* =============================================================================================================================== */
+			HSE_AesEncryptNvmResponse = HSE_AesEncryptNvm(AesTestPlainText, AesNvmTestEncryptedData, sizeof(AesTestPlainText));
+			HSE_AesDecryptNvmResponse = HSE_AesDecryptNvm(AesNvmTestEncryptedData, AesNvmTestDecryptedText, sizeof(AesNvmTestEncryptedData));
+			HSE_AesNvmRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesNvmTestDecryptedText, sizeof(AesTestPlainText)));
 
 		}
 		// TODO: Protect against failed INIT
@@ -657,17 +684,123 @@ extern "C"
 
 
 	/*!
-	 * @brief       Runs a one-pass AES-128 ECB cipher operation using the RAM key imported by HSE_ImportAESKey().
-	 * @details     Shared by HSE_AesEncrypt() and HSE_AesDecrypt(); not exposed outside this file.
+	 * @brief       Reads back the stored properties of AES_NVM_KEY_HANDLE (flags, key type, bit length) without
+	 *              exposing the raw key value. HSE_SRV_RSP_KEY_EMPTY means the slot has never been provisioned yet.
+	 *              Result is left in HSE_NvmAesKeyInfo for inspection.
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_GetNvmAesKeyInfo(void)
+	{
+		hseSrvDescriptor_t*   pHseSrvDescriptor;
+		hseGetKeyInfoSrv_t*   pGetKeyInfoReq;
+		hseSrvResponse_t      RetVal      = HSE_SRV_RSP_GENERAL_ERROR;
+		uint8                 u8MuChannel = Hse_Ip_GetFreeChannel(MU0_INSTANCE_U8);
+
+		memset(&HSE_NvmAesKeyInfo, 0, sizeof(HSE_NvmAesKeyInfo));
+
+		/* Optimize a bit the code by storing the address of the channel's descriptor in a pointer */
+		pHseSrvDescriptor = &Hse_aSrvDescriptor[u8MuChannel];
+		memset(pHseSrvDescriptor, 0, sizeof(hseSrvDescriptor_t));
+		pGetKeyInfoReq = &(pHseSrvDescriptor->hseSrv.getKeyInfoReq);
+
+		/* Create the service request for HSE by setting the descriptor's members */
+		pHseSrvDescriptor->srvId    = HSE_SRV_ID_GET_KEY_INFO;
+		pGetKeyInfoReq->keyHandle   = AES_NVM_KEY_HANDLE;
+		pGetKeyInfoReq->pKeyInfo    = (HOST_ADDR)&HSE_NvmAesKeyInfo;
+
+		/* Build the request to be sent to Hse Ip layer */
+		HseIp_aRequest[u8MuChannel].eReqType   = HSE_IP_REQTYPE_SYNC;
+		HseIp_aRequest[u8MuChannel].u32Timeout = TIMEOUT_TICKS_U32;
+
+		/* Send the request to Hse Ip layer */
+		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
+
+		return RetVal;
+	}
+
+
+	/*!
+	 * @brief       Imports aes128_key0 as a plain, unauthenticated AES128 key into the NVM key catalog slot
+	 *              identified by AES_NVM_KEY_HANDLE (group 0, slot 0). Unlike the RAM key, this key persists
+	 *              across reset once written to internal flash.
+	 * @details     A plain, unauthenticated import is only allowed into an EMPTY NVM slot; overwriting an
+	 *              existing NVM key requires an authenticated import. So on every boot this first calls
+	 *              HSE_GetNvmAesKeyInfo() to check whether the slot is already provisioned from a previous
+	 *              boot, and skips re-importing if it is (avoids failing on the 2nd+ boot, and avoids
+	 *              unnecessary flash wear from re-writing the same key every boot).
+	 *
+	 * @return      hseSrvResponse_t. HSE_SRV_RSP_OK also covers the "already provisioned, skipped" case.
+	 */
+	hseSrvResponse_t HSE_ImportNvmAESKey(void)
+	{
+		hseSrvDescriptor_t*      pHseSrvDescriptor;
+		hseImportKeySrv_t*       pImportKeyReq;
+		hseSrvResponse_t         RetVal      = HSE_SRV_RSP_GENERAL_ERROR;
+		uint8                    u8MuChannel;
+		static hseKeyInfo_t      KeyInfo;
+
+		HSE_GetNvmAesKeyInfoResponse = HSE_GetNvmAesKeyInfo();
+		if (HSE_SRV_RSP_OK == HSE_GetNvmAesKeyInfoResponse)
+		{
+			/* Already provisioned by an earlier boot - nothing to do. */
+			return HSE_SRV_RSP_OK;
+		}
+
+		u8MuChannel = Hse_Ip_GetFreeChannel(MU0_INSTANCE_U8);
+
+		memset(&KeyInfo, 0, sizeof(KeyInfo));
+		KeyInfo.keyFlags   = (HSE_KF_USAGE_ENCRYPT | HSE_KF_USAGE_DECRYPT);
+		KeyInfo.keyBitLen  = 128U;
+		KeyInfo.keyCounter = 0U;
+		KeyInfo.keyType    = HSE_KEY_TYPE_AES;
+
+		/* Optimize a bit the code by storing the address of the channel's descriptor in a pointer */
+		pHseSrvDescriptor = &Hse_aSrvDescriptor[u8MuChannel];
+		memset(pHseSrvDescriptor, 0, sizeof(hseSrvDescriptor_t));
+		pImportKeyReq = &(pHseSrvDescriptor->hseSrv.importKeyReq);
+
+		pHseSrvDescriptor->srvId                  = HSE_SRV_ID_IMPORT_KEY;
+		pImportKeyReq->targetKeyHandle            = AES_NVM_KEY_HANDLE;
+		pImportKeyReq->pKeyInfo                   = (HOST_ADDR)&KeyInfo;
+		pImportKeyReq->pKey[0]                    = 0U;
+		pImportKeyReq->pKey[1]                    = 0U;
+		pImportKeyReq->pKey[2]                    = (HOST_ADDR)aes128_key0;
+		pImportKeyReq->keyLen[0]                  = 0U;
+		pImportKeyReq->keyLen[1]                  = 0U;
+		pImportKeyReq->keyLen[2]                  = sizeof(aes128_key0);
+		pImportKeyReq->cipher.cipherKeyHandle      = HSE_INVALID_KEY_HANDLE;
+		pImportKeyReq->keyContainer.authKeyHandle  = HSE_INVALID_KEY_HANDLE;
+
+		/* Build the request to be sent to Hse Ip layer */
+		HseIp_aRequest[u8MuChannel].eReqType   = HSE_IP_REQTYPE_SYNC;
+		HseIp_aRequest[u8MuChannel].u32Timeout = TIMEOUT_TICKS_U32;
+
+		/* Send the request to Hse Ip layer */
+		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
+
+		/* Refresh the cached key info now that the key has (hopefully) been written */
+		HSE_GetNvmAesKeyInfoResponse = HSE_GetNvmAesKeyInfo();
+
+		return RetVal;
+	}
+
+
+	/*!
+	 * @brief       Runs a one-pass AES-128 ECB cipher operation using the given AES key handle
+	 *              (AES_RAM_KEY_HANDLE or AES_NVM_KEY_HANDLE).
+	 * @details     Shared by HSE_AesEncrypt()/HSE_AesDecrypt() (RAM) and HSE_AesEncryptNvm()/HSE_AesDecryptNvm()
+	 *              (NVM); not exposed outside this file.
 	 *
 	 * @param[in]   direction   HSE_CIPHER_DIR_ENCRYPT or HSE_CIPHER_DIR_DECRYPT
+	 * @param[in]   keyHandle   AES_RAM_KEY_HANDLE or AES_NVM_KEY_HANDLE
 	 * @param[in]   pInput      Source buffer (plaintext for encrypt, ciphertext for decrypt)
 	 * @param[out]  pOutput     Destination buffer (ciphertext for encrypt, plaintext for decrypt)
 	 * @param[in]   length      Length in bytes of pInput/pOutput; must be a multiple of 16 (AES block size)
 	 *
 	 * @return      hseSrvResponse_t
 	 */
-	static hseSrvResponse_t HSE_AesCipherECB(hseCipherDir_t direction, const uint8_t* pInput, uint8_t* pOutput, uint32_t length)
+	static hseSrvResponse_t HSE_Aes128EncryptDecrypt(hseCipherDir_t direction, hseKeyHandle_t keyHandle, const uint8_t* pInput, uint8_t* pOutput, uint32_t length)
 	{
 		hseSrvDescriptor_t* pHseSrvDescriptor;
 		hseSymCipherSrv_t*  pCipherReq;
@@ -686,7 +819,7 @@ extern "C"
 		pCipherReq->cipherBlockMode = HSE_CIPHER_BLOCK_MODE_ECB;
 		pCipherReq->cipherDir       = direction;
 		pCipherReq->sgtOption       = HSE_SGT_OPTION_NONE;
-		pCipherReq->keyHandle       = AES_RAM_KEY_HANDLE;
+		pCipherReq->keyHandle       = keyHandle;
 		pCipherReq->pIV             = 0U; /* ignored for ECB */
 		pCipherReq->inputLength     = length;
 		pCipherReq->pInput          = (HOST_ADDR)pInput;
@@ -713,7 +846,7 @@ extern "C"
 	 */
 	hseSrvResponse_t HSE_AesEncrypt(const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length)
 	{
-		return HSE_AesCipherECB(HSE_CIPHER_DIR_ENCRYPT, pPlainText, pCipherText, length);
+		return HSE_Aes128EncryptDecrypt(HSE_CIPHER_DIR_ENCRYPT, AES_RAM_KEY_HANDLE, pPlainText, pCipherText, length);
 	}
 
 	/*!
@@ -727,7 +860,35 @@ extern "C"
 	 */
 	hseSrvResponse_t HSE_AesDecrypt(const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length)
 	{
-		return HSE_AesCipherECB(HSE_CIPHER_DIR_DECRYPT, pCipherText, pPlainText, length);
+		return HSE_Aes128EncryptDecrypt(HSE_CIPHER_DIR_DECRYPT, AES_RAM_KEY_HANDLE, pCipherText, pPlainText, length);
+	}
+
+	/*!
+	 * @brief       Encrypts pPlainText with the AES-128 NVM key (AES_NVM_KEY_HANDLE) using ECB mode.
+	 *
+	 * @param[in]   pPlainText   Plaintext buffer, length must be a multiple of 16 bytes
+	 * @param[out]  pCipherText  Output buffer for the ciphertext, same length as pPlainText
+	 * @param[in]   length       Length in bytes of both buffers
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_AesEncryptNvm(const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length)
+	{
+		return HSE_Aes128EncryptDecrypt(HSE_CIPHER_DIR_ENCRYPT, AES_NVM_KEY_HANDLE, pPlainText, pCipherText, length);
+	}
+
+	/*!
+	 * @brief       Decrypts pCipherText with the AES-128 NVM key (AES_NVM_KEY_HANDLE) using ECB mode.
+	 *
+	 * @param[in]   pCipherText  Ciphertext buffer, length must be a multiple of 16 bytes
+	 * @param[out]  pPlainText   Output buffer for the recovered plaintext, same length as pCipherText
+	 * @param[in]   length       Length in bytes of both buffers
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_AesDecryptNvm(const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length)
+	{
+		return HSE_Aes128EncryptDecrypt(HSE_CIPHER_DIR_DECRYPT, AES_NVM_KEY_HANDLE, pCipherText, pPlainText, length);
 	}
 
 
