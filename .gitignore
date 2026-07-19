@@ -1,0 +1,10 @@
+# S32 Design Studio build output (compiled binaries, object files, maps)
+Debug_FLASH/
+Debug_RAM/
+Release_FLASH/
+Release_RAM/
+Debug/
+Release/
+
+# Claude Code local session settings (machine/user specific)
+.claude/settings.local.json
