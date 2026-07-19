@@ -23,6 +23,7 @@ extern "C"{
 ==================================================================================================*/
 #include "APP_Main.h"
 #include "HSE_Main.h"
+#include "HSE_FlashStorage_Example.h"
 #include "LED.h"
 
 
@@ -94,6 +95,7 @@ extern "C"{
 	     else
 	     {
 	    	 	 HSE_Init();
+	    	 	 HSE_Example_StoreEncryptedDataDemo();
 
 	     }
 

@@ -141,6 +141,8 @@ hseSrvResponse_t HSE_ImportAESKey(void);
 hseSrvResponse_t HSE_GetAesKeyInfo(void);
 hseSrvResponse_t HSE_AesEncrypt(const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length);
 hseSrvResponse_t HSE_AesDecrypt(const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length);
+hseSrvResponse_t HSE_AesCtrEncryptNvm(const uint8_t* pIV, const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length);
+hseSrvResponse_t HSE_AesCtrDecryptNvm(const uint8_t* pIV, const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length);
 hseSrvResponse_t HSE_ImportNvmAESKey(void);
 hseSrvResponse_t HSE_GetNvmAesKeyInfo(void);
 hseSrvResponse_t HSE_EraseNvmAesKey(void);

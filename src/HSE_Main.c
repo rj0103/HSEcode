@@ -1032,6 +1032,91 @@ extern "C"
 	}
 
 	/*!
+	 * @brief       Runs a one-pass AES-128 CTR cipher operation using the given AES key handle.
+	 * @details     Unlike ECB/CBC, CTR needs no block-alignment or padding - the ciphertext is
+	 *              always exactly the same length as the plaintext, for any length. In exchange,
+	 *              pIV (16 bytes) must be a nonce/counter value that is NEVER reused with the same
+	 *              key: reusing an IV lets an attacker XOR the two ciphertexts together and recover
+	 *              the XOR of the two plaintexts, which breaks the encryption. Generate a fresh
+	 *              random IV per message (e.g. via HSE_GetTRNG()) and store it alongside the
+	 *              ciphertext - it does not need to be kept secret, only unique.
+	 *
+	 * @param[in]   direction   HSE_CIPHER_DIR_ENCRYPT or HSE_CIPHER_DIR_DECRYPT
+	 * @param[in]   keyHandle   The AES key to use
+	 * @param[in]   pIV         16-byte nonce/counter, must match between encrypt and decrypt
+	 * @param[in]   pInput      Source buffer (plaintext for encrypt, ciphertext for decrypt)
+	 * @param[out]  pOutput     Destination buffer, same length as pInput
+	 * @param[in]   length      Length in bytes of pInput/pOutput; any value, no alignment needed
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	static hseSrvResponse_t HSE_Aes128CtrEncryptDecrypt(hseCipherDir_t direction, hseKeyHandle_t keyHandle, const uint8_t* pIV, const uint8_t* pInput, uint8_t* pOutput, uint32_t length)
+	{
+		hseSrvDescriptor_t* pHseSrvDescriptor;
+		hseSymCipherSrv_t*  pCipherReq;
+		hseSrvResponse_t    RetVal      = HSE_SRV_RSP_GENERAL_ERROR;
+		uint8               u8MuChannel = Hse_Ip_GetFreeChannel(MU0_INSTANCE_U8);
+
+		/* Optimize a bit the code by storing the address of the channel's descriptor in a pointer */
+		pHseSrvDescriptor = &Hse_aSrvDescriptor[u8MuChannel];
+		memset(pHseSrvDescriptor, 0, sizeof(hseSrvDescriptor_t));
+		pCipherReq = &(pHseSrvDescriptor->hseSrv.symCipherReq);
+
+		/* Create the service request for HSE by setting the descriptor's members */
+		pHseSrvDescriptor->srvId    = HSE_SRV_ID_SYM_CIPHER;
+		pCipherReq->accessMode      = HSE_ACCESS_MODE_ONE_PASS;
+		pCipherReq->cipherAlgo      = HSE_CIPHER_ALGO_AES;
+		pCipherReq->cipherBlockMode = HSE_CIPHER_BLOCK_MODE_CTR;
+		pCipherReq->cipherDir       = direction;
+		pCipherReq->sgtOption       = HSE_SGT_OPTION_NONE;
+		pCipherReq->keyHandle       = keyHandle;
+		pCipherReq->pIV             = (HOST_ADDR)pIV;
+		pCipherReq->inputLength     = length;
+		pCipherReq->pInput          = (HOST_ADDR)pInput;
+		pCipherReq->pOutput         = (HOST_ADDR)pOutput;
+
+		/* Build the request to be sent to Hse Ip layer */
+		HseIp_aRequest[u8MuChannel].eReqType   = HSE_IP_REQTYPE_SYNC;
+		HseIp_aRequest[u8MuChannel].u32Timeout = TIMEOUT_TICKS_U32;
+
+		/* Send the request to Hse Ip layer */
+		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
+
+		return RetVal;
+	}
+
+	/*!
+	 * @brief       Encrypts pPlainText with the AES-128 NVM key (AES_NVM_KEY_HANDLE) using CTR mode.
+	 *              Any length is allowed, no padding needed - see HSE_Aes128CtrEncryptDecrypt().
+	 *
+	 * @param[in]   pIV          16-byte nonce, must be fresh/unique per message (e.g. from HSE_GetTRNG())
+	 * @param[in]   pPlainText   Plaintext buffer, any length
+	 * @param[out]  pCipherText  Output buffer for the ciphertext, same length as pPlainText
+	 * @param[in]   length       Length in bytes of both buffers
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_AesCtrEncryptNvm(const uint8_t* pIV, const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length)
+	{
+		return HSE_Aes128CtrEncryptDecrypt(HSE_CIPHER_DIR_ENCRYPT, AES_NVM_KEY_HANDLE, pIV, pPlainText, pCipherText, length);
+	}
+
+	/*!
+	 * @brief       Decrypts pCipherText with the AES-128 NVM key (AES_NVM_KEY_HANDLE) using CTR mode.
+	 *
+	 * @param[in]   pIV          The same 16-byte nonce that was used to encrypt this ciphertext
+	 * @param[in]   pCipherText  Ciphertext buffer, any length
+	 * @param[out]  pPlainText   Output buffer for the recovered plaintext, same length as pCipherText
+	 * @param[in]   length       Length in bytes of both buffers
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_AesCtrDecryptNvm(const uint8_t* pIV, const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length)
+	{
+		return HSE_Aes128CtrEncryptDecrypt(HSE_CIPHER_DIR_DECRYPT, AES_NVM_KEY_HANDLE, pIV, pCipherText, pPlainText, length);
+	}
+
+	/*!
 	 * @brief       Encrypts pPlainText with the AES-128 NVM key (AES_NVM_KEY_HANDLE) using ECB mode.
 	 *
 	 * @param[in]   pPlainText   Plaintext buffer, length must be a multiple of 16 bytes
