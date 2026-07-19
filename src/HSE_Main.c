@@ -83,6 +83,7 @@ extern "C"
 #define UTEST_START_DATA 0xFFFFFFFFFFFFFFFFUL
 #define AES_RAM_KEY_HANDLE GET_KEY_HANDLE(HSE_KEY_CATALOG_ID_RAM,0,0)
 #define AES_NVM_KEY_HANDLE GET_KEY_HANDLE(HSE_KEY_CATALOG_ID_NVM,0,0)
+#define AES_GENERATED_RAM_KEY_HANDLE GET_KEY_HANDLE(HSE_KEY_CATALOG_ID_RAM,0,1)
 
 #define HSE_INVALID_KEY_HANDLE ((hseKeyHandle_t)0xFFFFFFFFUL)
 
@@ -148,6 +149,22 @@ extern "C"
 	hseSrvResponse_t HSE_AesEncryptNvmResponse = HSE_SRV_RSP_GENERAL_ERROR;
 	hseSrvResponse_t HSE_AesDecryptNvmResponse = HSE_SRV_RSP_GENERAL_ERROR;
 	bool             HSE_AesNvmRoundTripMatch  = false;
+
+	/* Holds the raw response of the last HSE_GenerateAesKey() call, for inspection */
+	hseSrvResponse_t HSE_GenerateAesKeyResponse = HSE_SRV_RSP_GENERAL_ERROR;
+
+	/* Holds the stored properties read back for AES_GENERATED_RAM_KEY_HANDLE, for inspection.
+	   As with any AES key, the raw generated value is never readable from the host - it never
+	   leaves HSE, which is the whole point of generating it there instead of importing one. */
+	hseKeyInfo_t     HSE_GeneratedAesKeyInfo;
+	hseSrvResponse_t HSE_GetGeneratedAesKeyInfoResponse = HSE_SRV_RSP_GENERAL_ERROR;
+
+	/* AES ECB round-trip self-test buffers/results for the generated key, for inspection */
+	static uint8_t   AesGenTestEncryptedData[APP_AES128_ECB_CIPHER_TEXT_SIZE] = {0};
+	static uint8_t   AesGenTestDecryptedText[APP_AES128_ECB_PLAIN_TEXT_SIZE] = {0};
+	hseSrvResponse_t HSE_AesEncryptGeneratedResponse = HSE_SRV_RSP_GENERAL_ERROR;
+	hseSrvResponse_t HSE_AesDecryptGeneratedResponse = HSE_SRV_RSP_GENERAL_ERROR;
+	bool             HSE_AesGeneratedRoundTripMatch  = false;
 
 	/*==================================================================================================
 	*                                    LOCAL FUNCTION PROTOTYPES
@@ -279,6 +296,13 @@ extern "C"
 			HSE_AesEncryptNvmResponse = HSE_AesEncryptNvm(AesTestPlainText, AesNvmTestEncryptedData, sizeof(AesTestPlainText));
 			HSE_AesDecryptNvmResponse = HSE_AesDecryptNvm(AesNvmTestEncryptedData, AesNvmTestDecryptedText, sizeof(AesNvmTestEncryptedData));
 			HSE_AesNvmRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesNvmTestDecryptedText, sizeof(AesTestPlainText)));
+		    /* =============================================================================================================================== */
+		    /*    Generate a random AES-128 key inside HSE (raw value never leaves HSE) and use it to encrypt/decrypt                          */
+		    /* =============================================================================================================================== */
+			HSE_GenerateAesKeyResponse = HSE_GenerateAesKey();
+			HSE_AesEncryptGeneratedResponse = HSE_AesEncryptGenerated(AesTestPlainText, AesGenTestEncryptedData, sizeof(AesTestPlainText));
+			HSE_AesDecryptGeneratedResponse = HSE_AesDecryptGenerated(AesGenTestEncryptedData, AesGenTestDecryptedText, sizeof(AesGenTestEncryptedData));
+			HSE_AesGeneratedRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesGenTestDecryptedText, sizeof(AesTestPlainText)));
 
 		}
 		// TODO: Protect against failed INIT
@@ -847,6 +871,90 @@ extern "C"
 
 
 	/*!
+	 * @brief       Reads back the stored properties of AES_GENERATED_RAM_KEY_HANDLE (flags, key type, bit
+	 *              length) without exposing the raw key value. Result is left in HSE_GeneratedAesKeyInfo.
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_GetGeneratedAesKeyInfo(void)
+	{
+		hseSrvDescriptor_t*   pHseSrvDescriptor;
+		hseGetKeyInfoSrv_t*   pGetKeyInfoReq;
+		hseSrvResponse_t      RetVal      = HSE_SRV_RSP_GENERAL_ERROR;
+		uint8                 u8MuChannel = Hse_Ip_GetFreeChannel(MU0_INSTANCE_U8);
+
+		memset(&HSE_GeneratedAesKeyInfo, 0, sizeof(HSE_GeneratedAesKeyInfo));
+
+		/* Optimize a bit the code by storing the address of the channel's descriptor in a pointer */
+		pHseSrvDescriptor = &Hse_aSrvDescriptor[u8MuChannel];
+		memset(pHseSrvDescriptor, 0, sizeof(hseSrvDescriptor_t));
+		pGetKeyInfoReq = &(pHseSrvDescriptor->hseSrv.getKeyInfoReq);
+
+		/* Create the service request for HSE by setting the descriptor's members */
+		pHseSrvDescriptor->srvId    = HSE_SRV_ID_GET_KEY_INFO;
+		pGetKeyInfoReq->keyHandle   = AES_GENERATED_RAM_KEY_HANDLE;
+		pGetKeyInfoReq->pKeyInfo    = (HOST_ADDR)&HSE_GeneratedAesKeyInfo;
+
+		/* Build the request to be sent to Hse Ip layer */
+		HseIp_aRequest[u8MuChannel].eReqType   = HSE_IP_REQTYPE_SYNC;
+		HseIp_aRequest[u8MuChannel].u32Timeout = TIMEOUT_TICKS_U32;
+
+		/* Send the request to Hse Ip layer */
+		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
+
+		return RetVal;
+	}
+
+
+	/*!
+	 * @brief       Generates a random AES-128 key inside HSE and stores it directly in the RAM key catalog
+	 *              slot identified by AES_GENERATED_RAM_KEY_HANDLE (group 0, slot 1). Unlike
+	 *              HSE_ImportAESKey()/HSE_ImportNvmAESKey(), the raw key bytes are never chosen by or
+	 *              exposed to the host - HSE's RNG generates them internally, so this is the stronger
+	 *              option whenever the application doesn't need a specific, pre-known key value.
+	 * @details     RAM keys can always be (re)generated, so unlike HSE_ImportNvmAESKey() this has no
+	 *              "already provisioned" guard - every call generates a brand new key and overwrites
+	 *              whatever was in that RAM slot before. It only makes sense to call once per boot,
+	 *              since RAM (like the imported RAM key) does not persist across reset anyway.
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_GenerateAesKey(void)
+	{
+		hseSrvDescriptor_t*   pHseSrvDescriptor;
+		hseKeyGenerateSrv_t*  pKeyGenReq;
+		hseSrvResponse_t      RetVal      = HSE_SRV_RSP_GENERAL_ERROR;
+		uint8                 u8MuChannel = Hse_Ip_GetFreeChannel(MU0_INSTANCE_U8);
+
+		/* Optimize a bit the code by storing the address of the channel's descriptor in a pointer */
+		pHseSrvDescriptor = &Hse_aSrvDescriptor[u8MuChannel];
+		memset(pHseSrvDescriptor, 0, sizeof(hseSrvDescriptor_t));
+		pKeyGenReq = &(pHseSrvDescriptor->hseSrv.keyGenReq);
+
+		/* Create the service request for HSE by setting the descriptor's members */
+		pHseSrvDescriptor->srvId          = HSE_SRV_ID_KEY_GENERATE;
+		pKeyGenReq->targetKeyHandle       = AES_GENERATED_RAM_KEY_HANDLE;
+		pKeyGenReq->keyInfo.keyFlags      = (HSE_KF_USAGE_ENCRYPT | HSE_KF_USAGE_DECRYPT);
+		pKeyGenReq->keyInfo.keyBitLen     = 128U;
+		pKeyGenReq->keyInfo.keyType       = HSE_KEY_TYPE_AES;
+		pKeyGenReq->keyGenScheme          = HSE_KEY_GEN_SYM_RANDOM_KEY;
+		pKeyGenReq->sch.symKey            = 0U; /* no scheme parameters for a random symmetric key */
+
+		/* Build the request to be sent to Hse Ip layer */
+		HseIp_aRequest[u8MuChannel].eReqType   = HSE_IP_REQTYPE_SYNC;
+		HseIp_aRequest[u8MuChannel].u32Timeout = TIMEOUT_TICKS_U32;
+
+		/* Send the request to Hse Ip layer */
+		RetVal = Hse_Ip_ServiceRequest(MU0_INSTANCE_U8, u8MuChannel, &HseIp_aRequest[u8MuChannel], pHseSrvDescriptor);
+
+		/* Refresh the cached key info now that the key has (hopefully) been generated */
+		HSE_GetGeneratedAesKeyInfoResponse = HSE_GetGeneratedAesKeyInfo();
+
+		return RetVal;
+	}
+
+
+	/*!
 	 * @brief       Runs a one-pass AES-128 ECB cipher operation using the given AES key handle
 	 *              (AES_RAM_KEY_HANDLE or AES_NVM_KEY_HANDLE).
 	 * @details     Shared by HSE_AesEncrypt()/HSE_AesDecrypt() (RAM) and HSE_AesEncryptNvm()/HSE_AesDecryptNvm()
@@ -949,6 +1057,36 @@ extern "C"
 	hseSrvResponse_t HSE_AesDecryptNvm(const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length)
 	{
 		return HSE_Aes128EncryptDecrypt(HSE_CIPHER_DIR_DECRYPT, AES_NVM_KEY_HANDLE, pCipherText, pPlainText, length);
+	}
+
+	/*!
+	 * @brief       Encrypts pPlainText with the AES-128 key generated by HSE_GenerateAesKey()
+	 *              (AES_GENERATED_RAM_KEY_HANDLE) using ECB mode.
+	 *
+	 * @param[in]   pPlainText   Plaintext buffer, length must be a multiple of 16 bytes
+	 * @param[out]  pCipherText  Output buffer for the ciphertext, same length as pPlainText
+	 * @param[in]   length       Length in bytes of both buffers
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_AesEncryptGenerated(const uint8_t* pPlainText, uint8_t* pCipherText, uint32_t length)
+	{
+		return HSE_Aes128EncryptDecrypt(HSE_CIPHER_DIR_ENCRYPT, AES_GENERATED_RAM_KEY_HANDLE, pPlainText, pCipherText, length);
+	}
+
+	/*!
+	 * @brief       Decrypts pCipherText with the AES-128 key generated by HSE_GenerateAesKey()
+	 *              (AES_GENERATED_RAM_KEY_HANDLE) using ECB mode.
+	 *
+	 * @param[in]   pCipherText  Ciphertext buffer, length must be a multiple of 16 bytes
+	 * @param[out]  pPlainText   Output buffer for the recovered plaintext, same length as pCipherText
+	 * @param[in]   length       Length in bytes of both buffers
+	 *
+	 * @return      hseSrvResponse_t
+	 */
+	hseSrvResponse_t HSE_AesDecryptGenerated(const uint8_t* pCipherText, uint8_t* pPlainText, uint32_t length)
+	{
+		return HSE_Aes128EncryptDecrypt(HSE_CIPHER_DIR_DECRYPT, AES_GENERATED_RAM_KEY_HANDLE, pCipherText, pPlainText, length);
 	}
 
 
