@@ -44,7 +44,7 @@ ENTRY(Reset_Handler)
 MEMORY
 {
     int_pflash              : ORIGIN = 0x00400000, LENGTH = 0x001D4000    /* 2048KB - 176KB (sBAF + HSE)*/
-    int_dflash              : ORIGIN = 0x10000000, LENGTH = 0x00020000    /* 128KB */
+    int_dflash              : ORIGIN = 0x10000000, LENGTH = 0x00016000    /* 88KB */
     int_itcm                : ORIGIN = 0x00000000, LENGTH = 0x00008000    /* 32KB */
     int_dtcm                : ORIGIN = 0x20000000, LENGTH = 0x0000F000    /* 60KB */
     int_stack_dtcm          : ORIGIN = 0x2000F000, LENGTH = 0x00001000    /* 4KB */

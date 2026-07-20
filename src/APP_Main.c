@@ -24,6 +24,7 @@ extern "C"{
 #include "APP_Main.h"
 #include "HSE_Main.h"
 #include "HSE_FlashStorage_Example.h"
+#include "HSE_SecureBoot.h"
 #include "LED.h"
 
 
@@ -96,6 +97,9 @@ extern "C"{
 	     {
 	    	 	 HSE_Init();
 	    	 	 HSE_Example_StoreEncryptedDataDemo();
+#ifdef RUN_SECURE_BOOT_PHASE1_DEMO
+	    	 	 HSE_SecureBoot_Phase1_Demo();
+#endif // RUN_SECURE_BOOT_PHASE1_DEMO
 
 	     }
 

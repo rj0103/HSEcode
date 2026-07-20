@@ -7,7 +7,7 @@ Secure boot means: before the application is allowed to run, HSE checks a crypto
 **Stage A — Prove the mechanism works, with no ability to break booting (this is what gets built first):**
 
 1. **Provision a signing key, temporarily.** Import a symmetric AES key into a scratch RAM slot, flagged so it can both sign and verify.
-2. **Compute a "proof tag" over a piece of the firmware.** Ask HSE to generate a CMAC (a keyed checksum) over a chosen block of the flashed code, using that temporary key. This tag is what will later prove the code hasn't changed.
+2. **Compute a "proof tag" over a test region.** Ask HSE to generate a CMAC (a keyed checksum) over a chosen block of data, using that temporary key. This tag is what will later prove the data hasn't changed. For this first pass, the "chosen block" is **not** the app's own code — it's a dedicated area in the Data Flash bank (the same one already used by `HSE_FlashStorage_Example.c`, next free sector: `0x10006000`), written and read with the flash helpers already built. Using Data Flash instead of the app's own code image means the test data can be deliberately corrupted later (step 7) with a simple flash write, with zero risk to the actual running application. Only once this whole pipeline is proven does it make sense to point it at the real code image (`__text_start`/`__text_end`) as a later, second pass.
 3. **Provision the real verification key, permanently.** Import the same key value into a persistent NVM slot — but flagged verify-only this time, never sign-capable, so it can check tags but never mint new ones.
 4. **Register the protected region with HSE.** Tell HSE: "this address range, this size, this expected tag, checked with this verify-only key" — this is the SMR (Secure Memory Region) install step. At this point HSE knows how to check the region, but nothing is enforced yet.
 5. **Delete the temporary signing key.** It already did its one job (step 2) and should not remain on the device.
@@ -71,11 +71,9 @@ Both catalogs already have spare slot capacity — `Hse_aRamKeyCatalog`/`Hse_aNv
 
 ## What gets covered by the SMR, and how the tag is produced
 
-**Region**: `extern uint32_t __text_start[];` / `extern uint32_t __text_end[];` (both confirmed to exist in the linker script). `pSmrSrc = (uint32_t)__text_start`, `smrSize = (uint32_t)__text_end - (uint32_t)__text_start` — this is exactly the already-flashed vector table + code + rodata of the running image. No new build step, no extra flashing.
+**Region, 1a (revised — use Data Flash, not the app image)**: a dedicated block in the on-chip Data Flash bank, at the next free sector after the three already used by `HSE_FlashStorage_Example.c` (sectors 0–2, `0x10000000`/`0x10002000`/`0x10004000`): **sector 3, `0x10006000`** (`C40_DATA_ARRAY_0_BLOCK_2_S003`). `pSmrSrc = 0x10006000U`, `smrSize` = however much test data is written there (see alignment open item below). Written/read with the same `C40_Ip_MainInterfaceWrite`/`C40_Ip_Read` pattern already built in `HSE_FlashStorage_Example.c`'s flash helpers. This keeps Stage 1a's test data completely decoupled from the running application — it can be deliberately corrupted (plan step 7) with a plain flash write, no recompiling/reflashing the app itself, and there is zero chance of the SMR mechanism ever needing to evaluate (and possibly reject) the code that's currently executing.
 
-**Staged validation within Phase 1** (extra safety margin, catches a plumbing mistake before trusting it against the whole image):
-- **1a**: first validate against a small `static const uint8_t` test buffer defined inside `HSE_SecureBoot.c` (e.g. 64 bytes — see open item below on alignment) — a trivial, reproducible expected result.
-- **1b**: once 1a passes, repeat against the real `__text_start`/`__text_end` span.
+**Region, 1b (only after 1a passes)**: `extern uint32_t __text_start[];` / `extern uint32_t __text_end[];` (both confirmed to exist in the linker script). `pSmrSrc = (uint32_t)__text_start`, `smrSize = (uint32_t)__text_end - (uint32_t)__text_start` — this is the real flashed vector table + code + rodata of the running image. No new build step, no extra flashing. This step is where the mechanism finally touches the real app image, so it should only be attempted once 1a has fully proven the pipeline (including the negative-control corruption test) against throwaway data.
 
 **Tag production**: on-device, not an offline signer — appropriate for a single dev board. Sequence:
 1. Import the transient RAM key (`AES_SMR_SIGN_RAM_KEY_HANDLE`).
