@@ -25,6 +25,7 @@ extern "C"{
 #include "HSE_Main.h"
 #include "HSE_FlashStorage_Example.h"
 #include "HSE_SecureBoot.h"
+#include "HSE_Mac_Ecc_Example.h"
 #include "LED.h"
 
 
@@ -100,6 +101,12 @@ extern "C"{
 #ifdef RUN_SECURE_BOOT_PHASE1_DEMO
 	    	 	 HSE_SecureBoot_Phase1_Demo();
 #endif // RUN_SECURE_BOOT_PHASE1_DEMO
+#ifdef RUN_MAC_ECC_EXAMPLE
+	    	 	 /* ECC key-pair generate/sign/verify needs the ECC_PAIR/ECC_PUB RAM catalog
+	    	 	    groups added in HSE_Main.c - only present after a build with
+	    	 	    RUN_FORMAT_KEY_CATALOGS_IN_INIT defined has run at least once. */
+	    	 	 HSE_Mac_Ecc_Example_Demo();
+#endif // RUN_MAC_ECC_EXAMPLE
 
 	     }
 

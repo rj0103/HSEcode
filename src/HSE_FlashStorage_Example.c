@@ -104,6 +104,10 @@ static C40_Ip_StatusType HSE_Example_FlashRead(uint32 address, uint8_t* pData, u
  *              Always erasing before writing keeps this example simple; a real application that
  *              writes repeatedly should track whether an erase is actually needed to reduce flash
  *              wear (each sector has a limited number of erase/write cycles).
+ * @details     Data Flash sectors are program/erase-lock protected by default - C40_Ip_ClearLock()
+ *              unlocks the sector before erase/write are attempted (erase and write both fail
+ *              otherwise), and C40_Ip_SetLock() re-locks it afterward regardless of outcome, so a
+ *              sector is never left unprotected longer than the operation actually needs.
  *
  * @param[in]   address        Destination address, must be 8-byte aligned.
  * @param[in]   virtualSector  Virtual sector index containing that address (see C40_Ip_Cfg.h).
@@ -116,29 +120,35 @@ static C40_Ip_StatusType HSE_Example_FlashWrite(uint32 address, C40_Ip_VirtualSe
 {
 	C40_Ip_StatusType status;
 
-	status = C40_Ip_MainInterfaceSectorErase(virtualSector, FLASH_DOMAIN_ID_U8);
-	if (C40_IP_STATUS_SUCCESS != status)
-	{
-		return status;
-	}
-	do
-	{
-		status = C40_Ip_MainInterfaceSectorEraseStatus();
-	} while (C40_IP_STATUS_BUSY == status);
+	status = C40_Ip_ClearLock(virtualSector, FLASH_DOMAIN_ID_U8);
 	if (C40_IP_STATUS_SUCCESS != status)
 	{
 		return status;
 	}
 
-	status = C40_Ip_MainInterfaceWrite(address, length, pData, FLASH_DOMAIN_ID_U8);
-	if (C40_IP_STATUS_SUCCESS != status)
+	status = C40_Ip_MainInterfaceSectorErase(virtualSector, FLASH_DOMAIN_ID_U8);
+	if (C40_IP_STATUS_SUCCESS == status)
 	{
-		return status;
+		do
+		{
+			status = C40_Ip_MainInterfaceSectorEraseStatus();
+		} while (C40_IP_STATUS_BUSY == status);
 	}
-	do
+
+	if (C40_IP_STATUS_SUCCESS == status)
 	{
-		status = C40_Ip_MainInterfaceWriteStatus();
-	} while (C40_IP_STATUS_BUSY == status);
+		status = C40_Ip_MainInterfaceWrite(address, length, pData, FLASH_DOMAIN_ID_U8);
+		if (C40_IP_STATUS_SUCCESS == status)
+		{
+			do
+			{
+				status = C40_Ip_MainInterfaceWriteStatus();
+			} while (C40_IP_STATUS_BUSY == status);
+		}
+	}
+
+	/* Re-lock regardless of outcome - never leave the sector unprotected */
+	(void)C40_Ip_SetLock(virtualSector, FLASH_DOMAIN_ID_U8);
 
 	return status;
 }

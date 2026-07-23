@@ -68,8 +68,20 @@ extern "C"
 	/* Table containing RAM key catalog entries */
 	static hseKeyGroupCfgEntry_t Hse_aRamKeyCatalog[] =
 	{
-	    /* RamKeyGroup_RamKey. RAM key group owner must always be HSE_KEY_OWNER_ANY. */
+	    /* RamKeyGroup_RamKey. RAM key group owner must always be HSE_KEY_OWNER_ANY.
+	       Group index 0 - slot 0: demo AES key (this file), slot 1: generated AES key (this file),
+	       slot 2: transient SMR sign key (HSE_SecureBoot.c), slot 3: MAC key (HSE_Mac_Ecc_Example.c). */
 	    {HSE_ALL_MU_MASK, HSE_KEY_OWNER_ANY, HSE_KEY_TYPE_AES, 4U, HSE_KEY128_BITS, {0U, 0U}},
+	    /* RamKeyGroup_EccPair - group index 1: secp256r1 key pair (HSE_Mac_Ecc_Example.c).
+	       NOTE: adding this group is a catalog *structure* change - unlike reusing a spare slot in
+	       an existing group, it only takes effect after HSE_FormatHseKeyCatalogs() re-runs (i.e.
+	       building once with RUN_FORMAT_KEY_CATALOGS_IN_INIT defined), which wipes all previously
+	       provisioned keys before HSE_Init()'s existing logic re-provisions them. */
+	    {HSE_ALL_MU_MASK, HSE_KEY_OWNER_ANY, HSE_KEY_TYPE_ECC_PAIR, 1U, HSE_KEY256_BITS, {0U, 0U}},
+	    /* RamKeyGroup_EccPub - group index 2: standalone public-only key (HSE_Mac_Ecc_Example.c),
+	       used to re-verify a signature using only the public key read back from Data Flash - a
+	       different key TYPE than the pair above, so it needs its own group. */
+	    {HSE_ALL_MU_MASK, HSE_KEY_OWNER_ANY, HSE_KEY_TYPE_ECC_PUB, 1U, HSE_KEY256_BITS, {0U, 0U}},
 	    /* Marker to end the key catalog */
 	    {0U, 0U, 0U, 0U, 0U, {0U, 0U}}
 	};

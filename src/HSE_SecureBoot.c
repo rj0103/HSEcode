@@ -85,15 +85,57 @@ static hseSrvDescriptor_t Hse_aSrvDescriptor[HSE_IP_NUM_OF_CHANNELS_PER_MU];
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
+static C40_Ip_StatusType HSE_SecureBoot_UnlockTestRegion(void);
+static void              HSE_SecureBoot_LockTestRegion(void);
 static C40_Ip_StatusType HSE_SecureBoot_EraseTestRegion(void);
 static C40_Ip_StatusType HSE_SecureBoot_WriteTestPattern(void);
 static bool              HSE_SecureBoot_VerifyTestPattern(void);
 
 /*!
+ * @brief       Unlocks all sectors covering SMR_TEST_DATA_ADDR..+SMR_TEST_DATA_SIZE, so they can
+ *              be erased/written. Data Flash sectors are program/erase-lock protected by default;
+ *              skipping this step is what made the erase/write calls below fail.
+ *
+ * @return      C40_Ip_StatusType
+ */
+static C40_Ip_StatusType HSE_SecureBoot_UnlockTestRegion(void)
+{
+	C40_Ip_StatusType status = C40_IP_STATUS_ERROR;
+	uint8_t sectorOffset;
+
+	for (sectorOffset = 0U; sectorOffset < SMR_TEST_DATA_NUM_SECTORS; sectorOffset++)
+	{
+		status = C40_Ip_ClearLock((C40_Ip_VirtualSectorsType)(SMR_TEST_DATA_FIRST_SECTOR + sectorOffset), FLASH_DOMAIN_ID_U8);
+		if (C40_IP_STATUS_SUCCESS != status)
+		{
+			return status;
+		}
+	}
+
+	return status;
+}
+
+/*!
+ * @brief       Re-locks all sectors covering SMR_TEST_DATA_ADDR..+SMR_TEST_DATA_SIZE. Best-effort:
+ *              always attempts every sector regardless of individual failures, so as many sectors
+ *              as possible end up protected again even if one call reports an error.
+ */
+static void HSE_SecureBoot_LockTestRegion(void)
+{
+	uint8_t sectorOffset;
+
+	for (sectorOffset = 0U; sectorOffset < SMR_TEST_DATA_NUM_SECTORS; sectorOffset++)
+	{
+		(void)C40_Ip_SetLock((C40_Ip_VirtualSectorsType)(SMR_TEST_DATA_FIRST_SECTOR + sectorOffset), FLASH_DOMAIN_ID_U8);
+	}
+}
+
+/*!
  * @brief       Erases all sectors covering SMR_TEST_DATA_ADDR..+SMR_TEST_DATA_SIZE.
  * @details     Each C40_Ip erase call covers exactly one virtual sector, so the 3 sectors backing
  *              the 20KB region are erased one at a time, busy-waiting on the async status after
- *              each - same pattern as HSE_FlashStorage_Example.c's flash helpers.
+ *              each - same pattern as HSE_FlashStorage_Example.c's flash helpers. Sectors must
+ *              already be unlocked (see HSE_SecureBoot_UnlockTestRegion()) before this is called.
  *
  * @return      C40_Ip_StatusType
  */
@@ -199,16 +241,26 @@ static bool HSE_SecureBoot_VerifyTestPattern(void)
  *              Leaves HSE_SecureBootTestDataWriteStatus / HSE_SecureBootTestDataVerified for
  *              inspection. Once this reads back clean, the next step is computing a CMAC over
  *              this region and installing it as an SMR entry (see the functions below).
+ * @details     Sectors are unlocked once up front (covers both the erase and the write that
+ *              follows it) and re-locked once at the end, regardless of outcome - erase/write
+ *              fail against a locked sector, which is why this step is required at all.
  */
 void HSE_SecureBoot_PrepareTestData(void)
 {
-	HSE_SecureBootTestDataWriteStatus = HSE_SecureBoot_EraseTestRegion();
+	HSE_SecureBootTestDataWriteStatus = HSE_SecureBoot_UnlockTestRegion();
+	if (C40_IP_STATUS_SUCCESS == HSE_SecureBootTestDataWriteStatus)
+	{
+		HSE_SecureBootTestDataWriteStatus = HSE_SecureBoot_EraseTestRegion();
+	}
 	if (C40_IP_STATUS_SUCCESS == HSE_SecureBootTestDataWriteStatus)
 	{
 		HSE_SecureBootTestDataWriteStatus = HSE_SecureBoot_WriteTestPattern();
 	}
 
 	HSE_SecureBootTestDataVerified = (C40_IP_STATUS_SUCCESS == HSE_SecureBootTestDataWriteStatus) && HSE_SecureBoot_VerifyTestPattern();
+
+	/* Re-lock regardless of outcome - never leave the region unprotected */
+	HSE_SecureBoot_LockTestRegion();
 }
 
 /*!
@@ -511,19 +563,28 @@ hseSrvResponse_t HSE_VerifySmrEntryOnDemand(uint8_t entryIndex)
  *              region with all-zero bytes (a valid NOR flash write with no erase cycle needed,
  *              since it only clears bits) and re-runs on-demand verification. Confirms the check
  *              now reports HSE_SRV_RSP_VERIFY_FAILED - proving it isn't a rubber stamp.
+ * @details     HSE_SecureBoot_PrepareTestData() already re-locked this sector, so it must be
+ *              unlocked again here before the write and re-locked afterward.
  */
 void HSE_SecureBoot_NegativeControlTest(uint8_t entryIndex)
 {
 	uint8_t zeroChunk[FLASH_WRITE_CHUNK_SIZE] = {0};
 
-	HSE_SecureBootCorruptTestDataStatus = C40_Ip_MainInterfaceWrite(SMR_TEST_DATA_ADDR, FLASH_WRITE_CHUNK_SIZE, zeroChunk, FLASH_DOMAIN_ID_U8);
+	HSE_SecureBootCorruptTestDataStatus = C40_Ip_ClearLock(SMR_TEST_DATA_FIRST_SECTOR, FLASH_DOMAIN_ID_U8);
 	if (C40_IP_STATUS_SUCCESS == HSE_SecureBootCorruptTestDataStatus)
 	{
-		do
+		HSE_SecureBootCorruptTestDataStatus = C40_Ip_MainInterfaceWrite(SMR_TEST_DATA_ADDR, FLASH_WRITE_CHUNK_SIZE, zeroChunk, FLASH_DOMAIN_ID_U8);
+		if (C40_IP_STATUS_SUCCESS == HSE_SecureBootCorruptTestDataStatus)
 		{
-			HSE_SecureBootCorruptTestDataStatus = C40_Ip_MainInterfaceWriteStatus();
-		} while (C40_IP_STATUS_BUSY == HSE_SecureBootCorruptTestDataStatus);
+			do
+			{
+				HSE_SecureBootCorruptTestDataStatus = C40_Ip_MainInterfaceWriteStatus();
+			} while (C40_IP_STATUS_BUSY == HSE_SecureBootCorruptTestDataStatus);
+		}
 	}
+
+	/* Re-lock regardless of outcome - never leave the sector unprotected */
+	(void)C40_Ip_SetLock(SMR_TEST_DATA_FIRST_SECTOR, FLASH_DOMAIN_ID_U8);
 
 	HSE_VerifySmrEntryAfterCorruptionResponse = HSE_VerifySmrEntryOnDemand(entryIndex);
 	HSE_SecureBootNegativeControlPassed = (HSE_SRV_RSP_VERIFY_FAILED == HSE_VerifySmrEntryAfterCorruptionResponse);
