@@ -146,6 +146,7 @@ static C40_Ip_StatusType HSE_SecureBoot_EraseTestRegion(void)
 
 	for (sectorOffset = 0U; sectorOffset < SMR_TEST_DATA_NUM_SECTORS; sectorOffset++)
 	{
+		status = C40_Ip_ClearLock((C40_Ip_VirtualSectorsType)(SMR_TEST_DATA_FIRST_SECTOR + sectorOffset), FLASH_DOMAIN_ID_U8);
 		status = C40_Ip_MainInterfaceSectorErase((C40_Ip_VirtualSectorsType)(SMR_TEST_DATA_FIRST_SECTOR + sectorOffset), FLASH_DOMAIN_ID_U8);
 		if (C40_IP_STATUS_SUCCESS != status)
 		{

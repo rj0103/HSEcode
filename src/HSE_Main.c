@@ -278,43 +278,43 @@ extern "C"
 			}
 			status = (HSE_SRV_RSP_OK == HSE_FormatKeyCatalogsResponse);
 #endif // RUN_FORMAT_KEY_CATALOGS_IN_INIT
-		    /* =============================================================================================================================== */
-		    /*    Import a key in the  RAM key slot                                                                                         */
-		    /* =============================================================================================================================== */
-			HSE_ImportKeyResponse = HSE_ImportAESKey();
-		    /* =============================================================================================================================== */
-		    /*    Read back the stored key's properties to confirm it was actually imported, before using it                                   */
-		    /* =============================================================================================================================== */
-			HSE_GetAesKeyInfoResponse = HSE_GetAesKeyInfo();
-		    /* =============================================================================================================================== */
-		    /*    Encrypt/decrypt round-trip test using the imported RAM AES key                                                                */
-		    /* =============================================================================================================================== */
-			HSE_AesEncryptResponse = HSE_AesEncrypt(AesTestPlainText, AesTestEncryptedData, sizeof(AesTestPlainText));
-			HSE_AesDecryptResponse = HSE_AesDecrypt(AesTestEncryptedData, AesTestDecryptedText, sizeof(AesTestEncryptedData));
-			HSE_AesRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesTestDecryptedText, sizeof(AesTestPlainText)));
-#ifdef ERASE_NVM_KEYS
-		    /* =============================================================================================================================== */
-		    /*    DEV ONLY: wipe the NVM test key so it gets freshly re-provisioned below. Undefine ERASE_NVM_KEYS for normal persistent use.  */
-		    /* =============================================================================================================================== */
-			(void)HSE_EraseNvmAesKey();
-#endif // ERASE_NVM_KEYS
-		    /* =============================================================================================================================== */
-		    /*    Import a persistent AES key into the NVM key catalog (only actually writes on the first boot)                               */
-		    /* =============================================================================================================================== */
-			HSE_ImportNvmKeyResponse = HSE_ImportNvmAESKey();
-		    /* =============================================================================================================================== */
-		    /*    Encrypt/decrypt round-trip test using the imported NVM AES key                                                                */
-		    /* =============================================================================================================================== */
-			HSE_AesEncryptNvmResponse = HSE_AesEncryptNvm(AesTestPlainText, AesNvmTestEncryptedData, sizeof(AesTestPlainText));
-			HSE_AesDecryptNvmResponse = HSE_AesDecryptNvm(AesNvmTestEncryptedData, AesNvmTestDecryptedText, sizeof(AesNvmTestEncryptedData));
-			HSE_AesNvmRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesNvmTestDecryptedText, sizeof(AesTestPlainText)));
-		    /* =============================================================================================================================== */
-		    /*    Generate a random AES-128 key inside HSE (raw value never leaves HSE) and use it to encrypt/decrypt                          */
-		    /* =============================================================================================================================== */
-			HSE_GenerateAesKeyResponse = HSE_GenerateAesKey();
-			HSE_AesEncryptGeneratedResponse = HSE_AesEncryptGenerated(AesTestPlainText, AesGenTestEncryptedData, sizeof(AesTestPlainText));
-			HSE_AesDecryptGeneratedResponse = HSE_AesDecryptGenerated(AesGenTestEncryptedData, AesGenTestDecryptedText, sizeof(AesGenTestEncryptedData));
-			HSE_AesGeneratedRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesGenTestDecryptedText, sizeof(AesTestPlainText)));
+//		    /* =============================================================================================================================== */
+//		    /*    Import a key in the  RAM key slot                                                                                         */
+//		    /* =============================================================================================================================== */
+//			HSE_ImportKeyResponse = HSE_ImportAESKey();
+//		    /* =============================================================================================================================== */
+//		    /*    Read back the stored key's properties to confirm it was actually imported, before using it                                   */
+//		    /* =============================================================================================================================== */
+//			HSE_GetAesKeyInfoResponse = HSE_GetAesKeyInfo();
+//		    /* =============================================================================================================================== */
+//		    /*    Encrypt/decrypt round-trip test using the imported RAM AES key                                                                */
+//		    /* =============================================================================================================================== */
+//			HSE_AesEncryptResponse = HSE_AesEncrypt(AesTestPlainText, AesTestEncryptedData, sizeof(AesTestPlainText));
+//			HSE_AesDecryptResponse = HSE_AesDecrypt(AesTestEncryptedData, AesTestDecryptedText, sizeof(AesTestEncryptedData));
+//			HSE_AesRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesTestDecryptedText, sizeof(AesTestPlainText)));
+//#ifdef ERASE_NVM_KEYS
+//		    /* =============================================================================================================================== */
+//		    /*    DEV ONLY: wipe the NVM test key so it gets freshly re-provisioned below. Undefine ERASE_NVM_KEYS for normal persistent use.  */
+//		    /* =============================================================================================================================== */
+//			(void)HSE_EraseNvmAesKey();
+//#endif // ERASE_NVM_KEYS
+//		    /* =============================================================================================================================== */
+//		    /*    Import a persistent AES key into the NVM key catalog (only actually writes on the first boot)                               */
+//		    /* =============================================================================================================================== */
+//			HSE_ImportNvmKeyResponse = HSE_ImportNvmAESKey();
+//		    /* =============================================================================================================================== */
+//		    /*    Encrypt/decrypt round-trip test using the imported NVM AES key                                                                */
+//		    /* =============================================================================================================================== */
+//			HSE_AesEncryptNvmResponse = HSE_AesEncryptNvm(AesTestPlainText, AesNvmTestEncryptedData, sizeof(AesTestPlainText));
+//			HSE_AesDecryptNvmResponse = HSE_AesDecryptNvm(AesNvmTestEncryptedData, AesNvmTestDecryptedText, sizeof(AesNvmTestEncryptedData));
+//			HSE_AesNvmRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesNvmTestDecryptedText, sizeof(AesTestPlainText)));
+//		    /* =============================================================================================================================== */
+//		    /*    Generate a random AES-128 key inside HSE (raw value never leaves HSE) and use it to encrypt/decrypt                          */
+//		    /* =============================================================================================================================== */
+//			HSE_GenerateAesKeyResponse = HSE_GenerateAesKey();
+//			HSE_AesEncryptGeneratedResponse = HSE_AesEncryptGenerated(AesTestPlainText, AesGenTestEncryptedData, sizeof(AesTestPlainText));
+//			HSE_AesDecryptGeneratedResponse = HSE_AesDecryptGenerated(AesGenTestEncryptedData, AesGenTestDecryptedText, sizeof(AesGenTestEncryptedData));
+//			HSE_AesGeneratedRoundTripMatch  = (0 == memcmp(AesTestPlainText, AesGenTestDecryptedText, sizeof(AesTestPlainText)));
 
 		}
 		// TODO: Protect against failed INIT

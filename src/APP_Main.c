@@ -33,7 +33,8 @@ extern "C"{
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
 
-#define RUN_SECURE_BOOT_PHASE1_DEMO
+//#define RUN_SECURE_BOOT_PHASE1_DEMO
+//#define RUN_MAC_ECC_EXAMPLE
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
@@ -97,7 +98,7 @@ extern "C"{
 	     else
 	     {
 	    	 	 HSE_Init();
-	    	 	 HSE_Example_StoreEncryptedDataDemo();
+//	    	 	 HSE_Example_StoreEncryptedDataDemo();
 #ifdef RUN_SECURE_BOOT_PHASE1_DEMO
 	    	 	 HSE_SecureBoot_Phase1_Demo();
 #endif // RUN_SECURE_BOOT_PHASE1_DEMO

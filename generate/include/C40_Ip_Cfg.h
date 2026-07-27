@@ -99,7 +99,7 @@ extern "C"{
 /* Development error detection for C40_IP API */
 #define C40_IP_DEV_ERROR_DETECT                (STD_OFF)
 #define C40_IP_UTEST_MODE_API                  (STD_ON)
-#define C40_IP_SECTOR_SET_LOCK_API             (STD_OFF)
+#define C40_IP_SECTOR_SET_LOCK_API             (STD_ON)
 
 #define C40_IP_ERASE_VERIFICATION_ENABLED      (STD_OFF)
 #define C40_IP_PROGRAM_VERIFICATION_ENABLED    (STD_OFF)

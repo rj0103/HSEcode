@@ -527,7 +527,7 @@
                            <setting name="MemEnableCheckCfgCrc" value="false"/>
                            <setting name="MemHwUtestModeService" value="true"/>
                            <setting name="MemHwGetBlockFromAddressService" value="false"/>
-                           <setting name="MemSectorSetLockApi" value="false"/>
+                           <setting name="MemSectorSetLockApi" value="true"/>
                            <setting name="MemEraseVerificationEnabled" value="false"/>
                            <setting name="MemWriteVerificationEnabled" value="false"/>
                            <array name="MemStartFlashAccessNotif"/>

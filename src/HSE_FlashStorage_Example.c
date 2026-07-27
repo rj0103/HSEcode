@@ -119,7 +119,6 @@ static C40_Ip_StatusType HSE_Example_FlashRead(uint32 address, uint8_t* pData, u
 static C40_Ip_StatusType HSE_Example_FlashWrite(uint32 address, C40_Ip_VirtualSectorsType virtualSector, const uint8_t* pData, uint32 length)
 {
 	C40_Ip_StatusType status;
-
 	status = C40_Ip_ClearLock(virtualSector, FLASH_DOMAIN_ID_U8);
 	if (C40_IP_STATUS_SUCCESS != status)
 	{
