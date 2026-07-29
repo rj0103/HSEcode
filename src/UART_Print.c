@@ -140,8 +140,21 @@ static void UART_Print_RawSend(const char *pBuf, uint32_t length)
  */
 void UART_Print_Init(void)
 {
+	uint32_t settleCount;
+
 	Lpuart_Uart_Ip_Init(UART_PRINT_INSTANCE, &Lpuart_Uart_Ip_xHwConfigPB_1);
 	Lpuart_Uart_Ip_SetTransmitterCmd(UART_PRINT_BASE, TRUE);
+
+	/* Settle delay: with TE enabled exactly once here (see file @details), it is now always the
+	   very FIRST send after this line that comes out corrupted, while every later send over the
+	   same still-enabled transmitter is clean - and a Release build (tighter instruction timing)
+	   makes it worse, not better. Both point at a real hardware settle time needed right after
+	   asserting CTRL[TE], before the shift register/baud counter is actually ready to send the
+	   first bit reliably. __asm volatile prevents this from being optimized away in Release. */
+	for (settleCount = 0U; settleCount < 1000000U; settleCount++)
+	{
+		__asm volatile ("nop");
+	}
 }
 
 /*!
