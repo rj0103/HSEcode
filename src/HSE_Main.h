@@ -105,6 +105,7 @@ typedef enum
 ==================================================================================================*/
 extern HSE_STAT_t HSE_Status;
 extern hseSrvResponse_t HSE_FormatKeyCatalogsResponse;
+extern bool             HSE_CatalogsWereAlreadyInstalled;
 extern hseSrvResponse_t HSE_ImportKeyResponse;
 extern hseKeyInfo_t     HSE_AesKeyInfo;
 extern hseSrvResponse_t HSE_GetAesKeyInfoResponse;

@@ -136,6 +136,9 @@ extern "C"
 
 	/* Holds the raw response of the last HSE_FormatHseKeyCatalogs() call, for inspection */
 	hseSrvResponse_t HSE_FormatKeyCatalogsResponse = HSE_SRV_RSP_GENERAL_ERROR;
+	/* Distinguishes "format actually ran" from "skipped, HSE_STATUS_INSTALL_OK was already set" -
+	   HSE_FormatKeyCatalogsResponse alone reads HSE_SRV_RSP_OK in both cases. */
+	bool HSE_CatalogsWereAlreadyInstalled = false;
 
 	/* Holds the raw response of the last HSE_ImportAESKey() call, for inspection */
 	hseSrvResponse_t HSE_ImportKeyResponse = HSE_SRV_RSP_GENERAL_ERROR;
@@ -275,7 +278,8 @@ extern "C"
 		    /*      catalogs already exist, so skip re-formatting (it would wipe existing keys, and repeated NVM reformats can also fail      */
 		    /*      with HSE_SRV_RSP_NOT_ENOUGH_SPACE). Only run it on a genuinely blank/never-provisioned HSE.                               */
 		    /* =============================================================================================================================== */
-			if (0U != (HseStatus & HSE_STATUS_INSTALL_OK))
+			HSE_CatalogsWereAlreadyInstalled = (0U != (HseStatus & HSE_STATUS_INSTALL_OK));
+			if (HSE_CatalogsWereAlreadyInstalled)
 			{
 				HSE_FormatKeyCatalogsResponse = HSE_SRV_RSP_OK; /* already installed - nothing to do */
 			}

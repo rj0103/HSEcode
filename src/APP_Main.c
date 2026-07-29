@@ -110,6 +110,13 @@ extern "C"{
 	    	 	 HSE_Init();
 	    	 	 uint32_t lpuart1FreqAfter = (uint32_t)Clock_Ip_GetClockFrequency(LPUART1_CLK);
 	    	 	 UART_Print_Status("HSE_Status", (uint32_t)HSE_Status, (uint32_t)HSE_VER_OK);
+	    	 	 /* Confirms whether RUN_FORMAT_KEY_CATALOGS_IN_INIT actually reformatted the
+	    	 	    catalogs this boot, or silently skipped because HSE_STATUS_INSTALL_OK was
+	    	 	    already set from an earlier provisioning run - see HSE_Main.c's own comment
+	    	 	    right before this call. Always safe to print: defaults to GENERAL_ERROR when
+	    	 	    that macro is off. */
+	    	 	 UART_Print_HseResponse("HSE FormatKeyCatalogs", HSE_FormatKeyCatalogsResponse);
+	    	 	 UART_Print_Bool("HSE CatalogsWereAlreadyInstalled", HSE_CatalogsWereAlreadyInstalled);
 //	    	 	 HSE_Example_StoreEncryptedDataDemo();
 #ifdef RUN_SECURE_BOOT_PHASE1_DEMO
 	    	 	 HSE_SecureBoot_Phase1_Demo();
