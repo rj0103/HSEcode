@@ -2,3 +2,5 @@
 
 # Claude Code local session settings (machine/user specific)
 .claude/settings.local.json
+/Release_FLASH/
+/Debug_FLASH/

@@ -8125,7 +8125,7 @@ END GROUP
                 0x0000000000000200                HEAP_SIZE = DEFINED (__heap_size__)?__heap_size__:0x200
                 0x0000000020407fff                __STANDBY_RAM_LIMIT_END = 0x20407fff
 
-.pflash         0x0000000000400000    0x17f28
+.pflash         0x0000000000400000    0x17f20
  *(.boot_header)
  .boot_header   0x0000000000400000      0x100 ./Project_Settings/Startup_Code/startup_cm7.o
                 0x0000000000402000                . = ALIGN (0x2000)
@@ -8282,674 +8282,674 @@ END GROUP
  .text          0x00000000004050e4      0x15c ./src/LED.o
                 0x00000000004050e4                LED_Init
                 0x00000000004050f8                LED_ToggleLED
- .text          0x0000000000405240      0x27c ./src/UART_Print.o
+ .text          0x0000000000405240      0x274 ./src/UART_Print.o
                 0x00000000004052ec                UART_Print_Init
                 0x0000000000405300                UART_Print_String
                 0x000000000040533c                UART_Print_HseResponse
-                0x00000000004053cc                UART_Print_Status
-                0x0000000000405458                UART_Print_Bool
- .text          0x00000000004054bc        0x8 ./src/main.o
-                0x00000000004054bc                main
- .text          0x00000000004054c4        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcmp.o)
- .text          0x00000000004054c4        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
- .text          0x00000000004054c4       0x10 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strlen.o)
-                0x00000000004054c4                strlen
- .text          0x00000000004054d4       0x30 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
-                0x00000000004054d4                __aeabi_uldivmod
- .text          0x0000000000405504      0x2d8 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
-                0x0000000000405504                __udivmoddi4
- .text          0x00000000004057dc        0x4 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
-                0x00000000004057dc                __aeabi_idiv0
-                0x00000000004057dc                __aeabi_ldiv0
+                0x00000000004053c8                UART_Print_Status
+                0x0000000000405450                UART_Print_Bool
+ .text          0x00000000004054b4        0x8 ./src/main.o
+                0x00000000004054b4                main
+ .text          0x00000000004054bc        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcmp.o)
+ .text          0x00000000004054bc        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+ .text          0x00000000004054bc       0x10 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strlen.o)
+                0x00000000004054bc                strlen
+ .text          0x00000000004054cc       0x30 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
+                0x00000000004054cc                __aeabi_uldivmod
+ .text          0x00000000004054fc      0x2d8 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+                0x00000000004054fc                __udivmoddi4
+ .text          0x00000000004057d4        0x4 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
+                0x00000000004057d4                __aeabi_idiv0
+                0x00000000004057d4                __aeabi_ldiv0
  *(.text*)
- .text.memcmp   0x00000000004057e0       0x20 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcmp.o)
-                0x00000000004057e0                memcmp
- .text.memset   0x0000000000405800       0x10 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
-                0x0000000000405800                memset
-                0x0000000000405810                . = ALIGN (0x4)
+ .text.memcmp   0x00000000004057d8       0x20 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcmp.o)
+                0x00000000004057d8                memcmp
+ .text.memset   0x00000000004057f8       0x10 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+                0x00000000004057f8                memset
+                0x0000000000405808                . = ALIGN (0x4)
  *(.mcal_text)
- .mcal_text     0x0000000000405810       0x14 ./Project_Settings/Startup_Code/exceptions.o
-                0x0000000000405810                NMI_Handler
-                0x0000000000405812                HardFault_Handler
-                0x0000000000405814                MemManage_Handler
-                0x0000000000405816                BusFault_Handler
-                0x0000000000405818                UsageFault_Handler
-                0x000000000040581a                SVC_Handler
-                0x000000000040581c                DebugMon_Handler
-                0x000000000040581e                PendSV_Handler
-                0x0000000000405820                SysTick_Handler
-                0x0000000000405822                undefined_handler
- .mcal_text     0x0000000000405824       0xbc ./Project_Settings/Startup_Code/nvic.o
-                0x0000000000405824                NVIC_SetPriorityGrouping
-                0x0000000000405846                NVIC_EnableIRQ
-                0x0000000000405876                NVIC_DisableIRQ
-                0x00000000004058a6                NVIC_SetPriority
- .mcal_text     0x00000000004058e0      0x2ac ./Project_Settings/Startup_Code/startup.o
-                0x00000000004058e0                init_data_bss
-                0x0000000000405a78                init_data_bss_core2
- .mcal_text     0x0000000000405b8c      0x33c ./Project_Settings/Startup_Code/system.o
-                0x0000000000405b8c                startup_go_to_user_mode
-                0x0000000000405b90                default_interrupt_routine
-                0x0000000000405b92                Sys_GetCoreID
-                0x0000000000405ba8                SystemInit
-                0x0000000000405ea8                Enable_FPU
- .mcal_text     0x0000000000405ec8     0x1f20 ./RTD/src/C40_Ip.o
-                0x0000000000406078                C40_Ip_GetSETSLOCKRegValue
-                0x00000000004060f8                C40_Ip_GetLockDomainIDValue
-                0x00000000004061e4                C40_Ip_Block4PipeSelect
-                0x0000000000406878                C40_Ip_MainInterfaceWriteLogicalAddress
-                0x0000000000406890                C40_Ip_EccDataErrorSuppression
-                0x0000000000406d2c                C40_Ip_SetAsyncMode
-                0x0000000000406d48                C40_Ip_GetSectorNumberFromAddress
-                0x0000000000406db4                C40_Ip_GetBlockNumberFromAddress
-                0x0000000000406e5c                C40_Ip_SetLock
-                0x0000000000406ea6                C40_Ip_SetLockProtect
-                0x0000000000406fa8                C40_Ip_GetLock
-                0x0000000000406fde                C40_Ip_GetLockProtect
-                0x0000000000407088                C40_Ip_ClearLock
-                0x00000000004070da                C40_Ip_ClearLockProtect
-                0x0000000000407180                C40_Ip_Init
-                0x00000000004071a8                C40_Ip_Abort
-                0x00000000004071bc                C40_Ip_MainInterfaceHVJobStatus
-                0x00000000004071f8                C40_Ip_MainInterfaceSectorErase
-                0x000000000040729c                C40_Ip_MainInterfaceSectorEraseStatus
-                0x00000000004072dc                C40_Ip_MainInterfaceWrite
-                0x00000000004073a0                C40_Ip_MainInterfaceWriteStatus
-                0x00000000004073e0                C40_Ip_Read
-                0x0000000000407488                C40_Ip_Compare
-                0x00000000004074e4                C40_Ip_ArrayIntegrityCheck
-                0x00000000004075bc                C40_Ip_CheckUserTestStatus
-                0x0000000000407640                C40_Ip_ArrayIntegrityCheckSuspend
-                0x00000000004076c4                C40_Ip_ArrayIntegrityCheckResume
-                0x0000000000407720                C40_Ip_UserMarginReadCheck
-                0x0000000000407818                C40_Ip_EccLogicCheck
-                0x00000000004079cc                C40_Ip_EdcAfterEccLogicCheck
-                0x0000000000407b84                C40_Ip_AddressEncodeLogicCheck
-                0x0000000000407ce8                C40_Ip_GetFailedAddress
-                0x0000000000407dd8                C40_Ip_ReportEccUnCorrectedError
- .mcal_text     0x0000000000407de8      0xe74 ./RTD/src/Clock_Ip.o
-                0x00000000004080ec                Clock_Ip_Init
-                0x000000000040812c                Clock_Ip_InitClock
-                0x00000000004087b8                Clock_Ip_GetPllStatus
-                0x00000000004088c0                Clock_Ip_DistributePll
-                0x0000000000408a3c                Clock_Ip_DisableClockMonitor
-                0x0000000000408a80                Clock_Ip_InstallNotificationsCallback
-                0x0000000000408a94                Clock_Ip_DisableModuleClock
-                0x0000000000408ad8                Clock_Ip_EnableModuleClock
-                0x0000000000408b58                Clock_Ip_DisableFircInStandby
-                0x0000000000408b74                Clock_Ip_EnableFircInStandby
-                0x0000000000408b90                Clock_Ip_DisableSircInStandby
-                0x0000000000408bac                Clock_Ip_EnableSircInStandby
-                0x0000000000408bc8                Clock_Ip_ReportClockErrors
-                0x0000000000408be8                Clock_Ip_StartTimeout
-                0x0000000000408c1c                Clock_Ip_TimeoutExpired
- .mcal_text     0x0000000000408c5c      0x458 ./RTD/src/Clock_Ip_Divider.o
- .mcal_text     0x00000000004090b4      0x170 ./RTD/src/Clock_Ip_DividerTrigger.o
- .mcal_text     0x0000000000409224      0x3b0 ./RTD/src/Clock_Ip_ExtOsc.o
- .mcal_text     0x00000000004095d4       0x16 ./RTD/src/Clock_Ip_FracDiv.o
- .mcal_text     0x00000000004095ea        0xe ./RTD/src/Clock_Ip_Frequency.o
-                0x00000000004095ea                Clock_Ip_SetExternalSignalFrequency
- .mcal_text     0x00000000004095f8      0x32c ./RTD/src/Clock_Ip_Gate.o
- .mcal_text     0x0000000000409924      0x1e4 ./RTD/src/Clock_Ip_IntOsc.o
- .mcal_text     0x0000000000409b08        0xa ./RTD/src/Clock_Ip_Irq.o
-                0x0000000000409b08                Mcu_Cmu_ClockFail_IRQHandler
- *fill*         0x0000000000409b12        0x2 
- .mcal_text     0x0000000000409b14      0x5a4 ./RTD/src/Clock_Ip_Monitor.o
-                0x000000000040a014                Clock_Ip_CMU_ClockFailInt
- .mcal_text     0x000000000040a0b8      0x2d8 ./RTD/src/Clock_Ip_Pll.o
- .mcal_text     0x000000000040a390      0x768 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
- .mcal_text     0x000000000040aaf8      0xaf8 ./RTD/src/Clock_Ip_Selector.o
-                0x000000000040b5ae                Clock_Ip_SetRtcRtccClksel_TrustedCall
- .mcal_text     0x000000000040b5f0      0x584 ./RTD/src/Clock_Ip_Specific.o
-                0x000000000040ba14                Clock_Ip_PowerClockIpModules
-                0x000000000040ba2e                Clock_Ip_SetRamWaitStates
-                0x000000000040ba38                Clock_Ip_SetFlashWaitStates
-                0x000000000040ba42                Clock_Ip_McMeEnterKey
-                0x000000000040ba6e                DisableFircInStandbyMode
-                0x000000000040ba84                EnableFircInStandbyMode
-                0x000000000040baa8                DisableSircInStandbyMode
-                0x000000000040babc                EnableSircInStandbyMode
-                0x000000000040bb38                Clock_Ip_Command
- .mcal_text     0x000000000040bb74      0xafc ./RTD/src/Det.o
-                0x000000000040bb74                Det_Init
-                0x000000000040bfb0                Det_ReportError
-                0x000000000040c06c                Det_ReportRuntimeError
-                0x000000000040c128                Det_ReportTransientFault
-                0x000000000040c1e4                Det_Start
-                0x000000000040c1e8                Det_InitDataNode
-                0x000000000040c2ee                Det_LinkNodeToHead
-                0x000000000040c366                Det_DelAllNodesSameId
-                0x000000000040c5c6                Det_FreeNodesInLinkedList
- .mcal_text     0x000000000040c670      0x324 ./RTD/src/Det_stub.o
-                0x000000000040c670                Det_TestLastReportError
-                0x000000000040c700                Det_TestLastReportRuntimeError
-                0x000000000040c790                Det_TestLastReportTransientFault
-                0x000000000040c820                Det_TestNoError
-                0x000000000040c89c                Det_TestNoRuntimeError
-                0x000000000040c918                Det_TestNoTransientFault
- .mcal_text     0x000000000040c994      0x9cc ./RTD/src/Hse_Ip.o
-                0x000000000040cae2                Hse_Ip_GetPhysicalCoreId
-                0x000000000040cd24                Hse_Ip_Init
-                0x000000000040cd9c                Hse_Ip_Deinit
-                0x000000000040cdbc                Hse_Ip_GetFreeChannel
-                0x000000000040ceb8                Hse_Ip_ReleaseChannel
-                0x000000000040cefc                Hse_Ip_ToAHBAddress
-                0x000000000040cf0c                Hse_Ip_ServiceRequest
-                0x000000000040d0c4                Hse_Ip_MainFunction
-                0x000000000040d0e2                Hse_Ip_GetHseStatus
-                0x000000000040d110                Hse_Ip_RegisterGenericCallback
-                0x000000000040d210                Hse_Ip_RxIrqHandler
-                0x000000000040d2b8                Hse_Ip_GeneralPurposeIrqHandler
- .mcal_text     0x000000000040d360      0x4f4 ./RTD/src/IntCtrl_Ip.o
-                0x000000000040d360                IntCtrl_Ip_InstallHandlerPrivileged
-                0x000000000040d3d0                IntCtrl_Ip_EnableIrqPrivileged
-                0x000000000040d428                IntCtrl_Ip_DisableIrqPrivileged
-                0x000000000040d480                IntCtrl_Ip_SetPriorityPrivileged
-                0x000000000040d4ee                IntCtrl_Ip_GetPriorityPrivileged
-                0x000000000040d54c                IntCtrl_Ip_ClearPendingPrivileged
-                0x000000000040d594                IntCtrl_Ip_SetPendingPrivileged
-                0x000000000040d5dc                IntCtrl_Ip_GetPendingPrivileged
-                0x000000000040d626                IntCtrl_Ip_GetActivePrivileged
-                0x000000000040d670                IntCtrl_Ip_Init
-                0x000000000040d772                IntCtrl_Ip_InstallHandler
-                0x000000000040d78e                IntCtrl_Ip_EnableIrq
-                0x000000000040d7a2                IntCtrl_Ip_DisableIrq
-                0x000000000040d7b6                IntCtrl_Ip_SetPriority
-                0x000000000040d7d6                IntCtrl_Ip_GetPriority
-                0x000000000040d7ec                IntCtrl_Ip_ClearPending
-                0x000000000040d800                IntCtrl_Ip_SetPending
-                0x000000000040d814                IntCtrl_Ip_GetPending
-                0x000000000040d834                IntCtrl_Ip_GetActive
- .mcal_text     0x000000000040d854     0x1d44 ./RTD/src/Lpuart_Uart_Ip.o
-                0x000000000040dda4                Lpuart_Uart_Ip_Init
-                0x000000000040deec                Lpuart_Uart_Ip_Deinit
-                0x000000000040dfb8                Lpuart_Uart_Ip_SyncSend
-                0x000000000040e0c8                Lpuart_Uart_Ip_AsyncSend
-                0x000000000040e1d4                Lpuart_Uart_Ip_GetTransmitStatus
-                0x000000000040e28c                Lpuart_Uart_Ip_AbortSendingData
-                0x000000000040e364                Lpuart_Uart_Ip_SyncReceive
-                0x000000000040e5e4                Lpuart_Uart_Ip_AsyncReceive
-                0x000000000040e6f0                Lpuart_Uart_Ip_GetReceiveStatus
-                0x000000000040e7a8                Lpuart_Uart_Ip_AbortReceivingData
-                0x000000000040e864                Lpuart_Uart_Ip_SetBaudRate
-                0x000000000040ea08                Lpuart_Uart_Ip_GetBaudRate
-                0x000000000040ea5c                Lpuart_Uart_Ip_SetTxBuffer
-                0x000000000040eac8                Lpuart_Uart_Ip_SetRxBuffer
-                0x000000000040eb34                Lpuart_Uart_Ip_IrqHandler
- .mcal_text     0x000000000040f598        0xc ./RTD/src/Lpuart_Uart_Ip_Irq.o
-                0x000000000040f598                LPUART_UART_IP_1_IRQHandler
- .mcal_text     0x000000000040f5a4       0x30 ./RTD/src/Mu_Ip_Irq.o
-                0x000000000040f5a4                Mu_Ip_Mu0_OredRx_Isr
-                0x000000000040f5b0                Mu_Ip_Mu0_OredGP_Isr
-                0x000000000040f5bc                Mu_Ip_Mu1_OredRx_Isr
-                0x000000000040f5c8                Mu_Ip_Mu1_OredGP_Isr
- .mcal_text     0x000000000040f5d4       0xd6 ./RTD/src/OsIf_Timer.o
-                0x000000000040f5fc                OsIf_Init
-                0x000000000040f616                OsIf_GetCounter
-                0x000000000040f63a                OsIf_GetElapsed
-                0x000000000040f662                OsIf_SetTimerFrequency
-                0x000000000040f682                OsIf_MicrosToTicks
- *fill*         0x000000000040f6aa        0x2 
- .mcal_text     0x000000000040f6ac       0x8c ./RTD/src/OsIf_Timer_System_Internal_Systick.o
-                0x000000000040f6ac                OsIf_Timer_System_Internal_Init
-                0x000000000040f6d4                OsIf_Timer_System_Internal_GetCounter
-                0x000000000040f6e4                OsIf_Timer_System_Internal_GetElapsed
- .mcal_text     0x000000000040f738      0x148 ./RTD/src/SchM_BaseNXP.o
-                0x000000000040f738                SchM_Enter_BaseNXP_BASENXP_EXCLUSIVE_AREA_00
-                0x000000000040f790                SchM_Exit_BaseNXP_BASENXP_EXCLUSIVE_AREA_00
-                0x000000000040f7dc                SchM_Enter_BaseNXP_BASENXP_EXCLUSIVE_AREA_01
-                0x000000000040f834                SchM_Exit_BaseNXP_BASENXP_EXCLUSIVE_AREA_01
- .mcal_text     0x000000000040f880      0x520 ./RTD/src/SchM_Crypto_43_HSE.o
-                0x000000000040f880                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_00
-                0x000000000040f8d8                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_00
-                0x000000000040f924                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_01
-                0x000000000040f97c                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_01
-                0x000000000040f9c8                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_02
-                0x000000000040fa20                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_02
-                0x000000000040fa6c                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_03
-                0x000000000040fac4                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_03
-                0x000000000040fb10                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_04
-                0x000000000040fb68                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_04
-                0x000000000040fbb4                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_05
-                0x000000000040fc0c                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_05
-                0x000000000040fc58                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_10
-                0x000000000040fcb0                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_10
-                0x000000000040fcfc                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_11
-                0x000000000040fd54                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_11
- .mcal_text     0x000000000040fda0      0x148 ./RTD/src/SchM_Dio.o
-                0x000000000040fda0                SchM_Enter_Dio_DIO_EXCLUSIVE_AREA_00
-                0x000000000040fdf8                SchM_Exit_Dio_DIO_EXCLUSIVE_AREA_00
-                0x000000000040fe44                SchM_Enter_Dio_DIO_EXCLUSIVE_AREA_01
-                0x000000000040fe9c                SchM_Exit_Dio_DIO_EXCLUSIVE_AREA_01
- .mcal_text     0x000000000040fee8     0x1ec0 ./RTD/src/SchM_Mcl.o
-                0x000000000040fee8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_00
-                0x000000000040ff40                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_00
-                0x000000000040ff8c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_01
-                0x000000000040ffe4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_01
-                0x0000000000410030                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_02
-                0x0000000000410088                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_02
-                0x00000000004100d4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_03
-                0x000000000041012c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_03
-                0x0000000000410178                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_04
-                0x00000000004101d0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_04
-                0x000000000041021c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_05
-                0x0000000000410274                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_05
-                0x00000000004102c0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_06
-                0x0000000000410318                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_06
-                0x0000000000410364                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_07
-                0x00000000004103bc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_07
-                0x0000000000410408                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_08
-                0x0000000000410460                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_08
-                0x00000000004104ac                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_09
-                0x0000000000410504                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_09
-                0x0000000000410550                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_10
-                0x00000000004105a8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_10
-                0x00000000004105f4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_11
-                0x000000000041064c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_11
-                0x0000000000410698                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_12
-                0x00000000004106f0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_12
-                0x000000000041073c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_13
-                0x0000000000410794                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_13
-                0x00000000004107e0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_14
-                0x0000000000410838                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_14
-                0x0000000000410884                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_15
-                0x00000000004108dc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_15
-                0x0000000000410928                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_16
-                0x0000000000410980                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_16
-                0x00000000004109cc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_17
-                0x0000000000410a24                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_17
-                0x0000000000410a70                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_18
-                0x0000000000410ac8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_18
-                0x0000000000410b14                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_19
-                0x0000000000410b6c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_19
-                0x0000000000410bb8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_20
-                0x0000000000410c10                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_20
-                0x0000000000410c5c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_21
-                0x0000000000410cb4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_21
-                0x0000000000410d00                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_22
-                0x0000000000410d58                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_22
-                0x0000000000410da4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_23
-                0x0000000000410dfc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_23
-                0x0000000000410e48                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_24
-                0x0000000000410ea0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_24
-                0x0000000000410eec                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_25
-                0x0000000000410f44                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_25
-                0x0000000000410f90                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_26
-                0x0000000000410fe8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_26
-                0x0000000000411034                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_27
-                0x000000000041108c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_27
-                0x00000000004110d8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_28
-                0x0000000000411130                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_28
-                0x000000000041117c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_29
-                0x00000000004111d4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_29
-                0x0000000000411220                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_30
-                0x0000000000411278                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_30
-                0x00000000004112c4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_31
-                0x000000000041131c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_31
-                0x0000000000411368                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_32
-                0x00000000004113c0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_32
-                0x000000000041140c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_33
-                0x0000000000411464                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_33
-                0x00000000004114b0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_34
-                0x0000000000411508                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_34
-                0x0000000000411554                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_35
-                0x00000000004115ac                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_35
-                0x00000000004115f8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_36
-                0x0000000000411650                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_36
-                0x000000000041169c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_37
-                0x00000000004116f4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_37
-                0x0000000000411740                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_38
-                0x0000000000411798                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_38
-                0x00000000004117e4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_39
-                0x000000000041183c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_39
-                0x0000000000411888                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_40
-                0x00000000004118e0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_40
-                0x000000000041192c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_41
-                0x0000000000411984                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_41
-                0x00000000004119d0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_42
-                0x0000000000411a28                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_42
-                0x0000000000411a74                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_43
-                0x0000000000411acc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_43
-                0x0000000000411b18                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_44
-                0x0000000000411b70                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_44
-                0x0000000000411bbc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_45
-                0x0000000000411c14                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_45
-                0x0000000000411c60                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_46
-                0x0000000000411cb8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_46
-                0x0000000000411d04                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_47
-                0x0000000000411d5c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_47
- .mcal_text     0x0000000000411da8      0x1ec ./RTD/src/SchM_Mcu.o
-                0x0000000000411da8                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_00
-                0x0000000000411e00                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_00
-                0x0000000000411e4c                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_01
-                0x0000000000411ea4                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_01
-                0x0000000000411ef0                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_02
-                0x0000000000411f48                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_02
- .mcal_text     0x0000000000411f94     0x10a8 ./RTD/src/SchM_Mem_43_INFLS.o
-                0x0000000000411f94                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_01
-                0x0000000000411fec                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_01
-                0x0000000000412038                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_02
-                0x0000000000412090                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_02
-                0x00000000004120dc                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_03
-                0x0000000000412134                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_03
-                0x0000000000412180                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_04
-                0x00000000004121d8                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_04
-                0x0000000000412224                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_05
-                0x000000000041227c                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_05
-                0x00000000004122c8                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_06
-                0x0000000000412320                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_06
-                0x000000000041236c                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_07
-                0x00000000004123c4                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_07
-                0x0000000000412410                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_08
-                0x0000000000412468                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_08
-                0x00000000004124b4                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_09
-                0x000000000041250c                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_09
-                0x0000000000412558                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_10
-                0x00000000004125b0                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_10
-                0x00000000004125fc                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_11
-                0x0000000000412654                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_11
-                0x00000000004126a0                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_12
-                0x00000000004126f8                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_12
-                0x0000000000412744                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_13
-                0x000000000041279c                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_13
-                0x00000000004127e8                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_14
-                0x0000000000412840                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_14
-                0x000000000041288c                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_15
-                0x00000000004128e4                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_15
-                0x0000000000412930                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_16
-                0x0000000000412988                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_16
-                0x00000000004129d4                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_17
-                0x0000000000412a2c                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_17
-                0x0000000000412a78                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_18
-                0x0000000000412ad0                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_18
-                0x0000000000412b1c                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_19
-                0x0000000000412b74                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_19
-                0x0000000000412bc0                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_20
-                0x0000000000412c18                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_20
-                0x0000000000412c64                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_21
-                0x0000000000412cbc                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_21
-                0x0000000000412d08                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_22
-                0x0000000000412d60                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_22
-                0x0000000000412dac                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_23
-                0x0000000000412e04                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_23
-                0x0000000000412e50                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_24
-                0x0000000000412ea8                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_24
-                0x0000000000412ef4                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_25
-                0x0000000000412f4c                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_25
-                0x0000000000412f98                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_26
-                0x0000000000412ff0                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_26
- .mcal_text     0x000000000041303c     0x11f0 ./RTD/src/SchM_Port.o
-                0x000000000041303c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_00
-                0x0000000000413094                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_00
-                0x00000000004130e0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_01
-                0x0000000000413138                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_01
-                0x0000000000413184                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_02
-                0x00000000004131dc                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_02
-                0x0000000000413228                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_03
-                0x0000000000413280                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_03
-                0x00000000004132cc                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_04
-                0x0000000000413324                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_04
-                0x0000000000413370                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_05
-                0x00000000004133c8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_05
-                0x0000000000413414                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_06
-                0x000000000041346c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_06
-                0x00000000004134b8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_07
-                0x0000000000413510                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_07
-                0x000000000041355c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_08
-                0x00000000004135b4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_08
-                0x0000000000413600                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_09
-                0x0000000000413658                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_09
-                0x00000000004136a4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_10
-                0x00000000004136fc                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_10
-                0x0000000000413748                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_11
-                0x00000000004137a0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_11
-                0x00000000004137ec                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_12
-                0x0000000000413844                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_12
-                0x0000000000413890                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_13
-                0x00000000004138e8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_13
-                0x0000000000413934                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_14
-                0x000000000041398c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_14
-                0x00000000004139d8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_15
-                0x0000000000413a30                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_15
-                0x0000000000413a7c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_16
-                0x0000000000413ad4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_16
-                0x0000000000413b20                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_17
-                0x0000000000413b78                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_17
-                0x0000000000413bc4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_18
-                0x0000000000413c1c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_18
-                0x0000000000413c68                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_19
-                0x0000000000413cc0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_19
-                0x0000000000413d0c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_20
-                0x0000000000413d64                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_20
-                0x0000000000413db0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_21
-                0x0000000000413e08                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_21
-                0x0000000000413e54                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_22
-                0x0000000000413eac                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_22
-                0x0000000000413ef8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_23
-                0x0000000000413f50                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_23
-                0x0000000000413f9c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_24
-                0x0000000000413ff4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_24
-                0x0000000000414040                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_25
-                0x0000000000414098                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_25
-                0x00000000004140e4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_26
-                0x000000000041413c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_26
-                0x0000000000414188                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_27
-                0x00000000004141e0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_27
- .mcal_text     0x000000000041422c      0xe18 ./RTD/src/SchM_Uart.o
-                0x000000000041422c                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_00
-                0x0000000000414284                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_00
-                0x00000000004142d0                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_01
-                0x0000000000414328                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_01
-                0x0000000000414374                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_02
-                0x00000000004143cc                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_02
-                0x0000000000414418                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_03
-                0x0000000000414470                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_03
-                0x00000000004144bc                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_04
-                0x0000000000414514                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_04
-                0x0000000000414560                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_05
-                0x00000000004145b8                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_05
-                0x0000000000414604                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_06
-                0x000000000041465c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_06
-                0x00000000004146a8                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_07
-                0x0000000000414700                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_07
-                0x000000000041474c                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_08
-                0x00000000004147a4                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_08
-                0x00000000004147f0                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_09
-                0x0000000000414848                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_09
-                0x0000000000414894                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_10
-                0x00000000004148ec                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_10
-                0x0000000000414938                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_11
-                0x0000000000414990                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_11
-                0x00000000004149dc                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_12
-                0x0000000000414a34                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_12
-                0x0000000000414a80                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_13
-                0x0000000000414ad8                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_13
-                0x0000000000414b24                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_14
-                0x0000000000414b7c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_14
-                0x0000000000414bc8                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_15
-                0x0000000000414c20                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_15
-                0x0000000000414c6c                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_16
-                0x0000000000414cc4                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_16
-                0x0000000000414d10                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_17
-                0x0000000000414d68                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_17
-                0x0000000000414db4                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_18
-                0x0000000000414e0c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_18
-                0x0000000000414e58                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_19
-                0x0000000000414eb0                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_19
-                0x0000000000414efc                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_20
-                0x0000000000414f54                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_20
-                0x0000000000414fa0                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_21
-                0x0000000000414ff8                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_21
- .mcal_text     0x0000000000415044      0x5c8 ./RTD/src/Siul2_Dio_Ip.o
-                0x000000000041519e                Siul2_Dio_Ip_WritePin
-                0x0000000000415202                Siul2_Dio_Ip_SetGPDO
-                0x000000000041522c                Siul2_Dio_Ip_ClearGPDO
-                0x000000000041527c                Siul2_Dio_Ip_WritePins
-                0x00000000004152d8                Siul2_Dio_Ip_GetPinsOutput
-                0x000000000041533e                Siul2_Dio_Ip_SetPins
-                0x00000000004153a2                Siul2_Dio_Ip_ClearPins
-                0x0000000000415404                Siul2_Dio_Ip_TogglePins
-                0x0000000000415462                Siul2_Dio_Ip_ReadPins
-                0x00000000004154e2                Siul2_Dio_Ip_ReadPin
-                0x00000000004155cc                Siul2_Dio_Ip_MaskedWritePins
- .mcal_text     0x000000000041560c      0x950 ./RTD/src/Siul2_Port_Ip.o
-                0x0000000000415970                Siul2_Port_Ip_Init
-                0x00000000004159c0                Siul2_Port_Ip_SetPullSel
-                0x0000000000415aa4                Siul2_Port_Ip_SetOutputBuffer
-                0x0000000000415b60                Siul2_Port_Ip_SetInputBuffer
-                0x0000000000415c3c                Siul2_Port_Ip_SetPinDirection
-                0x0000000000415d36                Siul2_Port_Ip_RevertPinConfiguration
-                0x0000000000415df8                Siul2_Port_Ip_GetPinConfiguration
- .mcal_text     0x0000000000415f5c      0x2c4 ./RTD/src/Tspc_Port_Ip.o
-                0x0000000000415f5c                Tspc_Port_Ip_EnableObeGroup
-                0x0000000000415fc4                Tspc_Port_Ip_DisableObeGroup
-                0x000000000041602c                Tspc_Port_Ip_MaskObeGroup
-                0x00000000004160b8                Tspc_Port_Ip_ConfigureObeGroup
-                0x0000000000416220                . = ALIGN (0x4)
+ .mcal_text     0x0000000000405808       0x14 ./Project_Settings/Startup_Code/exceptions.o
+                0x0000000000405808                NMI_Handler
+                0x000000000040580a                HardFault_Handler
+                0x000000000040580c                MemManage_Handler
+                0x000000000040580e                BusFault_Handler
+                0x0000000000405810                UsageFault_Handler
+                0x0000000000405812                SVC_Handler
+                0x0000000000405814                DebugMon_Handler
+                0x0000000000405816                PendSV_Handler
+                0x0000000000405818                SysTick_Handler
+                0x000000000040581a                undefined_handler
+ .mcal_text     0x000000000040581c       0xbc ./Project_Settings/Startup_Code/nvic.o
+                0x000000000040581c                NVIC_SetPriorityGrouping
+                0x000000000040583e                NVIC_EnableIRQ
+                0x000000000040586e                NVIC_DisableIRQ
+                0x000000000040589e                NVIC_SetPriority
+ .mcal_text     0x00000000004058d8      0x2ac ./Project_Settings/Startup_Code/startup.o
+                0x00000000004058d8                init_data_bss
+                0x0000000000405a70                init_data_bss_core2
+ .mcal_text     0x0000000000405b84      0x33c ./Project_Settings/Startup_Code/system.o
+                0x0000000000405b84                startup_go_to_user_mode
+                0x0000000000405b88                default_interrupt_routine
+                0x0000000000405b8a                Sys_GetCoreID
+                0x0000000000405ba0                SystemInit
+                0x0000000000405ea0                Enable_FPU
+ .mcal_text     0x0000000000405ec0     0x1f20 ./RTD/src/C40_Ip.o
+                0x0000000000406070                C40_Ip_GetSETSLOCKRegValue
+                0x00000000004060f0                C40_Ip_GetLockDomainIDValue
+                0x00000000004061dc                C40_Ip_Block4PipeSelect
+                0x0000000000406870                C40_Ip_MainInterfaceWriteLogicalAddress
+                0x0000000000406888                C40_Ip_EccDataErrorSuppression
+                0x0000000000406d24                C40_Ip_SetAsyncMode
+                0x0000000000406d40                C40_Ip_GetSectorNumberFromAddress
+                0x0000000000406dac                C40_Ip_GetBlockNumberFromAddress
+                0x0000000000406e54                C40_Ip_SetLock
+                0x0000000000406e9e                C40_Ip_SetLockProtect
+                0x0000000000406fa0                C40_Ip_GetLock
+                0x0000000000406fd6                C40_Ip_GetLockProtect
+                0x0000000000407080                C40_Ip_ClearLock
+                0x00000000004070d2                C40_Ip_ClearLockProtect
+                0x0000000000407178                C40_Ip_Init
+                0x00000000004071a0                C40_Ip_Abort
+                0x00000000004071b4                C40_Ip_MainInterfaceHVJobStatus
+                0x00000000004071f0                C40_Ip_MainInterfaceSectorErase
+                0x0000000000407294                C40_Ip_MainInterfaceSectorEraseStatus
+                0x00000000004072d4                C40_Ip_MainInterfaceWrite
+                0x0000000000407398                C40_Ip_MainInterfaceWriteStatus
+                0x00000000004073d8                C40_Ip_Read
+                0x0000000000407480                C40_Ip_Compare
+                0x00000000004074dc                C40_Ip_ArrayIntegrityCheck
+                0x00000000004075b4                C40_Ip_CheckUserTestStatus
+                0x0000000000407638                C40_Ip_ArrayIntegrityCheckSuspend
+                0x00000000004076bc                C40_Ip_ArrayIntegrityCheckResume
+                0x0000000000407718                C40_Ip_UserMarginReadCheck
+                0x0000000000407810                C40_Ip_EccLogicCheck
+                0x00000000004079c4                C40_Ip_EdcAfterEccLogicCheck
+                0x0000000000407b7c                C40_Ip_AddressEncodeLogicCheck
+                0x0000000000407ce0                C40_Ip_GetFailedAddress
+                0x0000000000407dd0                C40_Ip_ReportEccUnCorrectedError
+ .mcal_text     0x0000000000407de0      0xe74 ./RTD/src/Clock_Ip.o
+                0x00000000004080e4                Clock_Ip_Init
+                0x0000000000408124                Clock_Ip_InitClock
+                0x00000000004087b0                Clock_Ip_GetPllStatus
+                0x00000000004088b8                Clock_Ip_DistributePll
+                0x0000000000408a34                Clock_Ip_DisableClockMonitor
+                0x0000000000408a78                Clock_Ip_InstallNotificationsCallback
+                0x0000000000408a8c                Clock_Ip_DisableModuleClock
+                0x0000000000408ad0                Clock_Ip_EnableModuleClock
+                0x0000000000408b50                Clock_Ip_DisableFircInStandby
+                0x0000000000408b6c                Clock_Ip_EnableFircInStandby
+                0x0000000000408b88                Clock_Ip_DisableSircInStandby
+                0x0000000000408ba4                Clock_Ip_EnableSircInStandby
+                0x0000000000408bc0                Clock_Ip_ReportClockErrors
+                0x0000000000408be0                Clock_Ip_StartTimeout
+                0x0000000000408c14                Clock_Ip_TimeoutExpired
+ .mcal_text     0x0000000000408c54      0x458 ./RTD/src/Clock_Ip_Divider.o
+ .mcal_text     0x00000000004090ac      0x170 ./RTD/src/Clock_Ip_DividerTrigger.o
+ .mcal_text     0x000000000040921c      0x3b0 ./RTD/src/Clock_Ip_ExtOsc.o
+ .mcal_text     0x00000000004095cc       0x16 ./RTD/src/Clock_Ip_FracDiv.o
+ .mcal_text     0x00000000004095e2        0xe ./RTD/src/Clock_Ip_Frequency.o
+                0x00000000004095e2                Clock_Ip_SetExternalSignalFrequency
+ .mcal_text     0x00000000004095f0      0x32c ./RTD/src/Clock_Ip_Gate.o
+ .mcal_text     0x000000000040991c      0x1e4 ./RTD/src/Clock_Ip_IntOsc.o
+ .mcal_text     0x0000000000409b00        0xa ./RTD/src/Clock_Ip_Irq.o
+                0x0000000000409b00                Mcu_Cmu_ClockFail_IRQHandler
+ *fill*         0x0000000000409b0a        0x2 
+ .mcal_text     0x0000000000409b0c      0x5a4 ./RTD/src/Clock_Ip_Monitor.o
+                0x000000000040a00c                Clock_Ip_CMU_ClockFailInt
+ .mcal_text     0x000000000040a0b0      0x2d8 ./RTD/src/Clock_Ip_Pll.o
+ .mcal_text     0x000000000040a388      0x768 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
+ .mcal_text     0x000000000040aaf0      0xaf8 ./RTD/src/Clock_Ip_Selector.o
+                0x000000000040b5a6                Clock_Ip_SetRtcRtccClksel_TrustedCall
+ .mcal_text     0x000000000040b5e8      0x584 ./RTD/src/Clock_Ip_Specific.o
+                0x000000000040ba0c                Clock_Ip_PowerClockIpModules
+                0x000000000040ba26                Clock_Ip_SetRamWaitStates
+                0x000000000040ba30                Clock_Ip_SetFlashWaitStates
+                0x000000000040ba3a                Clock_Ip_McMeEnterKey
+                0x000000000040ba66                DisableFircInStandbyMode
+                0x000000000040ba7c                EnableFircInStandbyMode
+                0x000000000040baa0                DisableSircInStandbyMode
+                0x000000000040bab4                EnableSircInStandbyMode
+                0x000000000040bb30                Clock_Ip_Command
+ .mcal_text     0x000000000040bb6c      0xafc ./RTD/src/Det.o
+                0x000000000040bb6c                Det_Init
+                0x000000000040bfa8                Det_ReportError
+                0x000000000040c064                Det_ReportRuntimeError
+                0x000000000040c120                Det_ReportTransientFault
+                0x000000000040c1dc                Det_Start
+                0x000000000040c1e0                Det_InitDataNode
+                0x000000000040c2e6                Det_LinkNodeToHead
+                0x000000000040c35e                Det_DelAllNodesSameId
+                0x000000000040c5be                Det_FreeNodesInLinkedList
+ .mcal_text     0x000000000040c668      0x324 ./RTD/src/Det_stub.o
+                0x000000000040c668                Det_TestLastReportError
+                0x000000000040c6f8                Det_TestLastReportRuntimeError
+                0x000000000040c788                Det_TestLastReportTransientFault
+                0x000000000040c818                Det_TestNoError
+                0x000000000040c894                Det_TestNoRuntimeError
+                0x000000000040c910                Det_TestNoTransientFault
+ .mcal_text     0x000000000040c98c      0x9cc ./RTD/src/Hse_Ip.o
+                0x000000000040cada                Hse_Ip_GetPhysicalCoreId
+                0x000000000040cd1c                Hse_Ip_Init
+                0x000000000040cd94                Hse_Ip_Deinit
+                0x000000000040cdb4                Hse_Ip_GetFreeChannel
+                0x000000000040ceb0                Hse_Ip_ReleaseChannel
+                0x000000000040cef4                Hse_Ip_ToAHBAddress
+                0x000000000040cf04                Hse_Ip_ServiceRequest
+                0x000000000040d0bc                Hse_Ip_MainFunction
+                0x000000000040d0da                Hse_Ip_GetHseStatus
+                0x000000000040d108                Hse_Ip_RegisterGenericCallback
+                0x000000000040d208                Hse_Ip_RxIrqHandler
+                0x000000000040d2b0                Hse_Ip_GeneralPurposeIrqHandler
+ .mcal_text     0x000000000040d358      0x4f4 ./RTD/src/IntCtrl_Ip.o
+                0x000000000040d358                IntCtrl_Ip_InstallHandlerPrivileged
+                0x000000000040d3c8                IntCtrl_Ip_EnableIrqPrivileged
+                0x000000000040d420                IntCtrl_Ip_DisableIrqPrivileged
+                0x000000000040d478                IntCtrl_Ip_SetPriorityPrivileged
+                0x000000000040d4e6                IntCtrl_Ip_GetPriorityPrivileged
+                0x000000000040d544                IntCtrl_Ip_ClearPendingPrivileged
+                0x000000000040d58c                IntCtrl_Ip_SetPendingPrivileged
+                0x000000000040d5d4                IntCtrl_Ip_GetPendingPrivileged
+                0x000000000040d61e                IntCtrl_Ip_GetActivePrivileged
+                0x000000000040d668                IntCtrl_Ip_Init
+                0x000000000040d76a                IntCtrl_Ip_InstallHandler
+                0x000000000040d786                IntCtrl_Ip_EnableIrq
+                0x000000000040d79a                IntCtrl_Ip_DisableIrq
+                0x000000000040d7ae                IntCtrl_Ip_SetPriority
+                0x000000000040d7ce                IntCtrl_Ip_GetPriority
+                0x000000000040d7e4                IntCtrl_Ip_ClearPending
+                0x000000000040d7f8                IntCtrl_Ip_SetPending
+                0x000000000040d80c                IntCtrl_Ip_GetPending
+                0x000000000040d82c                IntCtrl_Ip_GetActive
+ .mcal_text     0x000000000040d84c     0x1d44 ./RTD/src/Lpuart_Uart_Ip.o
+                0x000000000040dd9c                Lpuart_Uart_Ip_Init
+                0x000000000040dee4                Lpuart_Uart_Ip_Deinit
+                0x000000000040dfb0                Lpuart_Uart_Ip_SyncSend
+                0x000000000040e0c0                Lpuart_Uart_Ip_AsyncSend
+                0x000000000040e1cc                Lpuart_Uart_Ip_GetTransmitStatus
+                0x000000000040e284                Lpuart_Uart_Ip_AbortSendingData
+                0x000000000040e35c                Lpuart_Uart_Ip_SyncReceive
+                0x000000000040e5dc                Lpuart_Uart_Ip_AsyncReceive
+                0x000000000040e6e8                Lpuart_Uart_Ip_GetReceiveStatus
+                0x000000000040e7a0                Lpuart_Uart_Ip_AbortReceivingData
+                0x000000000040e85c                Lpuart_Uart_Ip_SetBaudRate
+                0x000000000040ea00                Lpuart_Uart_Ip_GetBaudRate
+                0x000000000040ea54                Lpuart_Uart_Ip_SetTxBuffer
+                0x000000000040eac0                Lpuart_Uart_Ip_SetRxBuffer
+                0x000000000040eb2c                Lpuart_Uart_Ip_IrqHandler
+ .mcal_text     0x000000000040f590        0xc ./RTD/src/Lpuart_Uart_Ip_Irq.o
+                0x000000000040f590                LPUART_UART_IP_1_IRQHandler
+ .mcal_text     0x000000000040f59c       0x30 ./RTD/src/Mu_Ip_Irq.o
+                0x000000000040f59c                Mu_Ip_Mu0_OredRx_Isr
+                0x000000000040f5a8                Mu_Ip_Mu0_OredGP_Isr
+                0x000000000040f5b4                Mu_Ip_Mu1_OredRx_Isr
+                0x000000000040f5c0                Mu_Ip_Mu1_OredGP_Isr
+ .mcal_text     0x000000000040f5cc       0xd6 ./RTD/src/OsIf_Timer.o
+                0x000000000040f5f4                OsIf_Init
+                0x000000000040f60e                OsIf_GetCounter
+                0x000000000040f632                OsIf_GetElapsed
+                0x000000000040f65a                OsIf_SetTimerFrequency
+                0x000000000040f67a                OsIf_MicrosToTicks
+ *fill*         0x000000000040f6a2        0x2 
+ .mcal_text     0x000000000040f6a4       0x8c ./RTD/src/OsIf_Timer_System_Internal_Systick.o
+                0x000000000040f6a4                OsIf_Timer_System_Internal_Init
+                0x000000000040f6cc                OsIf_Timer_System_Internal_GetCounter
+                0x000000000040f6dc                OsIf_Timer_System_Internal_GetElapsed
+ .mcal_text     0x000000000040f730      0x148 ./RTD/src/SchM_BaseNXP.o
+                0x000000000040f730                SchM_Enter_BaseNXP_BASENXP_EXCLUSIVE_AREA_00
+                0x000000000040f788                SchM_Exit_BaseNXP_BASENXP_EXCLUSIVE_AREA_00
+                0x000000000040f7d4                SchM_Enter_BaseNXP_BASENXP_EXCLUSIVE_AREA_01
+                0x000000000040f82c                SchM_Exit_BaseNXP_BASENXP_EXCLUSIVE_AREA_01
+ .mcal_text     0x000000000040f878      0x520 ./RTD/src/SchM_Crypto_43_HSE.o
+                0x000000000040f878                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_00
+                0x000000000040f8d0                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_00
+                0x000000000040f91c                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_01
+                0x000000000040f974                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_01
+                0x000000000040f9c0                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_02
+                0x000000000040fa18                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_02
+                0x000000000040fa64                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_03
+                0x000000000040fabc                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_03
+                0x000000000040fb08                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_04
+                0x000000000040fb60                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_04
+                0x000000000040fbac                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_05
+                0x000000000040fc04                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_05
+                0x000000000040fc50                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_10
+                0x000000000040fca8                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_10
+                0x000000000040fcf4                SchM_Enter_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_11
+                0x000000000040fd4c                SchM_Exit_Crypto_43_HSE_CRYPTO_EXCLUSIVE_AREA_11
+ .mcal_text     0x000000000040fd98      0x148 ./RTD/src/SchM_Dio.o
+                0x000000000040fd98                SchM_Enter_Dio_DIO_EXCLUSIVE_AREA_00
+                0x000000000040fdf0                SchM_Exit_Dio_DIO_EXCLUSIVE_AREA_00
+                0x000000000040fe3c                SchM_Enter_Dio_DIO_EXCLUSIVE_AREA_01
+                0x000000000040fe94                SchM_Exit_Dio_DIO_EXCLUSIVE_AREA_01
+ .mcal_text     0x000000000040fee0     0x1ec0 ./RTD/src/SchM_Mcl.o
+                0x000000000040fee0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_00
+                0x000000000040ff38                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_00
+                0x000000000040ff84                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_01
+                0x000000000040ffdc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_01
+                0x0000000000410028                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_02
+                0x0000000000410080                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_02
+                0x00000000004100cc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_03
+                0x0000000000410124                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_03
+                0x0000000000410170                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_04
+                0x00000000004101c8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_04
+                0x0000000000410214                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_05
+                0x000000000041026c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_05
+                0x00000000004102b8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_06
+                0x0000000000410310                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_06
+                0x000000000041035c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_07
+                0x00000000004103b4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_07
+                0x0000000000410400                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_08
+                0x0000000000410458                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_08
+                0x00000000004104a4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_09
+                0x00000000004104fc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_09
+                0x0000000000410548                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_10
+                0x00000000004105a0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_10
+                0x00000000004105ec                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_11
+                0x0000000000410644                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_11
+                0x0000000000410690                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_12
+                0x00000000004106e8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_12
+                0x0000000000410734                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_13
+                0x000000000041078c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_13
+                0x00000000004107d8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_14
+                0x0000000000410830                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_14
+                0x000000000041087c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_15
+                0x00000000004108d4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_15
+                0x0000000000410920                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_16
+                0x0000000000410978                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_16
+                0x00000000004109c4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_17
+                0x0000000000410a1c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_17
+                0x0000000000410a68                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_18
+                0x0000000000410ac0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_18
+                0x0000000000410b0c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_19
+                0x0000000000410b64                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_19
+                0x0000000000410bb0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_20
+                0x0000000000410c08                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_20
+                0x0000000000410c54                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_21
+                0x0000000000410cac                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_21
+                0x0000000000410cf8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_22
+                0x0000000000410d50                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_22
+                0x0000000000410d9c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_23
+                0x0000000000410df4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_23
+                0x0000000000410e40                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_24
+                0x0000000000410e98                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_24
+                0x0000000000410ee4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_25
+                0x0000000000410f3c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_25
+                0x0000000000410f88                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_26
+                0x0000000000410fe0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_26
+                0x000000000041102c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_27
+                0x0000000000411084                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_27
+                0x00000000004110d0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_28
+                0x0000000000411128                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_28
+                0x0000000000411174                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_29
+                0x00000000004111cc                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_29
+                0x0000000000411218                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_30
+                0x0000000000411270                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_30
+                0x00000000004112bc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_31
+                0x0000000000411314                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_31
+                0x0000000000411360                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_32
+                0x00000000004113b8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_32
+                0x0000000000411404                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_33
+                0x000000000041145c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_33
+                0x00000000004114a8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_34
+                0x0000000000411500                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_34
+                0x000000000041154c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_35
+                0x00000000004115a4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_35
+                0x00000000004115f0                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_36
+                0x0000000000411648                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_36
+                0x0000000000411694                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_37
+                0x00000000004116ec                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_37
+                0x0000000000411738                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_38
+                0x0000000000411790                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_38
+                0x00000000004117dc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_39
+                0x0000000000411834                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_39
+                0x0000000000411880                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_40
+                0x00000000004118d8                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_40
+                0x0000000000411924                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_41
+                0x000000000041197c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_41
+                0x00000000004119c8                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_42
+                0x0000000000411a20                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_42
+                0x0000000000411a6c                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_43
+                0x0000000000411ac4                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_43
+                0x0000000000411b10                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_44
+                0x0000000000411b68                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_44
+                0x0000000000411bb4                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_45
+                0x0000000000411c0c                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_45
+                0x0000000000411c58                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_46
+                0x0000000000411cb0                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_46
+                0x0000000000411cfc                SchM_Enter_Mcl_MCL_EXCLUSIVE_AREA_47
+                0x0000000000411d54                SchM_Exit_Mcl_MCL_EXCLUSIVE_AREA_47
+ .mcal_text     0x0000000000411da0      0x1ec ./RTD/src/SchM_Mcu.o
+                0x0000000000411da0                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_00
+                0x0000000000411df8                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_00
+                0x0000000000411e44                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_01
+                0x0000000000411e9c                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_01
+                0x0000000000411ee8                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_02
+                0x0000000000411f40                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_02
+ .mcal_text     0x0000000000411f8c     0x10a8 ./RTD/src/SchM_Mem_43_INFLS.o
+                0x0000000000411f8c                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_01
+                0x0000000000411fe4                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_01
+                0x0000000000412030                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_02
+                0x0000000000412088                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_02
+                0x00000000004120d4                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_03
+                0x000000000041212c                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_03
+                0x0000000000412178                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_04
+                0x00000000004121d0                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_04
+                0x000000000041221c                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_05
+                0x0000000000412274                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_05
+                0x00000000004122c0                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_06
+                0x0000000000412318                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_06
+                0x0000000000412364                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_07
+                0x00000000004123bc                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_07
+                0x0000000000412408                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_08
+                0x0000000000412460                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_08
+                0x00000000004124ac                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_09
+                0x0000000000412504                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_09
+                0x0000000000412550                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_10
+                0x00000000004125a8                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_10
+                0x00000000004125f4                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_11
+                0x000000000041264c                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_11
+                0x0000000000412698                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_12
+                0x00000000004126f0                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_12
+                0x000000000041273c                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_13
+                0x0000000000412794                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_13
+                0x00000000004127e0                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_14
+                0x0000000000412838                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_14
+                0x0000000000412884                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_15
+                0x00000000004128dc                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_15
+                0x0000000000412928                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_16
+                0x0000000000412980                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_16
+                0x00000000004129cc                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_17
+                0x0000000000412a24                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_17
+                0x0000000000412a70                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_18
+                0x0000000000412ac8                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_18
+                0x0000000000412b14                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_19
+                0x0000000000412b6c                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_19
+                0x0000000000412bb8                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_20
+                0x0000000000412c10                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_20
+                0x0000000000412c5c                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_21
+                0x0000000000412cb4                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_21
+                0x0000000000412d00                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_22
+                0x0000000000412d58                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_22
+                0x0000000000412da4                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_23
+                0x0000000000412dfc                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_23
+                0x0000000000412e48                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_24
+                0x0000000000412ea0                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_24
+                0x0000000000412eec                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_25
+                0x0000000000412f44                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_25
+                0x0000000000412f90                SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_26
+                0x0000000000412fe8                SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_26
+ .mcal_text     0x0000000000413034     0x11f0 ./RTD/src/SchM_Port.o
+                0x0000000000413034                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_00
+                0x000000000041308c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_00
+                0x00000000004130d8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_01
+                0x0000000000413130                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_01
+                0x000000000041317c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_02
+                0x00000000004131d4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_02
+                0x0000000000413220                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_03
+                0x0000000000413278                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_03
+                0x00000000004132c4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_04
+                0x000000000041331c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_04
+                0x0000000000413368                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_05
+                0x00000000004133c0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_05
+                0x000000000041340c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_06
+                0x0000000000413464                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_06
+                0x00000000004134b0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_07
+                0x0000000000413508                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_07
+                0x0000000000413554                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_08
+                0x00000000004135ac                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_08
+                0x00000000004135f8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_09
+                0x0000000000413650                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_09
+                0x000000000041369c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_10
+                0x00000000004136f4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_10
+                0x0000000000413740                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_11
+                0x0000000000413798                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_11
+                0x00000000004137e4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_12
+                0x000000000041383c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_12
+                0x0000000000413888                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_13
+                0x00000000004138e0                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_13
+                0x000000000041392c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_14
+                0x0000000000413984                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_14
+                0x00000000004139d0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_15
+                0x0000000000413a28                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_15
+                0x0000000000413a74                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_16
+                0x0000000000413acc                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_16
+                0x0000000000413b18                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_17
+                0x0000000000413b70                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_17
+                0x0000000000413bbc                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_18
+                0x0000000000413c14                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_18
+                0x0000000000413c60                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_19
+                0x0000000000413cb8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_19
+                0x0000000000413d04                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_20
+                0x0000000000413d5c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_20
+                0x0000000000413da8                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_21
+                0x0000000000413e00                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_21
+                0x0000000000413e4c                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_22
+                0x0000000000413ea4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_22
+                0x0000000000413ef0                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_23
+                0x0000000000413f48                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_23
+                0x0000000000413f94                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_24
+                0x0000000000413fec                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_24
+                0x0000000000414038                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_25
+                0x0000000000414090                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_25
+                0x00000000004140dc                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_26
+                0x0000000000414134                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_26
+                0x0000000000414180                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_27
+                0x00000000004141d8                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_27
+ .mcal_text     0x0000000000414224      0xe18 ./RTD/src/SchM_Uart.o
+                0x0000000000414224                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_00
+                0x000000000041427c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_00
+                0x00000000004142c8                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_01
+                0x0000000000414320                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_01
+                0x000000000041436c                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_02
+                0x00000000004143c4                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_02
+                0x0000000000414410                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_03
+                0x0000000000414468                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_03
+                0x00000000004144b4                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_04
+                0x000000000041450c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_04
+                0x0000000000414558                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_05
+                0x00000000004145b0                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_05
+                0x00000000004145fc                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_06
+                0x0000000000414654                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_06
+                0x00000000004146a0                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_07
+                0x00000000004146f8                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_07
+                0x0000000000414744                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_08
+                0x000000000041479c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_08
+                0x00000000004147e8                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_09
+                0x0000000000414840                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_09
+                0x000000000041488c                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_10
+                0x00000000004148e4                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_10
+                0x0000000000414930                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_11
+                0x0000000000414988                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_11
+                0x00000000004149d4                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_12
+                0x0000000000414a2c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_12
+                0x0000000000414a78                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_13
+                0x0000000000414ad0                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_13
+                0x0000000000414b1c                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_14
+                0x0000000000414b74                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_14
+                0x0000000000414bc0                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_15
+                0x0000000000414c18                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_15
+                0x0000000000414c64                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_16
+                0x0000000000414cbc                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_16
+                0x0000000000414d08                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_17
+                0x0000000000414d60                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_17
+                0x0000000000414dac                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_18
+                0x0000000000414e04                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_18
+                0x0000000000414e50                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_19
+                0x0000000000414ea8                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_19
+                0x0000000000414ef4                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_20
+                0x0000000000414f4c                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_20
+                0x0000000000414f98                SchM_Enter_Uart_UART_EXCLUSIVE_AREA_21
+                0x0000000000414ff0                SchM_Exit_Uart_UART_EXCLUSIVE_AREA_21
+ .mcal_text     0x000000000041503c      0x5c8 ./RTD/src/Siul2_Dio_Ip.o
+                0x0000000000415196                Siul2_Dio_Ip_WritePin
+                0x00000000004151fa                Siul2_Dio_Ip_SetGPDO
+                0x0000000000415224                Siul2_Dio_Ip_ClearGPDO
+                0x0000000000415274                Siul2_Dio_Ip_WritePins
+                0x00000000004152d0                Siul2_Dio_Ip_GetPinsOutput
+                0x0000000000415336                Siul2_Dio_Ip_SetPins
+                0x000000000041539a                Siul2_Dio_Ip_ClearPins
+                0x00000000004153fc                Siul2_Dio_Ip_TogglePins
+                0x000000000041545a                Siul2_Dio_Ip_ReadPins
+                0x00000000004154da                Siul2_Dio_Ip_ReadPin
+                0x00000000004155c4                Siul2_Dio_Ip_MaskedWritePins
+ .mcal_text     0x0000000000415604      0x950 ./RTD/src/Siul2_Port_Ip.o
+                0x0000000000415968                Siul2_Port_Ip_Init
+                0x00000000004159b8                Siul2_Port_Ip_SetPullSel
+                0x0000000000415a9c                Siul2_Port_Ip_SetOutputBuffer
+                0x0000000000415b58                Siul2_Port_Ip_SetInputBuffer
+                0x0000000000415c34                Siul2_Port_Ip_SetPinDirection
+                0x0000000000415d2e                Siul2_Port_Ip_RevertPinConfiguration
+                0x0000000000415df0                Siul2_Port_Ip_GetPinConfiguration
+ .mcal_text     0x0000000000415f54      0x2c4 ./RTD/src/Tspc_Port_Ip.o
+                0x0000000000415f54                Tspc_Port_Ip_EnableObeGroup
+                0x0000000000415fbc                Tspc_Port_Ip_DisableObeGroup
+                0x0000000000416024                Tspc_Port_Ip_MaskObeGroup
+                0x00000000004160b0                Tspc_Port_Ip_ConfigureObeGroup
+                0x0000000000416218                . = ALIGN (0x4)
  *(.acmcu_code_rom)
-                0x0000000000416220                . = ALIGN (0x4)
-                0x0000000000416220                __acfls_code_rom_start = .
+                0x0000000000416218                . = ALIGN (0x4)
+                0x0000000000416218                __acfls_code_rom_start = .
  *(.acfls_code_rom)
  .acfls_code_rom
-                0x0000000000416220       0x74 ./RTD/src/Clock_Ip_Specific.o
-                0x0000000000416220                Clock_Ip_PRAMCSetRamIWS
-                0x0000000000416294                . = ALIGN (0x4)
-                0x0000000000416294                __acfls_code_rom_end = .
-                0x0000000000416294                __acmem_43_infls_code_rom_start = .
+                0x0000000000416218       0x74 ./RTD/src/Clock_Ip_Specific.o
+                0x0000000000416218                Clock_Ip_PRAMCSetRamIWS
+                0x000000000041628c                . = ALIGN (0x4)
+                0x000000000041628c                __acfls_code_rom_end = .
+                0x000000000041628c                __acmem_43_infls_code_rom_start = .
  *(.acmem_43_infls_code_rom)
  .acmem_43_infls_code_rom
-                0x0000000000416294       0xa4 ./RTD/src/C40_Ip_Ac.o
-                0x0000000000416294                C40_Ip_AccessCode
-                0x0000000000416338                . = ALIGN (0x4)
-                0x0000000000416338                __acmem_43_infls_code_rom_end = .
+                0x000000000041628c       0xa4 ./RTD/src/C40_Ip_Ac.o
+                0x000000000041628c                C40_Ip_AccessCode
+                0x0000000000416330                . = ALIGN (0x4)
+                0x0000000000416330                __acmem_43_infls_code_rom_end = .
  *(.init)
-                0x0000000000416338                . = ALIGN (0x4)
+                0x0000000000416330                . = ALIGN (0x4)
  *(.fini)
-                0x0000000000416338                . = ALIGN (0x4)
+                0x0000000000416330                . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x0000000000416338       0x30 ./RTD/src/Lpuart_Uart_Ip.o
- .rodata        0x0000000000416368        0x4 ./RTD/src/Siul2_Port_Ip.o
-                0x0000000000416368                Port_au32Siul2BaseAddr
- .rodata        0x000000000041636c       0x96 ./src/APP_Main.o
- *fill*         0x0000000000416402        0x2 
- .rodata        0x0000000000416404       0x80 ./src/HSE_AppSmrProvision.o
- .rodata        0x0000000000416484       0x1e ./src/HSE_FlashStorage_Example.o
- *fill*         0x00000000004164a2        0x2 
- .rodata        0x00000000004164a4       0x10 ./src/HSE_Mac_Ecc_Example.o
- .rodata        0x00000000004164b4       0x28 ./src/HSE_Main.o
- .rodata        0x00000000004164dc       0x10 ./src/HSE_SecureBoot.o
- .rodata        0x00000000004164ec       0x78 ./src/UART_Print.o
+ .rodata        0x0000000000416330       0x30 ./RTD/src/Lpuart_Uart_Ip.o
+ .rodata        0x0000000000416360        0x4 ./RTD/src/Siul2_Port_Ip.o
+                0x0000000000416360                Port_au32Siul2BaseAddr
+ .rodata        0x0000000000416364       0x96 ./src/APP_Main.o
+ *fill*         0x00000000004163fa        0x2 
+ .rodata        0x00000000004163fc       0x80 ./src/HSE_AppSmrProvision.o
+ .rodata        0x000000000041647c       0x1e ./src/HSE_FlashStorage_Example.o
+ *fill*         0x000000000041649a        0x2 
+ .rodata        0x000000000041649c       0x10 ./src/HSE_Mac_Ecc_Example.o
+ .rodata        0x00000000004164ac       0x28 ./src/HSE_Main.o
+ .rodata        0x00000000004164d4       0x10 ./src/HSE_SecureBoot.o
+ .rodata        0x00000000004164e4       0x78 ./src/UART_Print.o
  *(.rodata*)
-                0x0000000000416564                . = ALIGN (0x4)
+                0x000000000041655c                . = ALIGN (0x4)
  *(.mcal_const_cfg)
  .mcal_const_cfg
-                0x0000000000416564      0x480 ./board/Siul2_Port_Ip_Cfg.o
-                0x0000000000416564                g_pin_mux_InitConfigArr_PortContainer_0_BOARD_InitPeripherals
+                0x000000000041655c      0x480 ./board/Siul2_Port_Ip_Cfg.o
+                0x000000000041655c                g_pin_mux_InitConfigArr_PortContainer_0_BOARD_InitPeripherals
  .mcal_const_cfg
-                0x00000000004169e4        0x8 ./generate/src/C40_Ip_Cfg.o
-                0x00000000004169e4                C40_Ip_InitCfg
+                0x00000000004169dc        0x8 ./generate/src/C40_Ip_Cfg.o
+                0x00000000004169dc                C40_Ip_InitCfg
  .mcal_const_cfg
-                0x00000000004169ec      0x41c ./generate/src/Clock_Ip_Cfg.o
-                0x0000000000416dc0                Clock_Ip_aClockConfig
+                0x00000000004169e4      0x41c ./generate/src/Clock_Ip_Cfg.o
+                0x0000000000416db8                Clock_Ip_aClockConfig
  .mcal_const_cfg
-                0x0000000000416e08       0x14 ./generate/src/IntCtrl_Ip_Cfg.o
-                0x0000000000416e14                IntCtrlConfig_0
+                0x0000000000416e00       0x14 ./generate/src/IntCtrl_Ip_Cfg.o
+                0x0000000000416e0c                IntCtrlConfig_0
  .mcal_const_cfg
-                0x0000000000416e1c       0x28 ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
-                0x0000000000416e1c                Lpuart_Uart_Ip_xHwConfigPB_1
-                0x0000000000416e44                . = ALIGN (0x4)
+                0x0000000000416e14       0x28 ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
+                0x0000000000416e14                Lpuart_Uart_Ip_xHwConfigPB_1
+                0x0000000000416e3c                . = ALIGN (0x4)
  *(.mcal_const)
- .mcal_const    0x0000000000416e44        0x8 ./RTD/src/C40_Ip.o
-                0x0000000000416e44                C40_Ip_pFlashBaseAddress
- .mcal_const    0x0000000000416e4c      0xf14 ./RTD/src/Clock_Ip_Data.o
-                0x0000000000416e4c                Clock_Ip_au8DividerCallbackIndex
-                0x0000000000416e58                Clock_Ip_au8DividerTriggerCallbackIndex
-                0x0000000000416e64                Clock_Ip_au8XoscCallbackIndex
-                0x0000000000416e70                Clock_Ip_au8IrcoscCallbackIndex
-                0x0000000000416e7c                Clock_Ip_au8GateCallbackIndex
-                0x0000000000416e88                Clock_Ip_au8FractionalDividerCallbackIndex
-                0x0000000000416e94                Clock_Ip_au8PllCallbackIndex
-                0x0000000000416ea0                Clock_Ip_au8SelectorCallbackIndex
-                0x0000000000416eac                Clock_Ip_au8PcfsCallbackIndex
-                0x0000000000416eb8                Clock_Ip_au8CmuCallbackIndex
-                0x0000000000416ec4                Clock_Ip_au8ClockFeatures
-                0x00000000004171d4                Clock_Ip_au8SoftwareMuxResetValue
-                0x000000000041722c                Clock_Ip_au16SelectorEntryHardwareValue
-                0x0000000000417250                Clock_Ip_au16SelectorEntryRtcHardwareValue
-                0x0000000000417274                Clock_Ip_apxCgm
-                0x00000000004172c8                Clock_Ip_apxCgmPcfs
-                0x00000000004172cc                Clock_Ip_apxXosc
-                0x00000000004172d4                Clock_Ip_apxPll
-                0x00000000004172e4                Clock_Ip_apxCmu
-                0x0000000000417300                Clock_Ip_aeCmuNames
-                0x000000000041731c                Clock_Ip_axCmuInfo
-                0x00000000004173a8                Clock_Ip_apxMcMeSetPartitions
-                0x00000000004173b8                Clock_Ip_apxMcMeGetPartitions
-                0x00000000004173c8                Clock_Ip_apxMcMeTriggerPartitions
-                0x00000000004173d8                Clock_Ip_aeSourceTypeClockName
-                0x0000000000417420                Clock_Ip_aeHwPllName
-                0x0000000000417424                Clock_Ip_aeHwDfsName
-                0x0000000000417428                Clock_Ip_axFeatureExtensions
-                0x0000000000417678                Clock_Ip_axGateInfo
- .mcal_const    0x0000000000417d60       0x14 ./RTD/src/Clock_Ip_Divider.o
-                0x0000000000417d60                Clock_Ip_axDividerCallbacks
- .mcal_const    0x0000000000417d74       0x10 ./RTD/src/Clock_Ip_DividerTrigger.o
-                0x0000000000417d74                Clock_Ip_axDividerTriggerCallbacks
- .mcal_const    0x0000000000417d84       0x30 ./RTD/src/Clock_Ip_ExtOsc.o
-                0x0000000000417d84                Clock_Ip_axExtOscCallbacks
- .mcal_const    0x0000000000417db4        0xc ./RTD/src/Clock_Ip_FracDiv.o
-                0x0000000000417db4                Clock_Ip_axFracDivCallbacks
- .mcal_const    0x0000000000417dc0       0x10 ./RTD/src/Clock_Ip_Gate.o
-                0x0000000000417dc0                Clock_Ip_axGateCallbacks
- .mcal_const    0x0000000000417dd0       0x30 ./RTD/src/Clock_Ip_IntOsc.o
-                0x0000000000417dd0                Clock_Ip_axIntOscCallbacks
- .mcal_const    0x0000000000417e00       0x20 ./RTD/src/Clock_Ip_Monitor.o
-                0x0000000000417e00                Clock_Ip_axCmuCallbacks
- .mcal_const    0x0000000000417e20       0x28 ./RTD/src/Clock_Ip_Pll.o
-                0x0000000000417e20                Clock_Ip_axPllCallbacks
- .mcal_const    0x0000000000417e48       0x28 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
-                0x0000000000417e68                Clock_Ip_axPcfsCallbacks
- .mcal_const    0x0000000000417e70       0x28 ./RTD/src/Clock_Ip_Selector.o
-                0x0000000000417e70                Clock_Ip_axSelectorCallbacks
- .mcal_const    0x0000000000417e98        0x8 ./RTD/src/Hse_Ip.o
- .mcal_const    0x0000000000417ea0       0x20 ./RTD/src/Lpuart_Uart_Ip.o
-                0x0000000000417ec0                . = ALIGN (0x4)
-                0x0000000000417ec0                __init_table = .
+ .mcal_const    0x0000000000416e3c        0x8 ./RTD/src/C40_Ip.o
+                0x0000000000416e3c                C40_Ip_pFlashBaseAddress
+ .mcal_const    0x0000000000416e44      0xf14 ./RTD/src/Clock_Ip_Data.o
+                0x0000000000416e44                Clock_Ip_au8DividerCallbackIndex
+                0x0000000000416e50                Clock_Ip_au8DividerTriggerCallbackIndex
+                0x0000000000416e5c                Clock_Ip_au8XoscCallbackIndex
+                0x0000000000416e68                Clock_Ip_au8IrcoscCallbackIndex
+                0x0000000000416e74                Clock_Ip_au8GateCallbackIndex
+                0x0000000000416e80                Clock_Ip_au8FractionalDividerCallbackIndex
+                0x0000000000416e8c                Clock_Ip_au8PllCallbackIndex
+                0x0000000000416e98                Clock_Ip_au8SelectorCallbackIndex
+                0x0000000000416ea4                Clock_Ip_au8PcfsCallbackIndex
+                0x0000000000416eb0                Clock_Ip_au8CmuCallbackIndex
+                0x0000000000416ebc                Clock_Ip_au8ClockFeatures
+                0x00000000004171cc                Clock_Ip_au8SoftwareMuxResetValue
+                0x0000000000417224                Clock_Ip_au16SelectorEntryHardwareValue
+                0x0000000000417248                Clock_Ip_au16SelectorEntryRtcHardwareValue
+                0x000000000041726c                Clock_Ip_apxCgm
+                0x00000000004172c0                Clock_Ip_apxCgmPcfs
+                0x00000000004172c4                Clock_Ip_apxXosc
+                0x00000000004172cc                Clock_Ip_apxPll
+                0x00000000004172dc                Clock_Ip_apxCmu
+                0x00000000004172f8                Clock_Ip_aeCmuNames
+                0x0000000000417314                Clock_Ip_axCmuInfo
+                0x00000000004173a0                Clock_Ip_apxMcMeSetPartitions
+                0x00000000004173b0                Clock_Ip_apxMcMeGetPartitions
+                0x00000000004173c0                Clock_Ip_apxMcMeTriggerPartitions
+                0x00000000004173d0                Clock_Ip_aeSourceTypeClockName
+                0x0000000000417418                Clock_Ip_aeHwPllName
+                0x000000000041741c                Clock_Ip_aeHwDfsName
+                0x0000000000417420                Clock_Ip_axFeatureExtensions
+                0x0000000000417670                Clock_Ip_axGateInfo
+ .mcal_const    0x0000000000417d58       0x14 ./RTD/src/Clock_Ip_Divider.o
+                0x0000000000417d58                Clock_Ip_axDividerCallbacks
+ .mcal_const    0x0000000000417d6c       0x10 ./RTD/src/Clock_Ip_DividerTrigger.o
+                0x0000000000417d6c                Clock_Ip_axDividerTriggerCallbacks
+ .mcal_const    0x0000000000417d7c       0x30 ./RTD/src/Clock_Ip_ExtOsc.o
+                0x0000000000417d7c                Clock_Ip_axExtOscCallbacks
+ .mcal_const    0x0000000000417dac        0xc ./RTD/src/Clock_Ip_FracDiv.o
+                0x0000000000417dac                Clock_Ip_axFracDivCallbacks
+ .mcal_const    0x0000000000417db8       0x10 ./RTD/src/Clock_Ip_Gate.o
+                0x0000000000417db8                Clock_Ip_axGateCallbacks
+ .mcal_const    0x0000000000417dc8       0x30 ./RTD/src/Clock_Ip_IntOsc.o
+                0x0000000000417dc8                Clock_Ip_axIntOscCallbacks
+ .mcal_const    0x0000000000417df8       0x20 ./RTD/src/Clock_Ip_Monitor.o
+                0x0000000000417df8                Clock_Ip_axCmuCallbacks
+ .mcal_const    0x0000000000417e18       0x28 ./RTD/src/Clock_Ip_Pll.o
+                0x0000000000417e18                Clock_Ip_axPllCallbacks
+ .mcal_const    0x0000000000417e40       0x28 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
+                0x0000000000417e60                Clock_Ip_axPcfsCallbacks
+ .mcal_const    0x0000000000417e68       0x28 ./RTD/src/Clock_Ip_Selector.o
+                0x0000000000417e68                Clock_Ip_axSelectorCallbacks
+ .mcal_const    0x0000000000417e90        0x8 ./RTD/src/Hse_Ip.o
+ .mcal_const    0x0000000000417e98       0x20 ./RTD/src/Lpuart_Uart_Ip.o
+                0x0000000000417eb8                . = ALIGN (0x4)
+                0x0000000000417eb8                __init_table = .
  *(.init_table)
- .init_table    0x0000000000417ec0       0x4c ./Project_Settings/Startup_Code/startup_cm7.o
-                0x0000000000417f0c                . = ALIGN (0x4)
-                0x0000000000417f0c                __zero_table = .
+ .init_table    0x0000000000417eb8       0x4c ./Project_Settings/Startup_Code/startup_cm7.o
+                0x0000000000417f04                . = ALIGN (0x4)
+                0x0000000000417f04                __zero_table = .
  *(.zero_table)
- .zero_table    0x0000000000417f0c       0x1c ./Project_Settings/Startup_Code/startup_cm7.o
+ .zero_table    0x0000000000417f04       0x1c ./Project_Settings/Startup_Code/startup_cm7.o
 
-.ARM.extab      0x0000000000417f28        0x0
- .ARM.extab     0x0000000000417f28        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+.ARM.extab      0x0000000000417f20        0x0
+ .ARM.extab     0x0000000000417f20        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
 
-.ARM.exidx      0x0000000000417f28        0x8
- .ARM.exidx     0x0000000000417f28        0x8 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+.ARM.exidx      0x0000000000417f20        0x8
+ .ARM.exidx     0x0000000000417f20        0x8 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
 
-.glue_7         0x0000000000417f30        0x0
- .glue_7        0x0000000000417f30        0x0 linker stubs
+.glue_7         0x0000000000417f28        0x0
+ .glue_7        0x0000000000417f28        0x0 linker stubs
 
-.glue_7t        0x0000000000417f30        0x0
- .glue_7t       0x0000000000417f30        0x0 linker stubs
+.glue_7t        0x0000000000417f28        0x0
+ .glue_7t       0x0000000000417f28        0x0 linker stubs
 
-.vfp11_veneer   0x0000000000417f30        0x0
- .vfp11_veneer  0x0000000000417f30        0x0 linker stubs
+.vfp11_veneer   0x0000000000417f28        0x0
+ .vfp11_veneer  0x0000000000417f28        0x0 linker stubs
 
-.v4_bx          0x0000000000417f30        0x0
- .v4_bx         0x0000000000417f30        0x0 linker stubs
+.v4_bx          0x0000000000417f28        0x0
+ .v4_bx         0x0000000000417f28        0x0 linker stubs
 
-.iplt           0x0000000000417f30        0x0
- .iplt          0x0000000000417f30        0x0 ./Project_Settings/Startup_Code/Vector_Table.o
+.iplt           0x0000000000417f28        0x0
+ .iplt          0x0000000000417f28        0x0 ./Project_Settings/Startup_Code/Vector_Table.o
 
-.rel.dyn        0x0000000000417f30        0x0
- .rel.iplt      0x0000000000417f30        0x0 ./Project_Settings/Startup_Code/Vector_Table.o
-                0x0000000000417f30                . = ALIGN (0x4)
-                0x0000000000417f30                __text_end = .
-                0x0000000000417f30                __sram_data_rom = __text_end
+.rel.dyn        0x0000000000417f28        0x0
+ .rel.iplt      0x0000000000417f28        0x0 ./Project_Settings/Startup_Code/Vector_Table.o
+                0x0000000000417f28                . = ALIGN (0x4)
+                0x0000000000417f28                __text_end = .
+                0x0000000000417f28                __sram_data_rom = __text_end
 
-.sram_bss       0x0000000020400000      0xea4
+.sram_bss       0x0000000020400000      0xf64
                 0x0000000020400000                . = ALIGN (0x8)
                 0x0000000020400000                __standby_ram_begin__ = .
  *(.standby_data)
@@ -9055,190 +9055,191 @@ END GROUP
                 0x0000000020400b7c                HSE_SecureBootNegativeControlPassed
  .bss           0x0000000020400de0        0x1 ./src/LED.o
                 0x0000000020400de0                val
- .bss           0x0000000020400de1        0x0 ./src/UART_Print.o
- .bss           0x0000000020400de1        0x0 ./src/main.o
- .bss           0x0000000020400de1        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcmp.o)
- .bss           0x0000000020400de1        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
- .bss           0x0000000020400de1        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strlen.o)
- .bss           0x0000000020400de1        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
- .bss           0x0000000020400de1        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
- .bss           0x0000000020400de1        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
+ *fill*         0x0000000020400de1        0x3 
+ .bss           0x0000000020400de4       0xc0 ./src/UART_Print.o
+ .bss           0x0000000020400ea4        0x0 ./src/main.o
+ .bss           0x0000000020400ea4        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcmp.o)
+ .bss           0x0000000020400ea4        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+ .bss           0x0000000020400ea4        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strlen.o)
+ .bss           0x0000000020400ea4        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
+ .bss           0x0000000020400ea4        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+ .bss           0x0000000020400ea4        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
  *(.bss*)
-                0x0000000020400df0                . = ALIGN (0x10)
- *fill*         0x0000000020400de1        0xf 
+                0x0000000020400eb0                . = ALIGN (0x10)
+ *fill*         0x0000000020400ea4        0xc 
  *(.mcal_bss)
- .mcal_bss      0x0000000020400df0        0x4 ./Project_Settings/Startup_Code/system.o
-                0x0000000020400df0                RESET_CATCH_CORE
- .mcal_bss      0x0000000020400df4       0x18 ./RTD/src/C40_Ip.o
-                0x0000000020400e08                C40_Ip_Instance
- .mcal_bss      0x0000000020400e0c       0x63 ./RTD/src/Clock_Ip.o
-                0x0000000020400e14                Clock_Ip_pxConfig
-                0x0000000020400e18                Clock_Ip_FreqIds
- *fill*         0x0000000020400e6f        0x1 
- .mcal_bss      0x0000000020400e70        0xc ./RTD/src/Clock_Ip_Monitor.o
- *fill*         0x0000000020400e7c        0x4 
- .mcal_bss      0x0000000020400e80        0x8 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
- .mcal_bss      0x0000000020400e88        0x9 ./RTD/src/Clock_Ip_Specific.o
- *fill*         0x0000000020400e91        0x3 
- .mcal_bss      0x0000000020400e94        0x8 ./RTD/src/Hse_Ip.o
- .mcal_bss      0x0000000020400e9c        0x8 ./RTD/src/Siul2_Port_Ip.o
-                0x0000000020400ea4                . = ALIGN (0x4)
-                0x0000000020400ea4                __sram_bss_end = .
+ .mcal_bss      0x0000000020400eb0        0x4 ./Project_Settings/Startup_Code/system.o
+                0x0000000020400eb0                RESET_CATCH_CORE
+ .mcal_bss      0x0000000020400eb4       0x18 ./RTD/src/C40_Ip.o
+                0x0000000020400ec8                C40_Ip_Instance
+ .mcal_bss      0x0000000020400ecc       0x63 ./RTD/src/Clock_Ip.o
+                0x0000000020400ed4                Clock_Ip_pxConfig
+                0x0000000020400ed8                Clock_Ip_FreqIds
+ *fill*         0x0000000020400f2f        0x1 
+ .mcal_bss      0x0000000020400f30        0xc ./RTD/src/Clock_Ip_Monitor.o
+ *fill*         0x0000000020400f3c        0x4 
+ .mcal_bss      0x0000000020400f40        0x8 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
+ .mcal_bss      0x0000000020400f48        0x9 ./RTD/src/Clock_Ip_Specific.o
+ *fill*         0x0000000020400f51        0x3 
+ .mcal_bss      0x0000000020400f54        0x8 ./RTD/src/Hse_Ip.o
+ .mcal_bss      0x0000000020400f5c        0x8 ./RTD/src/Siul2_Port_Ip.o
+                0x0000000020400f64                . = ALIGN (0x4)
+                0x0000000020400f64                __sram_bss_end = .
 
-.sram_data      0x0000000020400ea4      0x23c load address 0x0000000000417f30
-                0x0000000020400ea4                . = ALIGN (0x4)
-                0x0000000020400ea4                __sram_data_begin__ = .
-                0x0000000020400ea4                . = ALIGN (0x4)
+.sram_data      0x0000000020400f64      0x23c load address 0x0000000000417f28
+                0x0000000020400f64                . = ALIGN (0x4)
+                0x0000000020400f64                __sram_data_begin__ = .
+                0x0000000020400f64                . = ALIGN (0x4)
  *(.ramcode)
- .ramcode       0x0000000020400ea4       0xf0 ./RTD/src/Clock_Ip_Specific.o
-                0x0000000020400f94                . = ALIGN (0x4)
+ .ramcode       0x0000000020400f64       0xf0 ./RTD/src/Clock_Ip_Specific.o
+                0x0000000020401054                . = ALIGN (0x4)
  *(.data)
- .data          0x0000000020400f94        0x0 ./Project_Settings/Startup_Code/Vector_Table.o
- .data          0x0000000020400f94        0x0 ./Project_Settings/Startup_Code/exceptions.o
- .data          0x0000000020400f94        0x0 ./Project_Settings/Startup_Code/nvic.o
- .data          0x0000000020400f94        0x0 ./Project_Settings/Startup_Code/startup.o
- .data          0x0000000020400f94        0x0 ./Project_Settings/Startup_Code/startup_cm7.o
- .data          0x0000000020400f94        0x0 ./Project_Settings/Startup_Code/system.o
- .data          0x0000000020400f94        0x0 ./RTD/src/C40_Ip.o
- .data          0x0000000020400f94        0x0 ./RTD/src/C40_Ip_Ac.o
- .data          0x0000000020400f94        0x0 ./RTD/src/Cache_Ip.o
- .data          0x0000000020400f94        0x0 ./RTD/src/Cache_Ip_HwAcc_ArmCoreMx.o
- .data          0x0000000020400f94        0x4 ./RTD/src/Clock_Ip.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_Data.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_Divider.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_DividerTrigger.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_ExtOsc.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_FracDiv.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_Frequency.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_Gate.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_IntOsc.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_Irq.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_Monitor.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_Pll.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_Selector.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Clock_Ip_Specific.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Det.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Det_stub.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Hse_Ip.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Hse_Ip_Semaphore.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Igf_Port_Ip.o
- .data          0x0000000020400f98        0x0 ./RTD/src/IntCtrl_Ip.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Lpuart_Uart_Ip.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Lpuart_Uart_Ip_Irq.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Mu_Ip_Irq.o
- .data          0x0000000020400f98        0x0 ./RTD/src/OsIf_Interrupts.o
- .data          0x0000000020400f98        0x0 ./RTD/src/OsIf_Software_Semaphore.o
- .data          0x0000000020400f98        0x0 ./RTD/src/OsIf_Timer.o
- .data          0x0000000020400f98        0x0 ./RTD/src/OsIf_Timer_System.o
- .data          0x0000000020400f98        0x0 ./RTD/src/OsIf_Timer_System_Internal_Systick.o
- .data          0x0000000020400f98        0x0 ./RTD/src/SchM_BaseNXP.o
- .data          0x0000000020400f98        0x0 ./RTD/src/SchM_Crypto_43_HSE.o
- .data          0x0000000020400f98        0x0 ./RTD/src/SchM_Dio.o
- .data          0x0000000020400f98        0x0 ./RTD/src/SchM_Mcl.o
- .data          0x0000000020400f98        0x0 ./RTD/src/SchM_Mcu.o
- .data          0x0000000020400f98        0x0 ./RTD/src/SchM_Mem_43_INFLS.o
- .data          0x0000000020400f98        0x0 ./RTD/src/SchM_Port.o
- .data          0x0000000020400f98        0x0 ./RTD/src/SchM_Uart.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Siul2_Dio_Ip.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Siul2_Port_Ip.o
- .data          0x0000000020400f98        0x0 ./RTD/src/Tspc_Port_Ip.o
- .data          0x0000000020400f98        0x0 ./board/Siul2_Port_Ip_Cfg.o
- .data          0x0000000020400f98        0x0 ./board/Tspc_Port_Ip_Cfg.o
- .data          0x0000000020400f98        0x0 ./generate/src/C40_Ip_Cfg.o
- .data          0x0000000020400f98        0x0 ./generate/src/Clock_Ip_Cfg.o
- .data          0x0000000020400f98        0x0 ./generate/src/Hse_Ip_Cfg.o
- .data          0x0000000020400f98        0x0 ./generate/src/Igf_Port_Ip_Cfg.o
- .data          0x0000000020400f98        0x0 ./generate/src/IntCtrl_Ip_Cfg.o
- .data          0x0000000020400f98        0x0 ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
- .data          0x0000000020400f98        0x0 ./generate/src/OsIf_Cfg.o
- .data          0x0000000020400f98        0x0 ./src/APP_Main.o
- .data          0x0000000020400f98       0x10 ./src/HSE_AppSmrProvision.o
-                0x0000000020400f98                HSE_AppSmr_GetVerifyKeyInfoResponse
-                0x0000000020400f9c                HSE_AppSmr_ImportVerifyKeyResponse
-                0x0000000020400fa0                HSE_AppSmr_InstallEntryResponse
-                0x0000000020400fa4                HSE_AppSmr_VerifyEntryResponse
- .data          0x0000000020400fa8       0x40 ./src/HSE_FlashStorage_Example.o
-                0x0000000020400fa8                HSE_Example_NvmKeyEncryptResponse
-                0x0000000020400fac                HSE_Example_NvmKeyFlashWriteStatus
-                0x0000000020400fb0                HSE_Example_NvmKeyFlashReadStatus
-                0x0000000020400fb4                HSE_Example_NvmKeyDecryptResponse
-                0x0000000020400fb8                HSE_Example_GeneratedKeyEncryptResponse
-                0x0000000020400fbc                HSE_Example_GeneratedKeyFlashWriteStatus
-                0x0000000020400fc0                HSE_Example_GeneratedKeyFlashReadStatus
-                0x0000000020400fc4                HSE_Example_GeneratedKeyDecryptResponse
-                0x0000000020400fc8                HSE_Example_CtrEncryptResponse
-                0x0000000020400fcc                HSE_Example_CtrFlashWriteStatus
-                0x0000000020400fd0                HSE_Example_CtrFlashReadStatus
-                0x0000000020400fd4                HSE_Example_CtrDecryptResponse
- .data          0x0000000020400fe8       0x34 ./src/HSE_Mac_Ecc_Example.o
-                0x0000000020400fe8                HSE_Mac_ImportKeyResponse
-                0x0000000020400fec                HSE_Mac_GenerateTagResponse
-                0x0000000020400ff0                HSE_Mac_VerifyTagResponse
-                0x0000000020400ff4                HSE_Mac_FlashWriteStatus
-                0x0000000020400ff8                HSE_Mac_FlashReadStatus
-                0x0000000020400ffc                HSE_Mac_VerifyFromFlashResponse
-                0x0000000020401000                HSE_Ecc_GenerateKeyPairResponse
-                0x0000000020401004                HSE_Ecc_SignResponse
-                0x0000000020401008                HSE_Ecc_VerifyResponse
-                0x000000002040100c                HSE_Ecc_FlashWriteStatus
-                0x0000000020401010                HSE_Ecc_FlashReadStatus
-                0x0000000020401014                HSE_Ecc_ImportPubKeyFromFlashResponse
-                0x0000000020401018                HSE_Ecc_VerifyFromFlashResponse
- .data          0x000000002040101c       0x8c ./src/HSE_Main.o
-                0x000000002040101c                HSE_Status
-                0x000000002040106c                HSE_FormatKeyCatalogsResponse
-                0x0000000020401070                HSE_ImportKeyResponse
-                0x0000000020401074                HSE_GetAesKeyInfoResponse
-                0x0000000020401078                HSE_AesEncryptResponse
-                0x000000002040107c                HSE_AesDecryptResponse
-                0x0000000020401080                HSE_ImportNvmKeyResponse
-                0x0000000020401084                HSE_GetNvmAesKeyInfoResponse
-                0x0000000020401088                HSE_AesEncryptNvmResponse
-                0x000000002040108c                HSE_AesDecryptNvmResponse
-                0x0000000020401090                HSE_GenerateAesKeyResponse
-                0x0000000020401094                HSE_GetGeneratedAesKeyInfoResponse
-                0x0000000020401098                HSE_AesEncryptGeneratedResponse
-                0x000000002040109c                HSE_AesDecryptGeneratedResponse
- .data          0x00000000204010a8       0x28 ./src/HSE_SecureBoot.o
-                0x00000000204010a8                HSE_SecureBootTestDataWriteStatus
-                0x00000000204010ac                HSE_ImportSmrSignKeyRamResponse
-                0x00000000204010b0                HSE_ImportSmrVerifyKeyNvmResponse
-                0x00000000204010b4                HSE_GetSmrVerifyKeyInfoResponse
-                0x00000000204010b8                HSE_ComputeSmrInstallTagResponse
-                0x00000000204010bc                HSE_EraseSmrSignKeyRamResponse
-                0x00000000204010c0                HSE_InstallSmrEntryResponse
-                0x00000000204010c4                HSE_VerifySmrEntryResponse
-                0x00000000204010c8                HSE_SecureBootCorruptTestDataStatus
-                0x00000000204010cc                HSE_VerifySmrEntryAfterCorruptionResponse
- .data          0x00000000204010d0        0x0 ./src/LED.o
- .data          0x00000000204010d0        0x0 ./src/UART_Print.o
- .data          0x00000000204010d0        0x0 ./src/main.o
- .data          0x00000000204010d0        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcmp.o)
- .data          0x00000000204010d0        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
- .data          0x00000000204010d0        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strlen.o)
- .data          0x00000000204010d0        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
- .data          0x00000000204010d0        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
- .data          0x00000000204010d0        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
+ .data          0x0000000020401054        0x0 ./Project_Settings/Startup_Code/Vector_Table.o
+ .data          0x0000000020401054        0x0 ./Project_Settings/Startup_Code/exceptions.o
+ .data          0x0000000020401054        0x0 ./Project_Settings/Startup_Code/nvic.o
+ .data          0x0000000020401054        0x0 ./Project_Settings/Startup_Code/startup.o
+ .data          0x0000000020401054        0x0 ./Project_Settings/Startup_Code/startup_cm7.o
+ .data          0x0000000020401054        0x0 ./Project_Settings/Startup_Code/system.o
+ .data          0x0000000020401054        0x0 ./RTD/src/C40_Ip.o
+ .data          0x0000000020401054        0x0 ./RTD/src/C40_Ip_Ac.o
+ .data          0x0000000020401054        0x0 ./RTD/src/Cache_Ip.o
+ .data          0x0000000020401054        0x0 ./RTD/src/Cache_Ip_HwAcc_ArmCoreMx.o
+ .data          0x0000000020401054        0x4 ./RTD/src/Clock_Ip.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_Data.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_Divider.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_DividerTrigger.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_ExtOsc.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_FracDiv.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_Frequency.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_Gate.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_IntOsc.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_Irq.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_Monitor.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_Pll.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_ProgFreqSwitch.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_Selector.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Clock_Ip_Specific.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Det.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Det_stub.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Hse_Ip.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Hse_Ip_Semaphore.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Igf_Port_Ip.o
+ .data          0x0000000020401058        0x0 ./RTD/src/IntCtrl_Ip.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Lpuart_Uart_Ip.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Lpuart_Uart_Ip_Irq.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Mu_Ip_Irq.o
+ .data          0x0000000020401058        0x0 ./RTD/src/OsIf_Interrupts.o
+ .data          0x0000000020401058        0x0 ./RTD/src/OsIf_Software_Semaphore.o
+ .data          0x0000000020401058        0x0 ./RTD/src/OsIf_Timer.o
+ .data          0x0000000020401058        0x0 ./RTD/src/OsIf_Timer_System.o
+ .data          0x0000000020401058        0x0 ./RTD/src/OsIf_Timer_System_Internal_Systick.o
+ .data          0x0000000020401058        0x0 ./RTD/src/SchM_BaseNXP.o
+ .data          0x0000000020401058        0x0 ./RTD/src/SchM_Crypto_43_HSE.o
+ .data          0x0000000020401058        0x0 ./RTD/src/SchM_Dio.o
+ .data          0x0000000020401058        0x0 ./RTD/src/SchM_Mcl.o
+ .data          0x0000000020401058        0x0 ./RTD/src/SchM_Mcu.o
+ .data          0x0000000020401058        0x0 ./RTD/src/SchM_Mem_43_INFLS.o
+ .data          0x0000000020401058        0x0 ./RTD/src/SchM_Port.o
+ .data          0x0000000020401058        0x0 ./RTD/src/SchM_Uart.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Siul2_Dio_Ip.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Siul2_Port_Ip.o
+ .data          0x0000000020401058        0x0 ./RTD/src/Tspc_Port_Ip.o
+ .data          0x0000000020401058        0x0 ./board/Siul2_Port_Ip_Cfg.o
+ .data          0x0000000020401058        0x0 ./board/Tspc_Port_Ip_Cfg.o
+ .data          0x0000000020401058        0x0 ./generate/src/C40_Ip_Cfg.o
+ .data          0x0000000020401058        0x0 ./generate/src/Clock_Ip_Cfg.o
+ .data          0x0000000020401058        0x0 ./generate/src/Hse_Ip_Cfg.o
+ .data          0x0000000020401058        0x0 ./generate/src/Igf_Port_Ip_Cfg.o
+ .data          0x0000000020401058        0x0 ./generate/src/IntCtrl_Ip_Cfg.o
+ .data          0x0000000020401058        0x0 ./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o
+ .data          0x0000000020401058        0x0 ./generate/src/OsIf_Cfg.o
+ .data          0x0000000020401058        0x0 ./src/APP_Main.o
+ .data          0x0000000020401058       0x10 ./src/HSE_AppSmrProvision.o
+                0x0000000020401058                HSE_AppSmr_GetVerifyKeyInfoResponse
+                0x000000002040105c                HSE_AppSmr_ImportVerifyKeyResponse
+                0x0000000020401060                HSE_AppSmr_InstallEntryResponse
+                0x0000000020401064                HSE_AppSmr_VerifyEntryResponse
+ .data          0x0000000020401068       0x40 ./src/HSE_FlashStorage_Example.o
+                0x0000000020401068                HSE_Example_NvmKeyEncryptResponse
+                0x000000002040106c                HSE_Example_NvmKeyFlashWriteStatus
+                0x0000000020401070                HSE_Example_NvmKeyFlashReadStatus
+                0x0000000020401074                HSE_Example_NvmKeyDecryptResponse
+                0x0000000020401078                HSE_Example_GeneratedKeyEncryptResponse
+                0x000000002040107c                HSE_Example_GeneratedKeyFlashWriteStatus
+                0x0000000020401080                HSE_Example_GeneratedKeyFlashReadStatus
+                0x0000000020401084                HSE_Example_GeneratedKeyDecryptResponse
+                0x0000000020401088                HSE_Example_CtrEncryptResponse
+                0x000000002040108c                HSE_Example_CtrFlashWriteStatus
+                0x0000000020401090                HSE_Example_CtrFlashReadStatus
+                0x0000000020401094                HSE_Example_CtrDecryptResponse
+ .data          0x00000000204010a8       0x34 ./src/HSE_Mac_Ecc_Example.o
+                0x00000000204010a8                HSE_Mac_ImportKeyResponse
+                0x00000000204010ac                HSE_Mac_GenerateTagResponse
+                0x00000000204010b0                HSE_Mac_VerifyTagResponse
+                0x00000000204010b4                HSE_Mac_FlashWriteStatus
+                0x00000000204010b8                HSE_Mac_FlashReadStatus
+                0x00000000204010bc                HSE_Mac_VerifyFromFlashResponse
+                0x00000000204010c0                HSE_Ecc_GenerateKeyPairResponse
+                0x00000000204010c4                HSE_Ecc_SignResponse
+                0x00000000204010c8                HSE_Ecc_VerifyResponse
+                0x00000000204010cc                HSE_Ecc_FlashWriteStatus
+                0x00000000204010d0                HSE_Ecc_FlashReadStatus
+                0x00000000204010d4                HSE_Ecc_ImportPubKeyFromFlashResponse
+                0x00000000204010d8                HSE_Ecc_VerifyFromFlashResponse
+ .data          0x00000000204010dc       0x8c ./src/HSE_Main.o
+                0x00000000204010dc                HSE_Status
+                0x000000002040112c                HSE_FormatKeyCatalogsResponse
+                0x0000000020401130                HSE_ImportKeyResponse
+                0x0000000020401134                HSE_GetAesKeyInfoResponse
+                0x0000000020401138                HSE_AesEncryptResponse
+                0x000000002040113c                HSE_AesDecryptResponse
+                0x0000000020401140                HSE_ImportNvmKeyResponse
+                0x0000000020401144                HSE_GetNvmAesKeyInfoResponse
+                0x0000000020401148                HSE_AesEncryptNvmResponse
+                0x000000002040114c                HSE_AesDecryptNvmResponse
+                0x0000000020401150                HSE_GenerateAesKeyResponse
+                0x0000000020401154                HSE_GetGeneratedAesKeyInfoResponse
+                0x0000000020401158                HSE_AesEncryptGeneratedResponse
+                0x000000002040115c                HSE_AesDecryptGeneratedResponse
+ .data          0x0000000020401168       0x28 ./src/HSE_SecureBoot.o
+                0x0000000020401168                HSE_SecureBootTestDataWriteStatus
+                0x000000002040116c                HSE_ImportSmrSignKeyRamResponse
+                0x0000000020401170                HSE_ImportSmrVerifyKeyNvmResponse
+                0x0000000020401174                HSE_GetSmrVerifyKeyInfoResponse
+                0x0000000020401178                HSE_ComputeSmrInstallTagResponse
+                0x000000002040117c                HSE_EraseSmrSignKeyRamResponse
+                0x0000000020401180                HSE_InstallSmrEntryResponse
+                0x0000000020401184                HSE_VerifySmrEntryResponse
+                0x0000000020401188                HSE_SecureBootCorruptTestDataStatus
+                0x000000002040118c                HSE_VerifySmrEntryAfterCorruptionResponse
+ .data          0x0000000020401190        0x0 ./src/LED.o
+ .data          0x0000000020401190        0x0 ./src/UART_Print.o
+ .data          0x0000000020401190        0x0 ./src/main.o
+ .data          0x0000000020401190        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcmp.o)
+ .data          0x0000000020401190        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+ .data          0x0000000020401190        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strlen.o)
+ .data          0x0000000020401190        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
+ .data          0x0000000020401190        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+ .data          0x0000000020401190        0x0 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
  *(.data*)
-                0x00000000204010d0                . = ALIGN (0x4)
+                0x0000000020401190                . = ALIGN (0x4)
  *(.mcal_data)
- .mcal_data     0x00000000204010d0        0x8 ./RTD/src/C40_Ip.o
- .mcal_data     0x00000000204010d8        0x4 ./RTD/src/Clock_Ip_Specific.o
- .mcal_data     0x00000000204010dc        0x4 ./RTD/src/Siul2_Dio_Ip.o
-                0x00000000204010dc                Siul2_Dio_Ip_au32BaseAdresses
-                0x00000000204010e0                . = ALIGN (0x4)
-                0x00000000204010e0                __sram_data_end__ = .
-                0x000000000041816c                __sram_data_rom_end = (__sram_data_rom + (__sram_data_end__ - __sram_data_begin__))
+ .mcal_data     0x0000000020401190        0x8 ./RTD/src/C40_Ip.o
+ .mcal_data     0x0000000020401198        0x4 ./RTD/src/Clock_Ip_Specific.o
+ .mcal_data     0x000000002040119c        0x4 ./RTD/src/Siul2_Dio_Ip.o
+                0x000000002040119c                Siul2_Dio_Ip_au32BaseAdresses
+                0x00000000204011a0                . = ALIGN (0x4)
+                0x00000000204011a0                __sram_data_end__ = .
+                0x0000000000418164                __sram_data_rom_end = (__sram_data_rom + (__sram_data_end__ - __sram_data_begin__))
 
-.heap           0x00000000204010e0      0x200 load address 0x000000000041816c
+.heap           0x00000000204011a0      0x200 load address 0x0000000000418164
                 0x0000000000000000                . = (. + ALIGN (0x4))
-                0x00000000204010e0                _end = .
-                0x00000000204010e0                end = .
-                0x00000000204010e0                _heap_start = .
+                0x00000000204011a0                _end = .
+                0x00000000204011a0                end = .
+                0x00000000204011a0                _heap_start = .
                 0x0000000000000200                . = (. + HEAP_SIZE)
- *fill*         0x00000000204010e0      0x200 
-                0x00000000204012e0                _heap_end = .
+ *fill*         0x00000000204011a0      0x200 
+                0x00000000204013a0                _heap_end = .
 
 .acfls_code_ram
                 0x0000000020407f00        0x0
@@ -9248,10 +9249,10 @@ END GROUP
                 0x0000000020407f00                __acmem_43_infls_code_ram_start = .
  *(.acmem_43_infls_code_ram)
                 0x0000000020407f00                __acmem_43_infls_code_ram_end = .
-                0x000000000041816c                __non_cacheable_data_rom = __sram_data_rom_end
+                0x0000000000418164                __non_cacheable_data_rom = __sram_data_rom_end
 
 .non_cacheable_data
-                0x0000000020408000        0x4 load address 0x000000000041816c
+                0x0000000020408000        0x4 load address 0x0000000000418164
                 0x0000000020408000                . = ALIGN (0x4)
                 0x0000000020408000                __non_cacheable_data_start__ = .
  *(.mcal_data_no_cacheable)
@@ -9261,13 +9262,13 @@ END GROUP
                 0x0000000020408000                HSE_LOOP_ADDR = .
                 0x0000000020408000        0x4 LONG 0x0
                 0x0000000020408004                __non_cacheable_data_end__ = .
-                0x0000000000418170                __non_cacheable_data_rom_end = (__non_cacheable_data_rom + (__non_cacheable_data_end__ - __non_cacheable_data_start__))
+                0x0000000000418168                __non_cacheable_data_rom_end = (__non_cacheable_data_rom + (__non_cacheable_data_end__ - __non_cacheable_data_start__))
 
-.igot.plt       0x0000000020408004        0x0 load address 0x0000000000418170
+.igot.plt       0x0000000020408004        0x0 load address 0x0000000000418168
  .igot.plt      0x0000000020408004        0x0 ./Project_Settings/Startup_Code/Vector_Table.o
 
 .non_cacheable_bss
-                0x0000000020408004     0x196c load address 0x0000000000418170
+                0x0000000020408004     0x196c load address 0x0000000000418168
                 0x0000000020408010                . = ALIGN (0x10)
  *fill*         0x0000000020408004        0xc 
                 0x0000000020408010                __non_cacheable_bss_start = .
@@ -9332,16 +9333,16 @@ END GROUP
  *(.int_results)
                 0x0000000020410000                . = (. + 0x100)
  *fill*         0x000000002040ff00      0x100 
-                0x0000000000418170                __shareable_data_rom = __non_cacheable_data_rom_end
+                0x0000000000418168                __shareable_data_rom = __non_cacheable_data_rom_end
 
 .shareable_data
-                0x0000000020410000        0x0 load address 0x0000000000418170
+                0x0000000020410000        0x0 load address 0x0000000000418168
                 0x0000000020410000                . = ALIGN (0x4)
                 0x0000000020410000                __shareable_data_start__ = .
  *(.mcal_shared_data)
                 0x0000000020410000                . = ALIGN (0x4)
                 0x0000000020410000                __shareable_data_end__ = .
-                0x0000000000418170                __shareable_data_rom_end = (__shareable_data_rom + (__shareable_data_end__ - __shareable_data_start__))
+                0x0000000000418168                __shareable_data_rom_end = (__shareable_data_rom + (__shareable_data_end__ - __shareable_data_start__))
 
 .int_vector     0x0000000020000000      0x408
                 0x0000000020000000                . = ALIGN (0x800)
@@ -9350,15 +9351,15 @@ END GROUP
  *fill*         0x0000000020000000      0x408 
                 0x0000000020000408                . = ALIGN (0x4)
                 0x0000000020000408                __interrupts_ram_end = .
-                0x0000000000418170                __tcm_data_rom = __shareable_data_rom_end
+                0x0000000000418168                __tcm_data_rom = __shareable_data_rom_end
 
-.data_tcm_data  0x0000000020000408        0x0 load address 0x0000000000418170
+.data_tcm_data  0x0000000020000408        0x0 load address 0x0000000000418168
                 0x0000000020000408                . = ALIGN (0x4)
                 0x0000000020000408                __dtcm_data_start__ = .
  *(.dtcm_data*)
                 0x0000000020000408                . = ALIGN (0x4)
                 0x0000000020000408                __dtcm_data_end__ = .
-                0x0000000000418170                __tcm_data_rom_end = (__tcm_data_rom + (__dtcm_data_end__ - __dtcm_data_start__))
+                0x0000000000418168                __tcm_data_rom_end = (__tcm_data_rom + (__dtcm_data_end__ - __dtcm_data_start__))
 
 .bss_tcm_data   0x0000000020000408        0x0
                 0x0000000020000408                . = ALIGN (0x4)
@@ -9366,15 +9367,15 @@ END GROUP
  *(.dtcm_bss*)
                 0x0000000020000408                . = ALIGN (0x4)
                 0x0000000020000408                __dtcm_bss_end__ = .
-                0x0000000000418170                __tcm_code_rom_start = __tcm_data_rom_end
+                0x0000000000418168                __tcm_code_rom_start = __tcm_data_rom_end
 
-.itcm_text      0x0000000000000000        0x0 load address 0x0000000000418170
+.itcm_text      0x0000000000000000        0x0 load address 0x0000000000418168
                 0x0000000000000000                . = ALIGN (0x4)
                 0x0000000000000000                __itcm_start__ = .
  *(.itcm_text*)
                 0x0000000000000000                . = ALIGN (0x4)
                 0x0000000000000000                __itcm_end__ = .
-                0x0000000000418170                __tcm_code_rom_end = (__tcm_code_rom_start + (__itcm_end__ - __itcm_start__))
+                0x0000000000418168                __tcm_code_rom_end = (__tcm_code_rom_start + (__itcm_end__ - __itcm_start__))
 
 .shareable_bss  0x0000000020410000        0x0
                 0x0000000020410000                . = ALIGN (0x10)
@@ -9392,21 +9393,21 @@ END GROUP
                 0x0000000020010000                __INT_DTCM_END = ((ORIGIN (int_dtcm) + LENGTH (int_dtcm)) + LENGTH (int_stack_dtcm))
                 0x0000000020410000                __RAM_SHAREABLE_START = __shareable_data_start__
                 0x000000000000000f                __RAM_SHAREABLE_SIZE = 0xf
-                0x0000000000418170                __ROM_SHAREABLE_START = __shareable_data_rom
-                0x0000000000418170                __ROM_SHAREABLE_END = __shareable_data_rom_end
+                0x0000000000418168                __ROM_SHAREABLE_START = __shareable_data_rom
+                0x0000000000418168                __ROM_SHAREABLE_END = __shareable_data_rom_end
                 0x0000000020408000                __RAM_NO_CACHEABLE_START = __non_cacheable_data_start__
                 0x000000000000000f                __RAM_NO_CACHEABLE_SIZE = 0xf
-                0x000000000041816c                __ROM_NO_CACHEABLE_START = __non_cacheable_data_rom
-                0x0000000000418170                __ROM_NO_CACHEABLE_END = __non_cacheable_data_rom_end
-                0x0000000020400ea4                __RAM_CACHEABLE_START = __sram_data_begin__
+                0x0000000000418164                __ROM_NO_CACHEABLE_START = __non_cacheable_data_rom
+                0x0000000000418168                __ROM_NO_CACHEABLE_END = __non_cacheable_data_rom_end
+                0x0000000020400f64                __RAM_CACHEABLE_START = __sram_data_begin__
                 0x000000000000000f                __RAM_CACHEABLE_SIZE = 0xf
-                0x0000000000417f30                __ROM_CACHEABLE_START = __sram_data_rom
-                0x000000000041816c                __ROM_CACHEABLE_END = __sram_data_rom_end
+                0x0000000000417f28                __ROM_CACHEABLE_START = __sram_data_rom
+                0x0000000000418164                __ROM_CACHEABLE_END = __sram_data_rom_end
                 0x0000000000400000                __ROM_CODE_START = ORIGIN (int_pflash)
                 0x0000000010000000                __ROM_DATA_START = ORIGIN (int_dflash)
                 0x0000000020400000                __BSS_SRAM_START = __sram_bss_start
-                0x0000000020400ea4                __BSS_SRAM_END = __sram_bss_end
-                0x0000000000000ea4                __BSS_SRAM_SIZE = (__sram_bss_end - __sram_bss_start)
+                0x0000000020400f64                __BSS_SRAM_END = __sram_bss_end
+                0x0000000000000f64                __BSS_SRAM_SIZE = (__sram_bss_end - __sram_bss_start)
                 0x0000000020408010                __BSS_SRAM_NC_START = __non_cacheable_bss_start
                 0x0000000000001960                __BSS_SRAM_NC_SIZE = (__non_cacheable_bss_end - __non_cacheable_bss_start)
                 0x0000000020409970                __BSS_SRAM_NC_END = __non_cacheable_bss_end
@@ -9417,29 +9418,29 @@ END GROUP
                 0x0000000000402000                __INIT_INTERRUPT_START = __interrupts_init_start
                 0x0000000000402408                __INIT_INTERRUPT_END = __interrupts_init_end
                 0x0000000000000000                __RAM_ITCM_START = __itcm_start__
-                0x0000000000418170                __ROM_ITCM_START = __tcm_code_rom_start
-                0x0000000000418170                __ROM_ITCM_END = __tcm_code_rom_end
+                0x0000000000418168                __ROM_ITCM_START = __tcm_code_rom_start
+                0x0000000000418168                __ROM_ITCM_END = __tcm_code_rom_end
                 0x0000000020000408                __RAM_DTCM_DATA_START = __dtcm_data_start__
-                0x0000000000418170                __ROM_DTCM_DATA_START = __tcm_data_rom
-                0x0000000000418170                __ROM_DTCM_END = __tcm_data_rom_end
-                0x0000000000417ec0                __INIT_TABLE = __init_table
-                0x0000000000417f0c                __ZERO_TABLE = __zero_table
+                0x0000000000418168                __ROM_DTCM_DATA_START = __tcm_data_rom
+                0x0000000000418168                __ROM_DTCM_END = __tcm_data_rom_end
+                0x0000000000417eb8                __INIT_TABLE = __init_table
+                0x0000000000417f04                __ZERO_TABLE = __zero_table
                 0x0000000000000001                __RAM_INIT = 0x1
                 0x0000000000000001                __ITCM_INIT = 0x1
                 0x0000000000000001                __DTCM_INIT = 0x1
-                0x0000000000416220                Fls_ACEraseRomStart = __acfls_code_rom_start
-                0x0000000000416294                Fls_ACEraseRomEnd = __acfls_code_rom_end
+                0x0000000000416218                Fls_ACEraseRomStart = __acfls_code_rom_start
+                0x000000000041628c                Fls_ACEraseRomEnd = __acfls_code_rom_end
                 0x000000000000001d                Fls_ACEraseSize = ((__acfls_code_rom_end - __acfls_code_rom_start) / 0x4)
-                0x0000000000416220                Fls_ACWriteRomStart = __acfls_code_rom_start
-                0x0000000000416294                Fls_ACWriteRomEnd = __acfls_code_rom_end
+                0x0000000000416218                Fls_ACWriteRomStart = __acfls_code_rom_start
+                0x000000000041628c                Fls_ACWriteRomEnd = __acfls_code_rom_end
                 0x000000000000001d                Fls_ACWriteSize = ((__acfls_code_rom_end - __acfls_code_rom_start) / 0x4)
                 0x0000000020407f00                _ERASE_FUNC_ADDRESS_ = __acfls_code_ram_start
                 0x0000000020407f00                _WRITE_FUNC_ADDRESS_ = __acfls_code_ram_start
-                0x0000000000416294                Mem_43_INFLS_ACEraseRomStart = __acmem_43_infls_code_rom_start
-                0x0000000000416338                Mem_43_INFLS_ACEraseRomEnd = __acmem_43_infls_code_rom_end
+                0x000000000041628c                Mem_43_INFLS_ACEraseRomStart = __acmem_43_infls_code_rom_start
+                0x0000000000416330                Mem_43_INFLS_ACEraseRomEnd = __acmem_43_infls_code_rom_end
                 0x0000000000000029                Mem_43_INFLS_ACEraseSize = (((__acmem_43_infls_code_rom_end - __acmem_43_infls_code_rom_start) + 0x3) / 0x4)
-                0x0000000000416294                Mem_43_INFLS_ACWriteRomStart = __acmem_43_infls_code_rom_start
-                0x0000000000416338                Mem_43_INFLS_ACWriteRomEnd = __acmem_43_infls_code_rom_end
+                0x000000000041628c                Mem_43_INFLS_ACWriteRomStart = __acmem_43_infls_code_rom_start
+                0x0000000000416330                Mem_43_INFLS_ACWriteRomEnd = __acmem_43_infls_code_rom_end
                 0x0000000000000029                Mem_43_INFLS_ACWriteSize = (((__acmem_43_infls_code_rom_end - __acmem_43_infls_code_rom_start) + 0x3) / 0x4)
                 0x0000000020407f00                _MEM_43_INFLS_ERASE_FUNC_ADDRESS_ = __acmem_43_infls_code_ram_start
                 0x0000000020407f00                _MEM_43_INFLS_WRITE_FUNC_ADDRESS_ = __acmem_43_infls_code_ram_start
@@ -9675,7 +9676,7 @@ LOAD linker stubs
  .comment       0x0000000000000052       0x53 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcmp.o)
  .comment       0x0000000000000052       0x53 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
 
-.debug_info     0x0000000000000000    0x30b3c
+.debug_info     0x0000000000000000    0x30b04
  .debug_info    0x0000000000000000      0x139 ./Project_Settings/Startup_Code/exceptions.o
  .debug_info    0x0000000000000139      0x755 ./Project_Settings/Startup_Code/nvic.o
  .debug_info    0x000000000000088e      0x331 ./Project_Settings/Startup_Code/startup.o
@@ -9741,11 +9742,11 @@ LOAD linker stubs
  .debug_info    0x0000000000027f48     0x38a5 ./src/HSE_Main.o
  .debug_info    0x000000000002b7ed     0x2ad8 ./src/HSE_SecureBoot.o
  .debug_info    0x000000000002e2c5     0x1c12 ./src/LED.o
- .debug_info    0x000000000002fed7      0x65d ./src/UART_Print.o
- .debug_info    0x0000000000030534       0x9b ./src/main.o
- .debug_info    0x00000000000305cf       0x26 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
- .debug_info    0x00000000000305f5      0x521 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
- .debug_info    0x0000000000030b16       0x26 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
+ .debug_info    0x000000000002fed7      0x625 ./src/UART_Print.o
+ .debug_info    0x00000000000304fc       0x9b ./src/main.o
+ .debug_info    0x0000000000030597       0x26 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
+ .debug_info    0x00000000000305bd      0x521 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+ .debug_info    0x0000000000030ade       0x26 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
 
 .debug_abbrev   0x0000000000000000     0x4f6b
  .debug_abbrev  0x0000000000000000       0x47 ./Project_Settings/Startup_Code/exceptions.o
@@ -10385,7 +10386,7 @@ LOAD linker stubs
  .debug_macro   0x000000000004aa47      0xada ./src/UART_Print.o
  .debug_macro   0x000000000004b521      0x5f2 ./src/main.o
 
-.debug_line     0x0000000000000000    0x27ae6
+.debug_line     0x0000000000000000    0x27ae8
  .debug_line    0x0000000000000000      0x597 ./Project_Settings/Startup_Code/exceptions.o
  .debug_line    0x0000000000000597      0x4f0 ./Project_Settings/Startup_Code/nvic.o
  .debug_line    0x0000000000000a87      0x53b ./Project_Settings/Startup_Code/startup.o
@@ -10451,13 +10452,13 @@ LOAD linker stubs
  .debug_line    0x0000000000022794     0x1537 ./src/HSE_Main.o
  .debug_line    0x0000000000023ccb     0x1460 ./src/HSE_SecureBoot.o
  .debug_line    0x000000000002512b      0x6b3 ./src/LED.o
- .debug_line    0x00000000000257de     0x11a3 ./src/UART_Print.o
- .debug_line    0x0000000000026981      0xaf9 ./src/main.o
- .debug_line    0x000000000002747a       0x68 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
- .debug_line    0x00000000000274e2      0x59c c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
- .debug_line    0x0000000000027a7e       0x68 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
+ .debug_line    0x00000000000257de     0x11a5 ./src/UART_Print.o
+ .debug_line    0x0000000000026983      0xaf9 ./src/main.o
+ .debug_line    0x000000000002747c       0x68 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
+ .debug_line    0x00000000000274e4      0x59c c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+ .debug_line    0x0000000000027a80       0x68 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
 
-.debug_str      0x0000000000000000   0x1695e2
+.debug_str      0x0000000000000000   0x1695f0
  .debug_str     0x0000000000000000    0x15fee ./Project_Settings/Startup_Code/exceptions.o
                                       0x16214 (size before relaxing)
  .debug_str     0x0000000000015fee     0xb895 ./Project_Settings/Startup_Code/nvic.o
@@ -10588,15 +10589,15 @@ LOAD linker stubs
                                      0x14a5df (size before relaxing)
  .debug_str     0x000000000016917b       0x24 ./src/LED.o
                                       0x58f3d (size before relaxing)
- .debug_str     0x000000000016919f      0x1cb ./src/UART_Print.o
-                                     0x146793 (size before relaxing)
- .debug_str     0x000000000016936a       0x13 ./src/main.o
+ .debug_str     0x000000000016919f      0x1d9 ./src/UART_Print.o
+                                     0x1467a1 (size before relaxing)
+ .debug_str     0x0000000000169378       0x13 ./src/main.o
                                      0x13eaa8 (size before relaxing)
- .debug_str     0x000000000016937d       0xb2 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
+ .debug_str     0x000000000016938b       0xb2 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
                                          0xbe (size before relaxing)
- .debug_str     0x000000000016942f      0x17b c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+ .debug_str     0x000000000016943d      0x17b c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
                                         0x2a9 (size before relaxing)
- .debug_str     0x00000000001695aa       0x38 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
+ .debug_str     0x00000000001695b8       0x38 c:/nxp/s32ds.3.6.7/s32ds/build_tools/gcc_v10.2/gcc-10.2-arm32-eabi/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/v7e-m+fp/hard\libgcc.a(_dvmd_tls.o)
                                          0xc2 (size before relaxing)
 
 .debug_frame    0x0000000000000000     0x50b0

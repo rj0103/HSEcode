@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/APP_Main.c \
+../src/HSE_AppSmrProvision.c \
 ../src/HSE_FlashStorage_Example.c \
 ../src/HSE_Mac_Ecc_Example.c \
 ../src/HSE_Main.c \
@@ -14,6 +15,7 @@ C_SRCS += \
 
 OBJS += \
 ./src/APP_Main.o \
+./src/HSE_AppSmrProvision.o \
 ./src/HSE_FlashStorage_Example.o \
 ./src/HSE_Mac_Ecc_Example.o \
 ./src/HSE_Main.o \
@@ -23,6 +25,7 @@ OBJS += \
 
 C_DEPS += \
 ./src/APP_Main.d \
+./src/HSE_AppSmrProvision.d \
 ./src/HSE_FlashStorage_Example.d \
 ./src/HSE_Mac_Ecc_Example.d \
 ./src/HSE_Main.d \
