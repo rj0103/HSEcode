@@ -41,11 +41,13 @@ extern "C"
 ==================================================================================================*/
 #define UART_PRINT_INSTANCE    (LPUART_UART_IP_INSTANCE_USING_1)  /* LPUART1, PTA18(TX)/PTA19(RX) */
 #define UART_PRINT_TIMEOUT_US  (100000U)                          /* 100ms - generous for a short debug line */
-#define UART_PRINT_LINE_MAX    (128U)                             /* big enough for the longest label used today, with margin */
+#define UART_PRINT_LINE_MAX    (192U)                             /* big enough for the longest label + the longer sync prefix below, with margin */
 
 /* Sacrificial padding sent ahead of every real line - see file @details. Plain CRLFs so even if
-   partially garbled, nothing meaningful is lost and no stray visible characters land mid-line. */
-#define UART_PRINT_SYNC_PREFIX  "\r\n\r\n\r\n\r\n\r\n\r\n"
+   partially garbled, nothing meaningful is lost and no stray visible characters land mid-line.
+   Confirmed via a real capture that a 6x-CRLF (12 byte) prefix wasn't quite long enough - some of
+   the real text's leading edge still landed inside the glitch window. Widened with margin. */
+#define UART_PRINT_SYNC_PREFIX  "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n"
 
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
