@@ -195,6 +195,36 @@ def cmd_header(args: argparse.Namespace) -> None:
     print(f"Wrote {out_path}")
 
 
+def _parse_int(s: str) -> int:
+    return int(s, 0)  # accepts 0x-prefixed hex or plain decimal
+
+
+def cmd_slice(args: argparse.Namespace) -> None:
+    in_path = Path(args.__dict__["in"])
+    out_path = Path(args.out)
+    base = _parse_int(args.base)
+    start = _parse_int(args.start)
+    end = _parse_int(args.end)
+
+    if end <= start:
+        sys.exit(f"error: --end (0x{end:X}) must be greater than --start (0x{start:X})")
+    if start < base:
+        sys.exit(f"error: --start (0x{start:X}) must be >= --base (0x{base:X})")
+
+    offset = start - base
+    length = end - start
+
+    data = in_path.read_bytes()
+    if offset + length > len(data):
+        sys.exit(
+            f"error: {in_path} is only {len(data)} bytes, but --start/--base/--end implies "
+            f"reading up to byte {offset + length} - check the addresses match this exact file"
+        )
+
+    out_path.write_bytes(data[offset:offset + length])
+    print(f"Wrote {out_path}: {length} bytes (0x{length:X}), sliced from offset 0x{offset:X} in {in_path}")
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -223,6 +253,14 @@ def build_parser() -> argparse.ArgumentParser:
     p_header.add_argument("--sig-prefix", required=True, help="Prefix matching the --out-prefix used at sign time.")
     p_header.add_argument("--out", required=True, help="Output path for the generated C header.")
     p_header.set_defaults(func=cmd_header)
+
+    p_slice = sub.add_parser("slice", help="Slice out [start,end) from a flat binary dump, given its base load address.")
+    p_slice.add_argument("--in", dest="in", required=True, help="Path to the flat binary (e.g. from objcopy -O binary -j .pflash).")
+    p_slice.add_argument("--base", required=True, help="Load address of byte 0 of --in (e.g. ORIGIN(int_pflash), hex or decimal).")
+    p_slice.add_argument("--start", required=True, help="Address to start the slice at (e.g. __text_start).")
+    p_slice.add_argument("--end", required=True, help="Address to end the slice at, exclusive (e.g. __text_end).")
+    p_slice.add_argument("--out", required=True, help="Output path for the sliced bytes.")
+    p_slice.set_defaults(func=cmd_slice)
 
     return parser
 
