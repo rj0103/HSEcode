@@ -68,6 +68,12 @@
                         <pin_feature name="direction" value="OUTPUT"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="LPUART1" signal="lpuart1_tx" pin_num="1" pin_signal="PTA18">
+                     <pin_features>
+                        <pin_feature name="direction" value="INPUT"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="LPUART1" signal="lpuart1_rx" pin_num="2" pin_signal="PTA19"/>
                </pins>
             </function>
          </functions_list>
@@ -354,6 +360,21 @@
                   <data type="Version">1.0.0</data>
                </feature>
             </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.driver.lpuart_uart" description="Lpuart_Uart is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.driver.lpuart_uart" description="An unsupported version of the Lpuart_Uart in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">1.0.0</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="Tool" resourceId="Clocks" description="The Clocks tool is required by the Peripherals tool, but it is disabled." problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data>true</data>
+               </feature>
+            </dependency>
          </dependencies>
          <generated_project_files>
             <file path="generate/include/C40_Ip_Cfg.h" update_enabled="true"/>
@@ -363,6 +384,9 @@
             <file path="generate/include/Hse_Ip_Cfg.h" update_enabled="true"/>
             <file path="generate/include/IntCtrl_Ip_Cfg.h" update_enabled="true"/>
             <file path="generate/include/IntCtrl_Ip_CfgDefines.h" update_enabled="true"/>
+            <file path="generate/include/Lpuart_Uart_Ip_Cfg.h" update_enabled="true"/>
+            <file path="generate/include/Lpuart_Uart_Ip_Defines.h" update_enabled="true"/>
+            <file path="generate/include/Lpuart_Uart_Ip_Sa_PBcfg.h" update_enabled="true"/>
             <file path="generate/include/OsIf_ArchCfg.h" update_enabled="true"/>
             <file path="generate/include/OsIf_Cfg.h" update_enabled="true"/>
             <file path="generate/include/Siul2_Dio_Ip_Cfg.h" update_enabled="true"/>
@@ -372,6 +396,7 @@
             <file path="generate/src/C40_Ip_Cfg.c" update_enabled="true"/>
             <file path="generate/src/Hse_Ip_Cfg.c" update_enabled="true"/>
             <file path="generate/src/IntCtrl_Ip_Cfg.c" update_enabled="true"/>
+            <file path="generate/src/Lpuart_Uart_Ip_Sa_PBcfg.c" update_enabled="true"/>
             <file path="generate/src/OsIf_Cfg.c" update_enabled="true"/>
          </generated_project_files>
          <peripherals_profile>
@@ -505,6 +530,38 @@
                                        <setting name="PortPinInvertControl" value="false"/>
                                        <setting name="PortPinSiul2Instance" value="SIUL2_0"/>
                                        <setting name="PortPinId" value="4"/>
+                                       <setting name="PortPinInitialMode" value="PORT_GPIO_MODE"/>
+                                    </struct>
+                                    <struct name="4">
+                                       <setting name="Name" value="PortPin_4"/>
+                                       <setting name="PortPinPue" value="false"/>
+                                       <setting name="PortPinPus" value="false"/>
+                                       <setting name="PortPinSafeMode" value="false"/>
+                                       <setting name="PortPinDse" value="false"/>
+                                       <setting name="PortPinWithReadBack" value="false"/>
+                                       <setting name="PortPinPke" value="false"/>
+                                       <setting name="PortPinIfe" value="false"/>
+                                       <setting name="PortPinDirectionChangeable" value="true"/>
+                                       <setting name="PortPinModeChangeable" value="true"/>
+                                       <setting name="PortPinInvertControl" value="false"/>
+                                       <setting name="PortPinSiul2Instance" value="SIUL2_0"/>
+                                       <setting name="PortPinId" value="5"/>
+                                       <setting name="PortPinInitialMode" value="PORT_GPIO_MODE"/>
+                                    </struct>
+                                    <struct name="5">
+                                       <setting name="Name" value="PortPin_5"/>
+                                       <setting name="PortPinPue" value="false"/>
+                                       <setting name="PortPinPus" value="false"/>
+                                       <setting name="PortPinSafeMode" value="false"/>
+                                       <setting name="PortPinDse" value="false"/>
+                                       <setting name="PortPinWithReadBack" value="false"/>
+                                       <setting name="PortPinPke" value="false"/>
+                                       <setting name="PortPinIfe" value="false"/>
+                                       <setting name="PortPinDirectionChangeable" value="true"/>
+                                       <setting name="PortPinModeChangeable" value="true"/>
+                                       <setting name="PortPinInvertControl" value="false"/>
+                                       <setting name="PortPinSiul2Instance" value="SIUL2_0"/>
+                                       <setting name="PortPinId" value="6"/>
                                        <setting name="PortPinInitialMode" value="PORT_GPIO_MODE"/>
                                     </struct>
                                  </array>
@@ -649,6 +706,52 @@
                               <setting name="MclEnableCache" value="false"/>
                               <setting name="MclEnableCacheDevErrorDetect" value="false"/>
                            </struct>
+                        </struct>
+                     </config_set>
+                  </instance>
+                  <instance name="Lpuart_Uart" uuid="97ae3a64-446a-42d9-b839-9d15f4258a76" type="Lpuart_Uart" type_id="Lpuart_Uart" mode="ip" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="Lpuart_Uart">
+                        <setting name="Name" value="Lpuart_Uart"/>
+                        <struct name="ConfigTimeSupport" quick_selection="Default">
+                           <setting name="POST_BUILD_VARIANT_USED" value="false"/>
+                           <setting name="IMPLEMENTATION_CONFIG_VARIANT" value="VARIANT-PRE-COMPILE"/>
+                        </struct>
+                        <struct name="GeneralConfiguration" quick_selection="Default">
+                           <setting name="Name" value="GeneralConfiguration"/>
+                           <setting name="UartDevErrorDetect" value="true"/>
+                           <setting name="UartTimeoutMethod" value="OSIF_COUNTER_DUMMY"/>
+                           <setting name="UartTimeoutDuration" value="0"/>
+                           <setting name="UartDmaEnable" value="false"/>
+                           <setting name="UartCallbackCapability" value="false"/>
+                           <array name="UartCallback">
+                              <setting name="0" value=""/>
+                           </array>
+                           <array name="UartCallbackParam"/>
+                        </struct>
+                        <struct name="UartGlobalConfig">
+                           <setting name="Name" value="UartGlobalConfig"/>
+                           <array name="UartChannel">
+                              <struct name="0">
+                                 <setting name="Name" value="UartChannel_0"/>
+                                 <setting name="UartHwUsing" value="LPUART_IP"/>
+                                 <setting name="UartClockFunctionalGroupRef" value="ClockConfig0"/>
+                                 <struct name="DetailModuleConfiguration">
+                                    <setting name="Name" value="DetailModuleConfiguration"/>
+                                    <setting name="UartHwChannel" value="LPUART_1"/>
+                                    <setting name="DesireBaudrate" value="LPUART_UART_BAUDRATE_115200"/>
+                                    <setting name="CustomBaudrateMantissa" value="1"/>
+                                    <setting name="CustomBaudrateDivisor" value="4"/>
+                                    <setting name="UartInteruptDmaMethod" value="LPUART_UART_IP_USING_INTERRUPTS"/>
+                                    <array name="UartDmaTxChannelRef"/>
+                                    <array name="UartDmaRxChannelRef"/>
+                                    <setting name="UartParityType" value="LPUART_UART_IP_PARITY_DISABLED"/>
+                                    <setting name="UartStopBitNumber" value="LPUART_UART_IP_ONE_STOP_BIT"/>
+                                    <setting name="UartWordLength" value="LPUART_UART_IP_8_BITS_PER_CHAR"/>
+                                    <setting name="UartInternalLoopbackEnable" value="false"/>
+                                    <setting name="UartTimeoutEnable" value="false"/>
+                                 </struct>
+                              </struct>
+                           </array>
                         </struct>
                      </config_set>
                   </instance>

@@ -109,6 +109,8 @@ PortContainer_0_BOARD_InitPeripherals:
   - {pin_num: '32', peripheral: SIUL2, signal: 'gpio, 29', pin_signal: PTA29, direction: OUTPUT}
   - {pin_num: '39', peripheral: SIUL2, signal: 'gpio, 31', pin_signal: PTA31, identifier: LED_BLUE, direction: OUTPUT}
   - {pin_num: '33', peripheral: SIUL2, signal: 'gpio, 30', pin_signal: PTA30, direction: OUTPUT}
+  - {pin_num: '1', peripheral: LPUART1, signal: lpuart1_tx, pin_signal: PTA18, direction: INPUT}
+  - {pin_num: '2', peripheral: LPUART1, signal: lpuart1_rx, pin_signal: PTA19}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
