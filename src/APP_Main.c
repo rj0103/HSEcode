@@ -115,12 +115,13 @@ extern "C"{
 #endif // RUN_MAC_ECC_EXAMPLE
 #ifdef RUN_APP_SMR_PROVISIONING
 	    	 	 /* One-time provisioning build (BOOTLOADER_SECURE_BOOT_PLAN.md Stage 2) - see
-	    	 	    HSE_AppSmrProvision.h's file-level @details for the required two-build
-	    	 	    sequence (build final app first, hardcode its addresses, THEN build/flash
-	    	 	    this). Confirm HSE_AppSmr_ImportVerifyKeyResponse and
-	    	 	    HSE_AppSmr_InstallEntryResponse == HSE_SRV_RSP_OK via debugger, then reflash
-	    	 	    the final (non-provisioning) build permanently. Also needs the NVM ECC_PUB
-	    	 	    catalog group added in HSE_Main.c, same reformat caveat as the RAM ECC groups. */
+	    	 	    HSE_AppSmrProvision.h's file-level @details. Flash this once, confirm
+	    	 	    HSE_AppSmr_ImportVerifyKeyResponse and HSE_AppSmr_InstallEntryResponse ==
+	    	 	    HSE_SRV_RSP_OK via debugger, then flip the flag back OFF in
+	    	 	    HSE_AppSmrProvision.h and reflash the original all-zero build (the one you
+	    	 	    actually ran tools/sign_tool.py against) permanently - that's what Bootlaoder
+	    	 	    will check going forward. Also needs the NVM ECC_PUB catalog group added in
+	    	 	    HSE_Main.c, same reformat caveat as the RAM ECC groups. */
 	    	 	 HSE_AppSmr_Provision_Demo();
 #endif // RUN_APP_SMR_PROVISIONING
 
