@@ -179,6 +179,15 @@ extern "C"{
  }
 void HSE_RX_IRQ()
 {
+	/* RTD/src/Hse_Ip.c's Hse_Ip_RxIrqHandler() is the real MU0 RX interrupt handler - it clears
+	   the RX interrupt flags (Hse_Ip_ClearInterruptFlags()) and, for a spurious/unclaimed
+	   interrupt, still clears the status flag itself specifically to prevent the interrupt from
+	   re-triggering immediately and looping forever (see that function's own comment). Leaving
+	   this handler empty left that flag permanently set, so every HSE RX event re-entered this
+	   NVIC-priority-0 ISR back-to-back for as long as the flag stayed set - starving everything
+	   else on the core, including the UART print that runs right after HSE_Init()'s long chain
+	   of HSE service calls (which is exactly the one call observed to come out corrupted). */
+	Hse_Ip_RxIrqHandler(MU0_INSTANCE_U8);
 	}
 
 #ifdef __cplusplus
