@@ -107,15 +107,6 @@ extern "C"{
 	     else
 	     {
 	    	 	 HSE_Init();
-	    	 	 /* Settle delay: the print immediately after HSE_Init()'s long chain of HSE
-	    	 	    service calls is the one consistently observed to come out corrupted over
-	    	 	    UART, while calls before/after it are clean - testing whether some bus/clock
-	    	 	    activity trailing off right after heavy HSE use needs time to settle before
-	    	 	    the next UART transmission starts. */
-	    	 	 for(uint32_t settleCount=0; settleCount < 1000000U; settleCount++)
-	    	 	 {
-	    	 		 __asm volatile ("nop");
-	    	 	 }
 	    	 	 UART_Print_Status("HSE_Status", (uint32_t)HSE_Status, (uint32_t)HSE_VER_OK);
 //	    	 	 HSE_Example_StoreEncryptedDataDemo();
 #ifdef RUN_SECURE_BOOT_PHASE1_DEMO
