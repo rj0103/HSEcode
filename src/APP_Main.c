@@ -27,6 +27,7 @@ extern "C"{
 #include "HSE_SecureBoot.h"
 #include "HSE_Mac_Ecc_Example.h"
 #include "HSE_AppSmrProvision.h"
+#include "UART_Print.h"
 #include "LED.h"
 
 
@@ -96,22 +97,36 @@ extern "C"{
 	     IntCtrl_Ip_EnableIrq(HSE_MU0_RX_IRQn);
 	     /* Check if HSE FW usage flag is already enabled. Otherwise program the flag */
 	     LED_Init();
+	     UART_Print_Init();
+	     UART_Print_String("\r\n=== GSLU_APP booting ===\r\n");
 	     if(FALSE == HSE_checkHseFwFeatureFlagEnabled())
 	     {
+	    	 UART_Print_String("HSE FW usage flag not enabled - unlocking UTEST sector\r\n");
 	    	 HSE_UnlockUtestSector();
 	     }
 	     else
 	     {
 	    	 	 HSE_Init();
+	    	 	 UART_Print_Status("HSE_Status", (uint32_t)HSE_Status, (uint32_t)HSE_VER_OK);
 //	    	 	 HSE_Example_StoreEncryptedDataDemo();
 #ifdef RUN_SECURE_BOOT_PHASE1_DEMO
 	    	 	 HSE_SecureBoot_Phase1_Demo();
+	    	 	 UART_Print_HseResponse("SecureBoot ImportSmrSignKeyRam", HSE_ImportSmrSignKeyRamResponse);
+	    	 	 UART_Print_HseResponse("SecureBoot ComputeSmrInstallTag", HSE_ComputeSmrInstallTagResponse);
+	    	 	 UART_Print_HseResponse("SecureBoot ImportSmrVerifyKeyNvm", HSE_ImportSmrVerifyKeyNvmResponse);
+	    	 	 UART_Print_HseResponse("SecureBoot InstallSmrEntry", HSE_InstallSmrEntryResponse);
+	    	 	 UART_Print_HseResponse("SecureBoot EraseSmrSignKeyRam", HSE_EraseSmrSignKeyRamResponse);
+	    	 	 UART_Print_HseResponse("SecureBoot VerifySmrEntry (expect OK)", HSE_VerifySmrEntryResponse);
+	    	 	 UART_Print_HseResponse("SecureBoot VerifyAfterCorruption (expect FAIL)", HSE_VerifySmrEntryAfterCorruptionResponse);
+	    	 	 UART_Print_Bool("SecureBoot NegativeControlPassed", HSE_SecureBootNegativeControlPassed);
 #endif // RUN_SECURE_BOOT_PHASE1_DEMO
 #ifdef RUN_MAC_ECC_EXAMPLE
 	    	 	 /* ECC key-pair generate/sign/verify needs the ECC_PAIR/ECC_PUB RAM catalog
 	    	 	    groups added in HSE_Main.c - only present after a build with
 	    	 	    RUN_FORMAT_KEY_CATALOGS_IN_INIT defined has run at least once. */
 	    	 	 HSE_Mac_Ecc_Example_Demo();
+	    	 	 UART_Print_Bool("Mac FlashRoundTripVerified", HSE_Mac_FlashRoundTripVerified);
+	    	 	 UART_Print_Bool("Ecc FlashRoundTripVerified", HSE_Ecc_FlashRoundTripVerified);
 #endif // RUN_MAC_ECC_EXAMPLE
 #ifdef RUN_APP_SMR_PROVISIONING
 	    	 	 /* One-time provisioning build (BOOTLOADER_SECURE_BOOT_PLAN.md Stage 2) - see
@@ -123,7 +138,11 @@ extern "C"{
 	    	 	    will check going forward. Also needs the NVM ECC_PUB catalog group added in
 	    	 	    HSE_Main.c, same reformat caveat as the RAM ECC groups. */
 	    	 	 HSE_AppSmr_Provision_Demo();
+	    	 	 UART_Print_HseResponse("AppSmr GetVerifyKeyInfo", HSE_AppSmr_GetVerifyKeyInfoResponse);
+	    	 	 UART_Print_HseResponse("AppSmr ImportVerifyKey", HSE_AppSmr_ImportVerifyKeyResponse);
+	    	 	 UART_Print_HseResponse("AppSmr InstallEntry", HSE_AppSmr_InstallEntryResponse);
 #endif // RUN_APP_SMR_PROVISIONING
+	    	 	 UART_Print_String("=== Provisioning/demo sequence complete ===\r\n");
 
 	     }
 
