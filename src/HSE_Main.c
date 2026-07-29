@@ -277,8 +277,15 @@ extern "C"
 		    /*      Format HSE Nvm and Ram key catalogs. This is a one-time provisioning step: once HSE_STATUS_INSTALL_OK is set, the         */
 		    /*      catalogs already exist, so skip re-formatting (it would wipe existing keys, and repeated NVM reformats can also fail      */
 		    /*      with HSE_SRV_RSP_NOT_ENOUGH_SPACE). Only run it on a genuinely blank/never-provisioned HSE.                               */
+		    /*      FORCE_KEY_CATALOG_REFORMAT bypasses that skip - needed when the catalog *structure* itself changed (a group was added/    */
+		    /*      resized in Hse_aNvmKeyCatalog/Hse_aRamKeyCatalog), since HSE_STATUS_INSTALL_OK being set from an earlier, different       */
+		    /*      catalog layout does not mean the CURRENT layout has ever actually been formatted. Deliberately a separate macro from      */
+		    /*      RUN_FORMAT_KEY_CATALOGS_IN_INIT so the common case (already formatted, nothing changed) stays a safe no-op by default.    */
 		    /* =============================================================================================================================== */
 			HSE_CatalogsWereAlreadyInstalled = (0U != (HseStatus & HSE_STATUS_INSTALL_OK));
+#ifdef FORCE_KEY_CATALOG_REFORMAT
+			HSE_FormatKeyCatalogsResponse = HSE_FormatHseKeyCatalogs();
+#else
 			if (HSE_CatalogsWereAlreadyInstalled)
 			{
 				HSE_FormatKeyCatalogsResponse = HSE_SRV_RSP_OK; /* already installed - nothing to do */
@@ -287,6 +294,7 @@ extern "C"
 			{
 				HSE_FormatKeyCatalogsResponse = HSE_FormatHseKeyCatalogs();
 			}
+#endif // FORCE_KEY_CATALOG_REFORMAT
 			status = (HSE_SRV_RSP_OK == HSE_FormatKeyCatalogsResponse);
 #endif // RUN_FORMAT_KEY_CATALOGS_IN_INIT
 //		    /* =============================================================================================================================== */
