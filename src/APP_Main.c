@@ -106,7 +106,9 @@ extern "C"{
 	     }
 	     else
 	     {
+	    	 	 uint32_t lpuart1FreqBefore = (uint32_t)Clock_Ip_GetClockFrequency(LPUART1_CLK);
 	    	 	 HSE_Init();
+	    	 	 uint32_t lpuart1FreqAfter = (uint32_t)Clock_Ip_GetClockFrequency(LPUART1_CLK);
 	    	 	 UART_Print_Status("HSE_Status", (uint32_t)HSE_Status, (uint32_t)HSE_VER_OK);
 //	    	 	 HSE_Example_StoreEncryptedDataDemo();
 #ifdef RUN_SECURE_BOOT_PHASE1_DEMO
@@ -143,6 +145,12 @@ extern "C"{
 	    	 	 UART_Print_HseResponse("AppSmr InstallEntry", HSE_AppSmr_InstallEntryResponse);
 #endif // RUN_APP_SMR_PROVISIONING
 	    	 	 UART_Print_String("=== Provisioning/demo sequence complete ===\r\n");
+	    	 	 /* Diagnostic: is HSE_Init() changing the LPUART1 functional clock? Both readings
+	    	 	    are reported through this known-clean print call rather than the currently
+	    	 	    corrupted HSE_Status one, so the comparison itself can't be hidden by whatever
+	    	 	    is going on there. "OK" here means the frequency did NOT change. */
+	    	 	 UART_Print_Status("LPUART1_CLK before HSE_Init", lpuart1FreqBefore, lpuart1FreqBefore);
+	    	 	 UART_Print_Status("LPUART1_CLK after HSE_Init", lpuart1FreqAfter, lpuart1FreqBefore);
 
 	     }
 
