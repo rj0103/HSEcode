@@ -26,6 +26,7 @@ extern "C"{
 #include "HSE_FlashStorage_Example.h"
 #include "HSE_SecureBoot.h"
 #include "HSE_Mac_Ecc_Example.h"
+#include "HSE_AppSmrProvision.h"
 #include "LED.h"
 
 
@@ -35,6 +36,7 @@ extern "C"{
 
 //#define RUN_SECURE_BOOT_PHASE1_DEMO
 //#define RUN_MAC_ECC_EXAMPLE
+//#define RUN_APP_SMR_PROVISIONING
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
@@ -108,6 +110,15 @@ extern "C"{
 	    	 	    RUN_FORMAT_KEY_CATALOGS_IN_INIT defined has run at least once. */
 	    	 	 HSE_Mac_Ecc_Example_Demo();
 #endif // RUN_MAC_ECC_EXAMPLE
+#ifdef RUN_APP_SMR_PROVISIONING
+	    	 	 /* One-time provisioning build (BOOTLOADER_SECURE_BOOT_PLAN.md Stage 2) - flash
+	    	 	    once with tools/sign_tool.py's real output in app_smr_provision_data.h (NOT
+	    	 	    the checked-in all-zero placeholder), confirm HSE_AppSmr_VerifyEntryResponse
+	    	 	    == HSE_SRV_RSP_OK via debugger, then leave this flag undefined again - the key
+	    	 	    and SMR entry both persist in HSE across reset. Also needs the NVM ECC_PUB
+	    	 	    catalog group added in HSE_Main.c, same reformat caveat as the RAM ECC groups. */
+	    	 	 HSE_AppSmr_Provision_Demo();
+#endif // RUN_APP_SMR_PROVISIONING
 
 	     }
 

@@ -59,8 +59,15 @@ extern "C"
 	/* Table containing NVM key catalog entries */
 	static hseKeyGroupCfgEntry_t Hse_aNvmKeyCatalog[] =
 	{
-	    /* NvmKeyGroup_MASTER_ECU_KEY__BOOT_MAC_KEY__Key1_To_Key10 */
+	    /* NvmKeyGroup_MASTER_ECU_KEY__BOOT_MAC_KEY__Key1_To_Key10 - group index 0 */
 	    {HSE_ALL_MU_MASK, HSE_KEY_OWNER_CUST, HSE_KEY_TYPE_AES, 4U, HSE_KEY128_BITS, {0U, 0U}},
+	    /* NvmKeyGroup_AppSmrVerify - group index 1: persistent secp256r1 public key used to verify
+	       GSLU_APP's own real SMR entry (see HSE_AppSmrProvision.c / BOOTLOADER_SECURE_BOOT_PLAN.md
+	       Stage 2). Must be NVM, not RAM - RAM keys are wiped every reset, but this key has to
+	       survive across reset for the bootloader's on-demand SMR check to ever succeed after the
+	       provisioning build is removed. Same "needs a reformat once" caveat as the RAM ECC groups
+	       below - see their comment. */
+	    {HSE_ALL_MU_MASK, HSE_KEY_OWNER_CUST, HSE_KEY_TYPE_ECC_PUB, 1U, HSE_KEY256_BITS, {0U, 0U}},
 	    /* Marker to end the key catalog */
 	    {0U, 0U, 0U, 0U, 0U, {0U, 0U}}
 	};
