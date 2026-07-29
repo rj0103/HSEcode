@@ -3,9 +3,10 @@
  * @file     HSE_AppSmrProvision.c
  * @brief    One-time provisioning: import GSLU_APP's real ECDSA (secp256r1)
  *           verify key into HSE's persistent NVM catalog, and install GSLU_APP's
- *           own SMR entry (covering __text_start..__text_end) so the Bootlaoder
- *           project can verify it before jumping in.
- *           See BOOTLOADER_SECURE_BOOT_PLAN.md, Stage 2.
+ *           own SMR entry (covering the FINAL app's fixed [text_start, text_end)
+ *           range) so the Bootlaoder project can verify it before jumping in.
+ *           See BOOTLOADER_SECURE_BOOT_PLAN.md, Stage 2, and this module's
+ *           header (HSE_AppSmrProvision.h) for the required two-build sequence.
  * @location /test/src/HSE_AppSmrProvision.c
  ******************************************************************************
  *
@@ -18,6 +19,9 @@ extern "C"
 #endif
 
 #include "HSE_AppSmrProvision.h"
+
+#ifdef RUN_APP_SMR_PROVISIONING
+
 #include "app_smr_provision_data.h"
 #include "string.h"
 
@@ -33,6 +37,20 @@ extern "C"
 
 #define ECC_CURVE_BYTE_LEN  (32U)  /* secp256r1: 256-bit curve, 32-byte r/s/coordinates */
 
+/* The FINAL app's fixed flash bounds - i.e. the build with RUN_APP_SMR_PROVISIONING left OFF,
+   NOT this (provisioning) build's own layout, which differs because this file's extra code/data
+   only exists in the provisioning build. See HSE_AppSmrProvision.h's file-level @details for the
+   full two-build sequence these two values come from.
+   START is fixed regardless of code size (ORIGIN(int_pflash) + the 8KB .boot_header/alignment
+   reserved before __text_start, per linker_flash_s32k312_Release.ld) - confirmed via the
+   Release_FLASH build's own .map file, so this one is safe to hardcode now.
+   END depends on the FINAL app's exact size, which changes now that this file's content is fully
+   absent from that build (smaller than the 0x496998 measured before this fix) - REBUILD with
+   RUN_APP_SMR_PROVISIONING undefined first, read the new __text_end from that build's .map file,
+   and replace the TODO placeholder below before flashing the provisioning build. */
+#define APP_PROTECTED_TEXT_START  (0x00484000UL)
+#define APP_PROTECTED_TEXT_END    (0x00484000UL) /* TODO: replace with the final app's real __text_end */
+
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
@@ -45,11 +63,6 @@ hseSrvResponse_t HSE_AppSmr_VerifyEntryResponse      = HSE_SRV_RSP_GENERAL_ERROR
 /*==================================================================================================
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
-/* The real flashed image bounds - vector table + code + rodata of this running image, exactly
-   like SECURE_BOOT_PLAN.md's Region 1b. Confirmed to exist in the linker script (see that file). */
-extern uint32_t __text_start[];
-extern uint32_t __text_end[];
-
 /* This translation unit obtains its own MU channels via Hse_Ip_GetFreeChannel(), so it needs its
    own host-side request/descriptor storage - same reasoning as HSE_SecureBoot.c / HSE_Mac_Ecc_Example.c. */
 static Hse_Ip_ReqType     HseIp_aRequest[HSE_IP_NUM_OF_CHANNELS_PER_MU];
@@ -147,8 +160,9 @@ hseSrvResponse_t HSE_AppSmr_ImportVerifyKey_Nvm(void)
 }
 
 /*!
- * @brief       Installs SMR entry #APP_SMR_ENTRY_INDEX covering [__text_start, __text_end) -
- *              GSLU_APP's own real flashed image - authenticated via ECDSA/SHA-256 using
+ * @brief       Installs SMR entry #APP_SMR_ENTRY_INDEX covering [APP_PROTECTED_TEXT_START,
+ *              APP_PROTECTED_TEXT_END) - the FINAL app's flashed image, NOT this provisioning
+ *              build's own layout - authenticated via ECDSA/SHA-256 using
  *              ECC_APP_VERIFY_NVM_KEY_HANDLE and the (r,s) signature from
  *              app_smr_provision_data.h (produced offline by tools/sign_tool.py - the private
  *              key never touches this device). In-place auth (pSmrDest = 0, no copy), on-demand
@@ -167,10 +181,10 @@ hseSrvResponse_t HSE_AppSmr_InstallEntry(void)
 	hseSrvResponse_t         RetVal      = HSE_SRV_RSP_GENERAL_ERROR;
 	uint8_t                  u8MuChannel = Hse_Ip_GetFreeChannel(MU0_INSTANCE_U8);
 	static hseSmrEntry_t     SmrEntry;
-	uint32_t                 regionLen = (uint32_t)__text_end - (uint32_t)__text_start;
+	uint32_t                 regionLen = APP_PROTECTED_TEXT_END - APP_PROTECTED_TEXT_START;
 
 	memset(&SmrEntry, 0, sizeof(SmrEntry));
-	SmrEntry.pSmrSrc                          = (uint32_t)__text_start;
+	SmrEntry.pSmrSrc                          = APP_PROTECTED_TEXT_START;
 	SmrEntry.smrSize                          = regionLen;
 	SmrEntry.pSmrDest                         = 0U;
 	SmrEntry.configFlags                      = HSE_SMR_CFG_FLAG_INSTALL_AUTH;
@@ -190,7 +204,7 @@ hseSrvResponse_t HSE_AppSmr_InstallEntry(void)
 	pSmrInstallReq->accessMode       = HSE_ACCESS_MODE_ONE_PASS;
 	pSmrInstallReq->entryIndex       = APP_SMR_ENTRY_INDEX;
 	pSmrInstallReq->pSmrEntry        = (HOST_ADDR)&SmrEntry;
-	pSmrInstallReq->pSmrData         = (HOST_ADDR)__text_start;
+	pSmrInstallReq->pSmrData         = (HOST_ADDR)APP_PROTECTED_TEXT_START;
 	pSmrInstallReq->smrDataLength    = regionLen;
 	pSmrInstallReq->pAuthTag[0]      = (HOST_ADDR)AppSmr_SignatureR;
 	pSmrInstallReq->pAuthTag[1]      = (HOST_ADDR)AppSmr_SignatureS;
@@ -206,9 +220,15 @@ hseSrvResponse_t HSE_AppSmr_InstallEntry(void)
 }
 
 /*!
- * @brief       Triggers on-demand verification of SMR entry #APP_SMR_ENTRY_INDEX - a sanity check
- *              that the just-installed entry actually verifies, before ever relying on the
- *              bootloader to do the same check. Not itself part of the boot-time enforcement path.
+ * @brief       Triggers on-demand verification of SMR entry #APP_SMR_ENTRY_INDEX.
+ * @details     Only meaningful once the FINAL app (not this provisioning build) is actually the
+ *              thing flashed at [APP_PROTECTED_TEXT_START, APP_PROTECTED_TEXT_END) - calling this
+ *              from the provisioning build itself will correctly report
+ *              HSE_SRV_RSP_VERIFY_FAILED, since the provisioning build's own bytes (not the final
+ *              app's) currently occupy that range. That's why HSE_AppSmr_Provision_Demo() below
+ *              does NOT call this automatically - use it manually (e.g. via debugger) after
+ *              reflashing the final app, if you want to double-check before relying on the
+ *              bootloader's own check.
  *
  * @return      hseSrvResponse_t. HSE_SRV_RSP_OK on match, HSE_SRV_RSP_VERIFY_FAILED otherwise.
  */
@@ -237,15 +257,19 @@ hseSrvResponse_t HSE_AppSmr_VerifyEntryOnDemand(void)
 }
 
 /*!
- * @brief       Runs the whole one-time provisioning sequence: import the NVM verify key, install
- *              the SMR entry, then verify it once as a sanity check.
+ * @brief       Runs the one-time provisioning sequence: import the NVM verify key, then install
+ *              the SMR entry. Deliberately does NOT self-verify afterward - see
+ *              HSE_AppSmr_VerifyEntryOnDemand()'s @details for why that would be misleading here.
+ *              Inspect HSE_AppSmr_ImportVerifyKeyResponse / HSE_AppSmr_InstallEntryResponse via
+ *              debugger to confirm this ran cleanly (both should read HSE_SRV_RSP_OK).
  */
 void HSE_AppSmr_Provision_Demo(void)
 {
 	HSE_AppSmr_ImportVerifyKeyResponse = HSE_AppSmr_ImportVerifyKey_Nvm();
 	HSE_AppSmr_InstallEntryResponse    = HSE_AppSmr_InstallEntry();
-	HSE_AppSmr_VerifyEntryResponse     = HSE_AppSmr_VerifyEntryOnDemand();
 }
+
+#endif /* RUN_APP_SMR_PROVISIONING */
 
 #ifdef __cplusplus
 }

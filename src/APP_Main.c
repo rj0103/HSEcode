@@ -36,7 +36,10 @@ extern "C"{
 
 //#define RUN_SECURE_BOOT_PHASE1_DEMO
 //#define RUN_MAC_ECC_EXAMPLE
-//#define RUN_APP_SMR_PROVISIONING
+/* RUN_APP_SMR_PROVISIONING is toggled in HSE_AppSmrProvision.h instead of here - that file's
+   entire body (not just this call site) must disappear when it's off, so the macro needs to be
+   visible to that translation unit too, not just this one. See that header's file-level
+   @details for the required two-build sequence before flipping it on. */
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
@@ -111,11 +114,12 @@ extern "C"{
 	    	 	 HSE_Mac_Ecc_Example_Demo();
 #endif // RUN_MAC_ECC_EXAMPLE
 #ifdef RUN_APP_SMR_PROVISIONING
-	    	 	 /* One-time provisioning build (BOOTLOADER_SECURE_BOOT_PLAN.md Stage 2) - flash
-	    	 	    once with tools/sign_tool.py's real output in app_smr_provision_data.h (NOT
-	    	 	    the checked-in all-zero placeholder), confirm HSE_AppSmr_VerifyEntryResponse
-	    	 	    == HSE_SRV_RSP_OK via debugger, then leave this flag undefined again - the key
-	    	 	    and SMR entry both persist in HSE across reset. Also needs the NVM ECC_PUB
+	    	 	 /* One-time provisioning build (BOOTLOADER_SECURE_BOOT_PLAN.md Stage 2) - see
+	    	 	    HSE_AppSmrProvision.h's file-level @details for the required two-build
+	    	 	    sequence (build final app first, hardcode its addresses, THEN build/flash
+	    	 	    this). Confirm HSE_AppSmr_ImportVerifyKeyResponse and
+	    	 	    HSE_AppSmr_InstallEntryResponse == HSE_SRV_RSP_OK via debugger, then reflash
+	    	 	    the final (non-provisioning) build permanently. Also needs the NVM ECC_PUB
 	    	 	    catalog group added in HSE_Main.c, same reformat caveat as the RAM ECC groups. */
 	    	 	 HSE_AppSmr_Provision_Demo();
 #endif // RUN_APP_SMR_PROVISIONING

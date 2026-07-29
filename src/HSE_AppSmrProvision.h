@@ -3,15 +3,36 @@
  * @file     HSE_AppSmrProvision.h
  * @brief    One-time provisioning: import GSLU_APP's real ECDSA (secp256r1)
  *           verify key into HSE's persistent NVM catalog, and install GSLU_APP's
- *           own SMR entry (covering __text_start..__text_end) so the Bootlaoder
- *           project can verify it before jumping in.
+ *           own SMR entry (covering the FINAL app's fixed [text_start, text_end)
+ *           range) so the Bootlaoder project can verify it before jumping in.
  *           See BOOTLOADER_SECURE_BOOT_PLAN.md, Stage 2.
- * @details  This is meant to be built into GSLU_APP, flashed ONCE (so the key
- *           lands in NVM and the SMR gets installed), then left out of normal
- *           builds afterward - guarded behind RUN_APP_SMR_PROVISIONING, same
- *           idiom as RUN_SECURE_BOOT_PHASE1_DEMO / RUN_MAC_ECC_EXAMPLE. Once
- *           provisioned, GSLU_APP no longer needs to carry this code: the key
- *           and the SMR entry both persist in HSE across reset.
+ * @details  IMPORTANT - two-build model, not "flash once and it just works":
+ *           1. Build GSLU_APP with RUN_APP_SMR_PROVISIONING left OFF (undefined,
+ *              below). This file's ENTIRE body compiles to nothing in that build -
+ *              no key data, no provisioning code at all. THIS is the "final app" -
+ *              the one that gets signed (tools/sign_tool.py) and the one the
+ *              bootloader will check forever after. Note its __text_start/
+ *              __text_end from its own .map file.
+ *           2. Hardcode those exact addresses into HSE_AppSmrProvision.c's
+ *              APP_PROTECTED_TEXT_START/END (NOT the extern __text_start/
+ *              __text_end linker symbols - those would refer to THIS
+ *              (provisioning) build's own, larger, different layout, not the
+ *              final app's).
+ *           3. Build GSLU_APP AGAIN with RUN_APP_SMR_PROVISIONING ON (this time
+ *              this file's real code + the real key/signature from
+ *              app_smr_provision_data.h ARE compiled in). Flash this build ONCE -
+ *              it imports the key and installs the SMR pointing at the addresses
+ *              from step 2, then plays no further part.
+ *           4. Reflash the ORIGINAL "final app" build from step 1 (unchanged,
+ *              same exact bytes that were signed) - this runs permanently, and
+ *              is what Bootlaoder verifies before jumping in.
+ *
+ *           WHY the two builds: this file's own compiled key/signature data
+ *           would otherwise sit inside the very byte range the signature is
+ *           supposed to describe - a circular "signing an image that contains
+ *           its own signature" problem. Keeping this file's content entirely
+ *           absent from the final, protected build sidesteps that: nothing
+ *           about the final app depends on what's compiled here.
  * @location /test/src/HSE_AppSmrProvision.h
  ******************************************************************************
  *
@@ -29,6 +50,16 @@ extern "C"{
 *                                          INCLUDE FILES
 ==================================================================================================*/
 #include "HSE_Main.h"
+
+/*==================================================================================================
+*                                      DEFINES AND MACROS
+==================================================================================================*/
+/* Single authoritative toggle for this whole module - both HSE_AppSmrProvision.c and APP_Main.c
+   see this same definition (both include this header). Leave commented out for every build
+   except the one-time "provisioning" flash described above. */
+//#define RUN_APP_SMR_PROVISIONING
+
+#ifdef RUN_APP_SMR_PROVISIONING
 
 /*==================================================================================================
                                  GLOBAL VARIABLE DECLARATIONS
@@ -57,26 +88,32 @@ hseSrvResponse_t HSE_AppSmr_GetVerifyKeyInfo(void);
 hseSrvResponse_t HSE_AppSmr_ImportVerifyKey_Nvm(void);
 
 /*!
- * @brief   Installs GSLU_APP's own SMR entry, covering [__text_start, __text_end) - the real
- *          flashed vector table + code + rodata of this running image - authenticated via
- *          ECDSA/SHA-256 using the NVM verify key and the (r,s) signature from
- *          app_smr_provision_data.h.
+ * @brief   Installs GSLU_APP's own SMR entry, covering the FINAL app's fixed, hardcoded
+ *          [APP_PROTECTED_TEXT_START, APP_PROTECTED_TEXT_END) range (see file @details - NOT
+ *          this build's own __text_start/__text_end), authenticated via ECDSA/SHA-256 using the
+ *          NVM verify key and the (r,s) signature from app_smr_provision_data.h.
  */
 hseSrvResponse_t HSE_AppSmr_InstallEntry(void);
 
 /*!
- * @brief   Triggers on-demand verification of GSLU_APP's own SMR entry - a sanity check that the
- *          just-installed entry actually verifies before handing control over to the bootloader's
- *          own check. Not itself part of the boot-time enforcement path.
+ * @brief   Triggers on-demand verification of GSLU_APP's own SMR entry. Only meaningful once the
+ *          final app (not this provisioning build) is actually the thing flashed at the protected
+ *          address range - calling this during the provisioning build itself will correctly
+ *          report HSE_SRV_RSP_VERIFY_FAILED, since this provisioning build's own bytes (not the
+ *          final app's) currently occupy that range. Provided for manual use after reflashing the
+ *          final app, if you want to double-check before relying on the bootloader's own check.
  */
 hseSrvResponse_t HSE_AppSmr_VerifyEntryOnDemand(void);
 
 /*!
- * @brief   Runs the whole one-time provisioning sequence: import the NVM verify key, install the
- *          SMR entry, then verify it once as a sanity check. Intended to run exactly once (or be
- *          skipped on subsequent boots once already provisioned) - see file-level @details.
+ * @brief   Runs the one-time provisioning sequence: import the NVM verify key, then install the
+ *          SMR entry. Does NOT self-verify (see HSE_AppSmr_VerifyEntryOnDemand()'s @brief for why
+ *          that would be misleading here) - inspect HSE_AppSmr_ImportVerifyKeyResponse /
+ *          HSE_AppSmr_InstallEntryResponse via debugger instead.
  */
 void HSE_AppSmr_Provision_Demo(void);
+
+#endif /* RUN_APP_SMR_PROVISIONING */
 
 #ifdef __cplusplus
 }
