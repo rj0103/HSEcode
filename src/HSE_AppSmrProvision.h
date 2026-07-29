@@ -54,7 +54,7 @@ extern "C"{
 /* Single authoritative toggle - both HSE_AppSmrProvision.c and APP_Main.c see this same
    definition (both include this header). Leave commented out except for the one-time
    provisioning flash described above. */
-#define RUN_APP_SMR_PROVISIONING
+//#define RUN_APP_SMR_PROVISIONING
 
 /*==================================================================================================
                                  GLOBAL VARIABLE DECLARATIONS

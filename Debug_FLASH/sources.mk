@@ -20,6 +20,7 @@ C_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+Project_Settings/Linker_Files \
 Project_Settings/Startup_Code \
 RTD/src \
 board \

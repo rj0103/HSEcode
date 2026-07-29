@@ -70,7 +70,7 @@
                   </pin>
                   <pin peripheral="LPUART1" signal="lpuart1_tx" pin_num="1" pin_signal="PTA18">
                      <pin_features>
-                        <pin_feature name="direction" value="INPUT"/>
+                        <pin_feature name="direction" value="OUTPUT"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="LPUART1" signal="lpuart1_rx" pin_num="2" pin_signal="PTA19"/>

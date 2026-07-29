@@ -1,9 +1,34 @@
-C:\WorkSpace\Projects\TATA_SeatMounted_Shifter\Software\claudeproj\codee11\HSEcode\tools>python sign_tool.py sign    --priv app_signing_key.pem --in app_image_slice.bin --out-prefix app_image
-Signed app_image_slice.bin (76184 bytes, SHA-256/ECDSA)
-  r (32B): app_image_sig_r.bin  a16c94002691e55b5c68c32a61b290108880a82997d77926a86b1de37ac82b22
-  s (32B): app_image_sig_s.bin  7aaee20be71203cf2bd4c96f0ee17540dc061f9210c4d721749ceb0e964ba5d8
 
-C:\WorkSpace\Projects\TATA_SeatMounted_Shifter\Software\claudeproj\codee11\HSEcode\tools>  python sign_tool.py verify  --pub  app_public_key_raw.bin --in app_image_slice.bin --sig-prefix app_image
-OK: signature over app_image_slice.bin verifies against app_public_key_raw.bin.
 
-C:\WorkSpace\Projects\TATA_SeatMounted_Shifter\Software\claudeproj\codee11\HSEcode\tools>
+
+
+
+
+
+=== GSLU_APP booting ===
+C H H H H H H H H H H H H H H H H H H H H H H jU}Mх     0x00000003 (OK)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=== Provisioning/demo sequence complete ===

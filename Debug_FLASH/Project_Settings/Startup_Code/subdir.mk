@@ -4,14 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 S_SRCS += \
-../Project_Settings/Startup_Code/Vector_Table.s \
-../Project_Settings/Startup_Code/startup_cm7.s 
+../Project_Settings/Startup_Code/Vector_Table.s 
 
 C_SRCS += \
 ../Project_Settings/Startup_Code/exceptions.c \
 ../Project_Settings/Startup_Code/nvic.c \
 ../Project_Settings/Startup_Code/startup.c \
 ../Project_Settings/Startup_Code/system.c 
+
+S_UPPER_SRCS += \
+../Project_Settings/Startup_Code/startup_cm7.S 
 
 OBJS += \
 ./Project_Settings/Startup_Code/Vector_Table.o \
@@ -40,6 +42,13 @@ Project_Settings/Startup_Code/%.o: ../Project_Settings/Startup_Code/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: Standard S32DS C Compiler'
 	arm-none-eabi-gcc "@Project_Settings/Startup_Code/exceptions.args" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+Project_Settings/Startup_Code/%.o: ../Project_Settings/Startup_Code/%.S
+	@echo 'Building file: $<'
+	@echo 'Invoking: Standard S32DS Assembler'
+	arm-none-eabi-gcc "@Project_Settings/Startup_Code/startup_cm7.args" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

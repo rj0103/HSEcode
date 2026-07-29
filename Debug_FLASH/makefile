@@ -13,6 +13,7 @@ RM := rm -rf
 -include board/subdir.mk
 -include RTD/src/subdir.mk
 -include Project_Settings/Startup_Code/subdir.mk
+-include Project_Settings/Linker_Files/subdir.mk
 -include subdir.mk
 -include objects.mk
 
@@ -33,7 +34,7 @@ GSLU_APP.siz \
 all: GSLU_APP.elf secondary-outputs
 
 # Tool invocations
-GSLU_APP.elf: $(OBJS) C:/WorkSpace/Projects/TATA_SeatMounted_Shifter/Software/claudeproj/codee11/HSEcode/Project_Settings/Linker_Files/linker_flash_s32k312.ld $(USER_OBJS)
+GSLU_APP.elf: $(OBJS) C:\WorkSpace\Projects\TATA_SeatMounted_Shifter\Software\claudeproj\codee11\HSEcode\Project_Settings\Linker_Files\linker_flash_s32k312.ld $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Standard S32DS C Linker'
 	arm-none-eabi-gcc -o "GSLU_APP.elf" "@GSLU_APP.args"  $(USER_OBJS)

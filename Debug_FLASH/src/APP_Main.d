@@ -164,7 +164,8 @@ src/APP_Main.o: ../src/APP_Main.c ../src/APP_Main.h \
  C:/WorkSpace/Projects/TATA_SeatMounted_Shifter/Software/claudeproj/codee11/HSEcode/generate/include/Siul2_Dio_Ip_Cfg.h \
  C:/NXP/S32DS.3.6.7/S32DS/software/PlatformSDK_S32K3/RTD/BaseNXP_TS_T40D34M70I1R0/include/Dio_MemMap.h \
  ../src/HSE_FlashStorage_Example.h ../src/HSE_SecureBoot.h \
- ../src/HSE_Mac_Ecc_Example.h ../src/LED.h
+ ../src/HSE_Mac_Ecc_Example.h ../src/HSE_AppSmrProvision.h \
+ ../src/UART_Print.h ../src/LED.h
 ../src/APP_Main.h:
 C:/NXP/S32DS.3.6.7/S32DS/software/PlatformSDK_S32K3/RTD/BaseNXP_TS_T40D34M70I1R0/header/S32K312.h:
 C:/NXP/S32DS.3.6.7/S32DS/software/PlatformSDK_S32K3/RTD/BaseNXP_TS_T40D34M70I1R0/header/S32K312_ADC.h:
@@ -337,4 +338,6 @@ C:/NXP/S32DS.3.6.7/S32DS/software/PlatformSDK_S32K3/RTD/BaseNXP_TS_T40D34M70I1R0
 ../src/HSE_FlashStorage_Example.h:
 ../src/HSE_SecureBoot.h:
 ../src/HSE_Mac_Ecc_Example.h:
+../src/HSE_AppSmrProvision.h:
+../src/UART_Print.h:
 ../src/LED.h:
