@@ -10,17 +10,19 @@
  *           support them. Numbers are formatted by hand (hex only, 8 digits).
  *
  *           Each logical line is assembled into ONE buffer and sent via a
- *           SINGLE Lpuart_Uart_Ip_SyncSend() call, not several small ones.
- *           That call enables the LPUART transmitter, sends, then disables
- *           it again, every time it's invoked - observed in practice to
- *           corrupt the first several bytes of whatever it sends (a settling
- *           glitch right after enabling TX), while the rest of the same call
- *           comes through clean. Splitting one line across multiple calls
- *           multiplied how often that glitch window occurred. Consolidating
- *           to one call per line, plus a short throwaway prefix
- *           (UART_PRINT_SYNC_PREFIX) ahead of the real text, means the glitch
- *           - if it happens - only ever eats disposable padding, not the
- *           actual message.
+ *           SINGLE Lpuart_Uart_Ip_SyncSend() call, not several small ones -
+ *           that call enables the LPUART transmitter, sends, then disables it
+ *           again every time it's invoked, and splitting one line across
+ *           several calls multiplied how often any transmit glitch occurred.
+ *           A throwaway CRLF prefix (UART_PRINT_SYNC_PREFIX) is also sent
+ *           ahead of the real text on every line, so that if a glitch still
+ *           happens, it eats disposable padding rather than the message.
+ *
+ *           The line buffer itself is a static module-level buffer, not a
+ *           per-call stack-local one - see UART_Print_LineBuf's own comment
+ *           for why (this project's DTCM stack is small, and a large local
+ *           buffer reused right after deeply-nested HSE calls is exactly the
+ *           kind of thing that can pick up corrupted stack content).
  * @location /test/src/UART_Print.c
  ******************************************************************************
  *
@@ -48,6 +50,17 @@ extern "C"
    Confirmed via a real capture that a 6x-CRLF (12 byte) prefix wasn't quite long enough - some of
    the real text's leading edge still landed inside the glitch window. Widened with margin. */
 #define UART_PRINT_SYNC_PREFIX  "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n"
+
+/*==================================================================================================
+*                                         LOCAL VARIABLES
+==================================================================================================*/
+/* Static, not stack-local: this project's DTCM stack is only 4KB
+   (linker_flash_s32k312_Release.ld), and HSE_Init() calls a long chain of HSE service functions
+   before any of these print functions run for the first time after it. A 192-byte local buffer
+   reused across deeply-nested calls is exactly the kind of thing that can pick up leftover/
+   corrupted stack content from whatever ran immediately before it. Making it static removes that
+   risk entirely - safe here since every call is sequential/blocking, never concurrent. */
+static char UART_Print_LineBuf[UART_PRINT_LINE_MAX];
 
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
@@ -114,13 +127,12 @@ void UART_Print_Init(void)
  */
 void UART_Print_String(const char *str)
 {
-	char     line[UART_PRINT_LINE_MAX];
 	uint32_t offset = 0U;
 
-	offset = UART_Print_AppendStr(line, offset, UART_PRINT_SYNC_PREFIX);
-	offset = UART_Print_AppendStr(line, offset, str);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, UART_PRINT_SYNC_PREFIX);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, str);
 
-	UART_Print_RawSend(line, offset);
+	UART_Print_RawSend(UART_Print_LineBuf, offset);
 }
 
 /*!
@@ -129,19 +141,18 @@ void UART_Print_String(const char *str)
  */
 void UART_Print_HseResponse(const char *label, hseSrvResponse_t response)
 {
-	char     line[UART_PRINT_LINE_MAX];
 	char     hex[9];
 	uint32_t offset = 0U;
 
 	UART_Print_Hex32((uint32_t)response, hex);
 
-	offset = UART_Print_AppendStr(line, offset, UART_PRINT_SYNC_PREFIX);
-	offset = UART_Print_AppendStr(line, offset, label);
-	offset = UART_Print_AppendStr(line, offset, ": 0x");
-	offset = UART_Print_AppendStr(line, offset, hex);
-	offset = UART_Print_AppendStr(line, offset, (HSE_SRV_RSP_OK == response) ? " (OK)\r\n" : " (FAIL)\r\n");
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, UART_PRINT_SYNC_PREFIX);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, label);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, ": 0x");
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, hex);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, (HSE_SRV_RSP_OK == response) ? " (OK)\r\n" : " (FAIL)\r\n");
 
-	UART_Print_RawSend(line, offset);
+	UART_Print_RawSend(UART_Print_LineBuf, offset);
 }
 
 /*!
@@ -149,19 +160,18 @@ void UART_Print_HseResponse(const char *label, hseSrvResponse_t response)
  */
 void UART_Print_Status(const char *label, uint32_t status, uint32_t okValue)
 {
-	char     line[UART_PRINT_LINE_MAX];
 	char     hex[9];
 	uint32_t offset = 0U;
 
 	UART_Print_Hex32(status, hex);
 
-	offset = UART_Print_AppendStr(line, offset, UART_PRINT_SYNC_PREFIX);
-	offset = UART_Print_AppendStr(line, offset, label);
-	offset = UART_Print_AppendStr(line, offset, ": 0x");
-	offset = UART_Print_AppendStr(line, offset, hex);
-	offset = UART_Print_AppendStr(line, offset, (status == okValue) ? " (OK)\r\n" : " (FAIL)\r\n");
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, UART_PRINT_SYNC_PREFIX);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, label);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, ": 0x");
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, hex);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, (status == okValue) ? " (OK)\r\n" : " (FAIL)\r\n");
 
-	UART_Print_RawSend(line, offset);
+	UART_Print_RawSend(UART_Print_LineBuf, offset);
 }
 
 /*!
@@ -170,14 +180,13 @@ void UART_Print_Status(const char *label, uint32_t status, uint32_t okValue)
  */
 void UART_Print_Bool(const char *label, bool value)
 {
-	char     line[UART_PRINT_LINE_MAX];
 	uint32_t offset = 0U;
 
-	offset = UART_Print_AppendStr(line, offset, UART_PRINT_SYNC_PREFIX);
-	offset = UART_Print_AppendStr(line, offset, label);
-	offset = UART_Print_AppendStr(line, offset, value ? ": true\r\n" : ": false\r\n");
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, UART_PRINT_SYNC_PREFIX);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, label);
+	offset = UART_Print_AppendStr(UART_Print_LineBuf, offset, value ? ": true\r\n" : ": false\r\n");
 
-	UART_Print_RawSend(line, offset);
+	UART_Print_RawSend(UART_Print_LineBuf, offset);
 }
 
 #ifdef __cplusplus
