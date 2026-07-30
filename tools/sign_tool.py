@@ -22,12 +22,6 @@ Usage:
   python sign_tool.py sign    --priv app_signing_key.pem --in GSLU_APP.bin --out-prefix app_image
   python sign_tool.py verify  --pub  app_public_key_raw.bin --in GSLU_APP.bin --sig-prefix app_image
   python sign_tool.py header  --pub  app_public_key_raw.bin --sig-prefix app_image --out ../src/app_smr_provision_data.h
-
-  # Whenever the app's content changes (new code, not a new key) - re-sign + regenerate the
-  # header in one step, reusing the SAME key pair:
-  python sign_tool.py resign  --priv app_signing_key.pem --pub app_public_key_raw.bin \\
-                              --in GSLU_APP.bin --out-prefix app_image \\
-                              --out ../src/app_smr_provision_data.h
 """
 
 import argparse
@@ -201,19 +195,6 @@ def cmd_header(args: argparse.Namespace) -> None:
     print(f"Wrote {out_path}")
 
 
-def cmd_resign(args: argparse.Namespace) -> None:
-    """Re-sign an updated build with the EXISTING key pair and regenerate the header in one
-    step - for when only the app's content changed (e.g. new code was added), not the key.
-    Equivalent to running `sign` then `header` by hand."""
-    sign_args = argparse.Namespace(priv=args.priv, **{"in": args.__dict__["in"]}, out_prefix=args.out_prefix)
-    cmd_sign(sign_args)
-
-    header_args = argparse.Namespace(pub=args.pub, sig_prefix=args.out_prefix, out=args.out)
-    cmd_header(header_args)
-
-    print(f"Re-signed {args.__dict__['in']} and regenerated {args.out} - same key pair, new signature only.")
-
-
 def _parse_int(s: str) -> int:
     return int(s, 0)  # accepts 0x-prefixed hex or plain decimal
 
@@ -272,14 +253,6 @@ def build_parser() -> argparse.ArgumentParser:
     p_header.add_argument("--sig-prefix", required=True, help="Prefix matching the --out-prefix used at sign time.")
     p_header.add_argument("--out", required=True, help="Output path for the generated C header.")
     p_header.set_defaults(func=cmd_header)
-
-    p_resign = sub.add_parser("resign", help="Re-sign an updated build with the SAME key pair and regenerate the header (sign + header in one step).")
-    p_resign.add_argument("--priv", required=True, help="Path to the EXISTING private key (PEM, PKCS8) - not regenerated.")
-    p_resign.add_argument("--pub", required=True, help="Path to the EXISTING public key, raw X||Y (64 bytes) - not regenerated.")
-    p_resign.add_argument("--in", dest="in", required=True, help="Path to the freshly-built/sliced image to sign.")
-    p_resign.add_argument("--out-prefix", required=True, help="Prefix for the output <prefix>_sig_r.bin / _sig_s.bin files.")
-    p_resign.add_argument("--out", required=True, help="Output path for the regenerated C header.")
-    p_resign.set_defaults(func=cmd_resign)
 
     p_slice = sub.add_parser("slice", help="Slice out [start,end) from a flat binary dump, given its base load address.")
     p_slice.add_argument("--in", dest="in", required=True, help="Path to the flat binary (e.g. from objcopy -O binary -j .pflash).")
