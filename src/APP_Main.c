@@ -106,10 +106,10 @@ extern "C"{
 	     }
 	     else
 	     {
-	    	 	 uint32_t lpuart1FreqBefore = (uint32_t)Clock_Ip_GetClockFrequency(LPUART1_CLK);
+//	    	 	 uint32_t lpuart1FreqBefore = (uint32_t)Clock_Ip_GetClockFrequency(LPUART1_CLK);
 	    	 	 HSE_Init();
-	    	 	 uint32_t lpuart1FreqAfter = (uint32_t)Clock_Ip_GetClockFrequency(LPUART1_CLK);
-	    	 	 UART_Print_Status("HSE_Status", (uint32_t)HSE_Status, (uint32_t)HSE_VER_OK);
+//	    	 	 uint32_t lpuart1FreqAfter = (uint32_t)Clock_Ip_GetClockFrequency(LPUART1_CLK);
+//	    	 	 UART_Print_Status("HSE_Status", (uint32_t)HSE_Status, (uint32_t)HSE_VER_OK);
 	    	 	 /* Confirms whether RUN_FORMAT_KEY_CATALOGS_IN_INIT actually reformatted the
 	    	 	    catalogs this boot, or silently skipped because HSE_STATUS_INSTALL_OK was
 	    	 	    already set from an earlier provisioning run - see HSE_Main.c's own comment
@@ -151,13 +151,20 @@ extern "C"{
 	    	 	 UART_Print_HseResponse("AppSmr ImportVerifyKey", HSE_AppSmr_ImportVerifyKeyResponse);
 	    	 	 UART_Print_HseResponse("AppSmr InstallEntry", HSE_AppSmr_InstallEntryResponse);
 #endif // RUN_APP_SMR_PROVISIONING
+#ifdef RUN_APP_SMR_SIGNATURE_UPDATE
+	    	 	 /* Re-enters just a new signature (same already-imported key) - the normal path
+	    	 	    after a rebuild that changed __text_start..__text_end, once app_smr_provision_
+	    	 	    data.h has been regenerated with tools/sign_tool.py's sign+header commands. */
+	    	 	 HSE_AppSmr_UpdateSignature();
+	    	 	 UART_Print_HseResponse("AppSmr UpdateSignature", HSE_AppSmr_UpdateSignatureResponse);
+#endif // RUN_APP_SMR_SIGNATURE_UPDATE
 	    	 	 UART_Print_String("=== Provisioning/demo sequence complete ===\r\n");
 	    	 	 /* Diagnostic: is HSE_Init() changing the LPUART1 functional clock? Both readings
 	    	 	    are reported through this known-clean print call rather than the currently
 	    	 	    corrupted HSE_Status one, so the comparison itself can't be hidden by whatever
 	    	 	    is going on there. "OK" here means the frequency did NOT change. */
-	    	 	 UART_Print_Status("LPUART1_CLK before HSE_Init", lpuart1FreqBefore, lpuart1FreqBefore);
-	    	 	 UART_Print_Status("LPUART1_CLK after HSE_Init", lpuart1FreqAfter, lpuart1FreqBefore);
+//	    	 	 UART_Print_Status("LPUART1_CLK before HSE_Init", lpuart1FreqBefore, lpuart1FreqBefore);
+//	    	 	 UART_Print_Status("LPUART1_CLK after HSE_Init", lpuart1FreqAfter, lpuart1FreqBefore);
 
 	     }
 

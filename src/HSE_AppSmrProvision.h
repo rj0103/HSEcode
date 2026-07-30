@@ -24,12 +24,21 @@
  *           only their contents differ - so both builds share the same
  *           address layout, and the code doesn't need to know or care which
  *           one is currently running.
- *           Not exercised in the same boot the values matter for: the
- *           install call only records the provided signature as HSE's
- *           reference for future checks (it does not need to already match
- *           current flash content at install time) - so it's fine that the
- *           provisioning build's own flash content differs from the
- *           all-zero build's.
+ *           CORRECTION (confirmed by testing): HSE_SRV_ID_SMR_ENTRY_INSTALL with
+ *           HSE_SMR_CFG_FLAG_INSTALL_AUTH DOES verify pSmrData against pAuthTag
+ *           immediately at install time - it is not just recording a future
+ *           reference. So installing from the provisioning build itself (whose
+ *           own region content differs from the signed all-zero build's) is
+ *           expected to report HSE_SRV_RSP_VERIFY_FAILED. What matters is
+ *           whether the SMR entry structure is still recorded despite that -
+ *           confirm by reflashing the all-zero build and checking the
+ *           bootloader's on-demand verify (HSE_BootVerify_VerifyAppSmr()).
+ *           If a re-install is ever needed after the app changes (new code,
+ *           same key), HSE_AppSmr_UpdateSignature() re-runs just the install
+ *           step with whatever (r,s) is currently compiled in, without
+ *           touching the already-imported key - re-run tools/sign_tool.py's
+ *           `sign` + `header` commands (same key pair) to regenerate
+ *           app_smr_provision_data.h first.
  * @location /test/src/HSE_AppSmrProvision.h
  ******************************************************************************
  *
@@ -56,6 +65,12 @@ extern "C"{
    provisioning flash described above. */
 //#define RUN_APP_SMR_PROVISIONING
 
+/* Separate toggle for re-entering just a new signature (HSE_AppSmr_UpdateSignature()) after the
+   app was rebuilt/re-signed but the key itself hasn't changed - the common case going forward,
+   since the key only ever needs importing once. Independent from RUN_APP_SMR_PROVISIONING so
+   either can be exercised without the other. */
+//#define RUN_APP_SMR_SIGNATURE_UPDATE
+
 /*==================================================================================================
                                  GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
@@ -64,6 +79,7 @@ extern hseSrvResponse_t HSE_AppSmr_GetVerifyKeyInfoResponse;
 extern hseSrvResponse_t HSE_AppSmr_ImportVerifyKeyResponse;
 extern hseSrvResponse_t HSE_AppSmr_InstallEntryResponse;
 extern hseSrvResponse_t HSE_AppSmr_VerifyEntryResponse;
+extern hseSrvResponse_t HSE_AppSmr_UpdateSignatureResponse;
 
 /*==================================================================================================
                                      FUNCTION PROTOTYPES
@@ -107,6 +123,20 @@ hseSrvResponse_t HSE_AppSmr_VerifyEntryOnDemand(void);
  *          debugger instead.
  */
 void HSE_AppSmr_Provision_Demo(void);
+
+/*!
+ * @brief   Re-enters a NEW signature for the app WITHOUT touching the already-imported verify
+ *          key - just re-runs HSE_AppSmr_InstallEntry() with whatever (r,s) is currently compiled
+ *          in (app_smr_provision_data.h). Use this (instead of HSE_AppSmr_Provision_Demo()) when
+ *          the app was rebuilt/re-signed but the key itself hasn't changed - the common case,
+ *          since the key only needs to be imported once, ever.
+ *
+ * @return  hseSrvResponse_t - same caveat as HSE_AppSmr_InstallEntry() applies: calling this from
+ *          the provisioning build itself (RUN_APP_SMR_PROVISIONING ON) is expected to report
+ *          HSE_SRV_RSP_VERIFY_FAILED, since install verifies against the CURRENT flash content,
+ *          which differs from the all-zero build that was actually signed.
+ */
+hseSrvResponse_t HSE_AppSmr_UpdateSignature(void);
 
 #ifdef __cplusplus
 }

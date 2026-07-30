@@ -42,6 +42,7 @@ hseSrvResponse_t HSE_AppSmr_GetVerifyKeyInfoResponse = HSE_SRV_RSP_GENERAL_ERROR
 hseSrvResponse_t HSE_AppSmr_ImportVerifyKeyResponse  = HSE_SRV_RSP_GENERAL_ERROR;
 hseSrvResponse_t HSE_AppSmr_InstallEntryResponse     = HSE_SRV_RSP_GENERAL_ERROR;
 hseSrvResponse_t HSE_AppSmr_VerifyEntryResponse      = HSE_SRV_RSP_GENERAL_ERROR;
+hseSrvResponse_t HSE_AppSmr_UpdateSignatureResponse  = HSE_SRV_RSP_GENERAL_ERROR;
 
 /*==================================================================================================
 *                                         LOCAL VARIABLES
@@ -266,6 +267,17 @@ void HSE_AppSmr_Provision_Demo(void)
 {
 	HSE_AppSmr_ImportVerifyKeyResponse = HSE_AppSmr_ImportVerifyKey_Nvm();
 	HSE_AppSmr_InstallEntryResponse    = HSE_AppSmr_InstallEntry();
+}
+
+/*!
+ * @brief       Re-enters a new signature without touching the already-imported verify key - see
+ *              this function's header comment for when to use it instead of
+ *              HSE_AppSmr_Provision_Demo().
+ */
+hseSrvResponse_t HSE_AppSmr_UpdateSignature(void)
+{
+	HSE_AppSmr_UpdateSignatureResponse = HSE_AppSmr_InstallEntry();
+	return HSE_AppSmr_UpdateSignatureResponse;
 }
 
 #ifdef __cplusplus
