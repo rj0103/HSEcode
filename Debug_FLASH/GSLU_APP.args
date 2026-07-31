@@ -2,7 +2,7 @@
 --entry=Reset_Handler
 -ggdb3
 -T
-"C:/WorkSpace/Projects/TATA_SeatMounted_Shifter/Software/claudeproj/codee11/HSEcode/Project_Settings/Linker_Files/linker_flash_s32k312.ld"
+"G:/cw_HSE/workspace/GSLU_APP/GSLU_APP/Project_Settings/Linker_Files/linker_flash_s32k312.ld"
 -Wl,-Map,"GSLU_APP.map"
 -mcpu=cortex-m7
 -mthumb
@@ -72,11 +72,11 @@
 "./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o"
 "./generate/src/OsIf_Cfg.o"
 "./src/APP_Main.o"
-"./src/HSE_AppSmrProvision.o"
 "./src/HSE_FlashStorage_Example.o"
 "./src/HSE_Mac_Ecc_Example.o"
 "./src/HSE_Main.o"
 "./src/HSE_SecureBoot.o"
+"./src/HSE_TestDummySmrInstall.o"
 "./src/LED.o"
 "./src/UART_Print.o"
 "./src/main.o"

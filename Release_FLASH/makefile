@@ -36,7 +36,7 @@ GSLU_APP.siz \
 all: GSLU_APP.elf secondary-outputs
 
 # Tool invocations
-GSLU_APP.elf: $(OBJS) C:\WorkSpace\Projects\TATA_SeatMounted_Shifter\Software\claudeproj\codee11\HSEcode\Project_Settings\Linker_Files\linker_flash_s32k312_Release.ld $(USER_OBJS)
+GSLU_APP.elf: $(OBJS) G:\cw_HSE\workspace\GSLU_APP\GSLU_APP\Project_Settings\Linker_Files\linker_flash_s32k312_Release.ld $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Standard S32DS C Linker'
 	arm-none-eabi-gcc -o "GSLU_APP.elf" "@GSLU_APP.args"  $(USER_OBJS)

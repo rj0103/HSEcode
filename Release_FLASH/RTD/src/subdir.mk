@@ -29,6 +29,8 @@ C_SRCS += \
 ../RTD/src/Hse_Ip_Semaphore.c \
 ../RTD/src/Igf_Port_Ip.c \
 ../RTD/src/IntCtrl_Ip.c \
+../RTD/src/Lpuart_Uart_Ip.c \
+../RTD/src/Lpuart_Uart_Ip_Irq.c \
 ../RTD/src/Mu_Ip_Irq.c \
 ../RTD/src/OsIf_Interrupts.c \
 ../RTD/src/OsIf_Software_Semaphore.c \
@@ -42,6 +44,7 @@ C_SRCS += \
 ../RTD/src/SchM_Mcu.c \
 ../RTD/src/SchM_Mem_43_INFLS.c \
 ../RTD/src/SchM_Port.c \
+../RTD/src/SchM_Uart.c \
 ../RTD/src/Siul2_Dio_Ip.c \
 ../RTD/src/Siul2_Port_Ip.c \
 ../RTD/src/Tspc_Port_Ip.c 
@@ -72,6 +75,8 @@ OBJS += \
 ./RTD/src/Hse_Ip_Semaphore.o \
 ./RTD/src/Igf_Port_Ip.o \
 ./RTD/src/IntCtrl_Ip.o \
+./RTD/src/Lpuart_Uart_Ip.o \
+./RTD/src/Lpuart_Uart_Ip_Irq.o \
 ./RTD/src/Mu_Ip_Irq.o \
 ./RTD/src/OsIf_Interrupts.o \
 ./RTD/src/OsIf_Software_Semaphore.o \
@@ -85,6 +90,7 @@ OBJS += \
 ./RTD/src/SchM_Mcu.o \
 ./RTD/src/SchM_Mem_43_INFLS.o \
 ./RTD/src/SchM_Port.o \
+./RTD/src/SchM_Uart.o \
 ./RTD/src/Siul2_Dio_Ip.o \
 ./RTD/src/Siul2_Port_Ip.o \
 ./RTD/src/Tspc_Port_Ip.o 
@@ -115,6 +121,8 @@ C_DEPS += \
 ./RTD/src/Hse_Ip_Semaphore.d \
 ./RTD/src/Igf_Port_Ip.d \
 ./RTD/src/IntCtrl_Ip.d \
+./RTD/src/Lpuart_Uart_Ip.d \
+./RTD/src/Lpuart_Uart_Ip_Irq.d \
 ./RTD/src/Mu_Ip_Irq.d \
 ./RTD/src/OsIf_Interrupts.d \
 ./RTD/src/OsIf_Software_Semaphore.d \
@@ -128,6 +136,7 @@ C_DEPS += \
 ./RTD/src/SchM_Mcu.d \
 ./RTD/src/SchM_Mem_43_INFLS.d \
 ./RTD/src/SchM_Port.d \
+./RTD/src/SchM_Uart.d \
 ./RTD/src/Siul2_Dio_Ip.d \
 ./RTD/src/Siul2_Port_Ip.d \
 ./RTD/src/Tspc_Port_Ip.d 

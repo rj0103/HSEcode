@@ -32,7 +32,6 @@ extern "C"{
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
 
-bool val=0;
 /*==================================================================================================
 *                           LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
 ==================================================================================================*/
@@ -73,6 +72,51 @@ bool val=0;
 			 g_pin_mux_InitConfigArr_PortContainer_0_BOARD_InitPeripherals);
  }
 
+/* Independent per-channel software toggle state - NOT read back from hardware. The R/G/B LED
+   pins are configured with inputBuffer = PORT_INPUT_BUFFER_DISABLED (output-only), so
+   Siul2_Dio_Ip_ReadPin() cannot reliably report their actual output level on this board; a
+   read-then-invert toggle silently stuck every LED on its first call. Tracking state in software
+   per-channel avoids depending on read-back entirely, while still fixing the original bug (one
+   shared toggle flag for every color, which let an unrelated color's leftover state bleed into
+   whichever colors the caller is actively toggling). */
+static bool LedRedState   = false;
+static bool LedGreenState = false;
+static bool LedBlueState  = false;
+
+static void LED_ToggleRed(void)
+{
+	LedRedState = !LedRedState;
+	Siul2_Dio_Ip_WritePin(LED_RED_PORT, LED_RED_PIN, LedRedState);
+}
+
+static void LED_ToggleGreen(void)
+{
+	LedGreenState = !LedGreenState;
+	Siul2_Dio_Ip_WritePin(LED_GREEN_PORT, LED_GREEN_PIN, LedGreenState);
+}
+
+static void LED_ToggleBlue(void)
+{
+	LedBlueState = !LedBlueState;
+	Siul2_Dio_Ip_WritePin(LED_BLUE_PORT, LED_BLUE_PIN, LedBlueState);
+}
+
+/*!
+ * @brief       Forces every color channel (red/green/blue) off, and resets their software toggle
+ *              state to match. Call once when entering a new steady LED pattern (e.g. a halt
+ *              loop) so a leftover channel state from whatever pattern was running before can't
+ *              bleed into the new one.
+ */
+void LED_AllOff(void)
+{
+	LedRedState = false;
+	LedGreenState = false;
+	LedBlueState = false;
+	Siul2_Dio_Ip_WritePin(LED_RED_PORT, LED_RED_PIN, 0U);
+	Siul2_Dio_Ip_WritePin(LED_GREEN_PORT, LED_GREEN_PIN, 0U);
+	Siul2_Dio_Ip_WritePin(LED_BLUE_PORT, LED_BLUE_PIN, 0U);
+}
+
  void LED_ToggleLED(uint8_t led)
  {
 
@@ -80,24 +124,21 @@ bool val=0;
 	 {
 
 	 case LED_RED_PIN:
-		 val = !val;
-		 Siul2_Dio_Ip_WritePin(LED_RED_PORT, LED_RED_PIN, val);
+		 LED_ToggleRed();
 		 break;
-	 case LED_BLUE_PIN: val =! val;
-	 Siul2_Dio_Ip_WritePin(LED_BLUE_PORT, LED_BLUE_PIN, val);
+	 case LED_BLUE_PIN:
+		 LED_ToggleBlue();
 		 break;
-	 case LED_GREEN_PIN: val =! val;
-	 Siul2_Dio_Ip_WritePin(LED_GREEN_PORT, LED_GREEN_PIN, val);
+	 case LED_GREEN_PIN:
+		 LED_ToggleGreen();
 		 break;
 	 case LED_YELLOW_PIN:
-		 val =! val;
-		 Siul2_Dio_Ip_WritePin(LED_RED_PORT, LED_RED_PIN, val);
-		 Siul2_Dio_Ip_WritePin(LED_GREEN_PORT, LED_GREEN_PIN, val);
+		 LED_ToggleRed();
+		 LED_ToggleGreen();
 		 break;
 	 case LED_CYAN_PIN:
-		 val =! val;
-		 Siul2_Dio_Ip_WritePin(LED_GREEN_PORT, LED_GREEN_PIN, val);
-		 Siul2_Dio_Ip_WritePin(LED_BLUE_PORT, LED_BLUE_PIN, val);
+		 LED_ToggleGreen();
+		 LED_ToggleBlue();
 		 break;
 
 	 }

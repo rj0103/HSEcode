@@ -112,11 +112,10 @@ static uint32_t UART_Print_AppendStr(char *pBuf, uint32_t offset, const char *pS
 }
 
 /*!
- * @brief       The one place that actually writes bytes to the LPUART - a raw, direct register
- *              send (see file @details for why this bypasses Lpuart_Uart_Ip_SyncSend()). The
- *              transmitter itself is enabled once in UART_Print_Init() and never disabled here.
+ * @brief       Writes exactly length bytes of pBuf to the LPUART, one at a time, polling TDRE
+ *              between bytes.
  */
-static void UART_Print_RawSend(const char *pBuf, uint32_t length)
+static void UART_Print_SendChunk(const char *pBuf, uint32_t length)
 {
 	uint32_t i;
 	uint32_t spins;
@@ -135,26 +134,22 @@ static void UART_Print_RawSend(const char *pBuf, uint32_t length)
 }
 
 /*!
+ * @brief       Sends a fully-assembled line. The transmitter is enabled once in
+ *              UART_Print_Init() and never disabled here (see that function's own comment).
+ */
+static void UART_Print_RawSend(const char *pBuf, uint32_t length)
+{
+	UART_Print_SendChunk(pBuf, length);
+}
+
+/*!
  * @brief       Initializes LPUART1 for blocking debug prints and enables its transmitter exactly
  *              once - see file @details for why it is never disabled again after this.
  */
 void UART_Print_Init(void)
 {
-	uint32_t settleCount;
-
 	Lpuart_Uart_Ip_Init(UART_PRINT_INSTANCE, &Lpuart_Uart_Ip_xHwConfigPB_1);
 	Lpuart_Uart_Ip_SetTransmitterCmd(UART_PRINT_BASE, TRUE);
-
-	/* Settle delay: with TE enabled exactly once here (see file @details), it is now always the
-	   very FIRST send after this line that comes out corrupted, while every later send over the
-	   same still-enabled transmitter is clean - and a Release build (tighter instruction timing)
-	   makes it worse, not better. Both point at a real hardware settle time needed right after
-	   asserting CTRL[TE], before the shift register/baud counter is actually ready to send the
-	   first bit reliably. __asm volatile prevents this from being optimized away in Release. */
-	for (settleCount = 0U; settleCount < 1000000U; settleCount++)
-	{
-		__asm volatile ("nop");
-	}
 }
 
 /*!

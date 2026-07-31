@@ -2,7 +2,7 @@
 --entry=Reset_Handler
 -ggdb3
 -T
-"C:/WorkSpace/Projects/TATA_SeatMounted_Shifter/Software/claudeproj/codee11/HSEcode/Project_Settings/Linker_Files/linker_flash_s32k312_Release.ld"
+"G:/cw_HSE/workspace/GSLU_APP/GSLU_APP/Project_Settings/Linker_Files/linker_flash_s32k312_Release.ld"
 -Wl,-Map,"GSLU_APP.map"
 -mcpu=cortex-m7
 -mthumb
@@ -43,6 +43,8 @@
 "./RTD/src/Hse_Ip_Semaphore.o"
 "./RTD/src/Igf_Port_Ip.o"
 "./RTD/src/IntCtrl_Ip.o"
+"./RTD/src/Lpuart_Uart_Ip.o"
+"./RTD/src/Lpuart_Uart_Ip_Irq.o"
 "./RTD/src/Mu_Ip_Irq.o"
 "./RTD/src/OsIf_Interrupts.o"
 "./RTD/src/OsIf_Software_Semaphore.o"
@@ -56,6 +58,7 @@
 "./RTD/src/SchM_Mcu.o"
 "./RTD/src/SchM_Mem_43_INFLS.o"
 "./RTD/src/SchM_Port.o"
+"./RTD/src/SchM_Uart.o"
 "./RTD/src/Siul2_Dio_Ip.o"
 "./RTD/src/Siul2_Port_Ip.o"
 "./RTD/src/Tspc_Port_Ip.o"
@@ -66,14 +69,17 @@
 "./generate/src/Hse_Ip_Cfg.o"
 "./generate/src/Igf_Port_Ip_Cfg.o"
 "./generate/src/IntCtrl_Ip_Cfg.o"
+"./generate/src/Lpuart_Uart_Ip_Sa_PBcfg.o"
 "./generate/src/OsIf_Cfg.o"
 "./src/APP_Main.o"
-"./src/HSE_AppSmrProvision.o"
+"./src/AppSmr_RegionPad.o"
+"./src/HSE_AppSmrProvision2.o"
 "./src/HSE_FlashStorage_Example.o"
 "./src/HSE_Mac_Ecc_Example.o"
 "./src/HSE_Main.o"
 "./src/HSE_SecureBoot.o"
 "./src/LED.o"
+"./src/UART_Print.o"
 "./src/main.o"
 -lc
 -lm

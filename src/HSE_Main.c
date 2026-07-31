@@ -31,6 +31,17 @@ extern "C"
 	*                                        GLOBAL CONSTANTS
 	==================================================================================================*/
 
+/* Force-reformat every boot is only safe/wanted for the Provisioning app (Flash_Load_KEY) - that's
+   the one place a fresh reformat + re-import of the current Hse_aNvmKeyCatalog contents (e.g. a
+   newly generated key pair) is actually desired. Main app (Release_FLASH/Debug_FLASH) must NOT
+   force this: it also calls HSE_Init(), and an unconditional reformat there would wipe the
+   AppSmrVerify NVM key (group 1) on every single Main app boot, breaking Bootlaoder's verify on
+   the very next reset since Main app has no ImportVerifyKey capability to re-provision it. */
+#ifdef PROVISION_APP_BUILD
+#define RUN_FORMAT_KEY_CATALOGS_IN_INIT
+#define FORCE_KEY_CATALOG_REFORMAT
+#endif
+
 	/*==================================================================================================
 	*                                        GLOBAL VARIABLES
 	==================================================================================================*/
@@ -62,11 +73,12 @@ extern "C"
 	    /* NvmKeyGroup_MASTER_ECU_KEY__BOOT_MAC_KEY__Key1_To_Key10 - group index 0 */
 	    {HSE_ALL_MU_MASK, HSE_KEY_OWNER_CUST, HSE_KEY_TYPE_AES, 4U, HSE_KEY128_BITS, {0U, 0U}},
 	    /* NvmKeyGroup_AppSmrVerify - group index 1: persistent secp256r1 public key used to verify
-	       GSLU_APP's own real SMR entry (see HSE_AppSmrProvision.c / BOOTLOADER_SECURE_BOOT_PLAN.md
-	       Stage 2). Must be NVM, not RAM - RAM keys are wiped every reset, but this key has to
-	       survive across reset for the bootloader's on-demand SMR check to ever succeed after the
-	       provisioning build is removed. Same "needs a reformat once" caveat as the RAM ECC groups
-	       below - see their comment. */
+	       Main app's real SMR entry (index 2). Imported by the Provisioning app (a separate build
+	       config of this same project, "Flash_Load_KEY", flashed at 0x004C2000 - factory/EOL only,
+	       never shipped), never by this build itself. Must be NVM, not RAM - RAM keys are wiped
+	       every reset, but this key has to survive across reset for Bootlaoder's on-demand SMR
+	       check to ever succeed. Same "needs a reformat once" caveat as the RAM ECC groups below -
+	       see their comment. */
 	    {HSE_ALL_MU_MASK, HSE_KEY_OWNER_CUST, HSE_KEY_TYPE_ECC_PUB, 1U, HSE_KEY256_BITS, {0U, 0U}},
 	    /* Marker to end the key catalog */
 	    {0U, 0U, 0U, 0U, 0U, {0U, 0U}}
@@ -282,6 +294,7 @@ extern "C"
 		    /*      catalog layout does not mean the CURRENT layout has ever actually been formatted. Deliberately a separate macro from      */
 		    /*      RUN_FORMAT_KEY_CATALOGS_IN_INIT so the common case (already formatted, nothing changed) stays a safe no-op by default.    */
 		    /* =============================================================================================================================== */
+#ifdef PROVISION_APP_BUILD
 			HSE_CatalogsWereAlreadyInstalled = (0U != (HseStatus & HSE_STATUS_INSTALL_OK));
 #ifdef FORCE_KEY_CATALOG_REFORMAT
 			HSE_FormatKeyCatalogsResponse = HSE_FormatHseKeyCatalogs();
@@ -295,6 +308,21 @@ extern "C"
 				HSE_FormatKeyCatalogsResponse = HSE_FormatHseKeyCatalogs();
 			}
 #endif // FORCE_KEY_CATALOG_REFORMAT
+#else
+			/* Main app (Release_FLASH/Debug_FLASH) never formats/reformats the NVM key catalog -
+			   that's exclusively the Provisioning app's job (see PROVISION_APP_BUILD above). Main
+			   app can only ever run after Bootlaoder has already verified its SMR entry, which
+			   itself can only succeed after the Provisioning app already formatted+populated the
+			   catalogs - so by the time Main app reaches this point the catalogs are guaranteed
+			   installed. Do NOT gate on HSE_STATUS_INSTALL_OK here: confirmed empirically that it
+			   reads back false on a Main app boot immediately following a real, successful
+			   Provisioning app run and Bootlaoder verify (not reliable across a Bootlaoder-
+			   mediated jump) - trusting it caused Main app to call HSE_FormatHseKeyCatalogs()
+			   again on already-populated catalogs, which failed with HSE_SRV_RSP_GENERAL_ERROR
+			   (0x33D6D4F1). */
+			HSE_CatalogsWereAlreadyInstalled = true;
+			HSE_FormatKeyCatalogsResponse = HSE_SRV_RSP_OK;
+#endif // PROVISION_APP_BUILD
 			status = (HSE_SRV_RSP_OK == HSE_FormatKeyCatalogsResponse);
 #endif // RUN_FORMAT_KEY_CATALOGS_IN_INIT
 //		    /* =============================================================================================================================== */

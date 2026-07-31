@@ -14,6 +14,7 @@ Two properties matter:
 - **Authenticity** — the image was produced/signed by someone holding the right key.
 - **Integrity** — the image hasn't been altered since it was signed.
 
+
 A CMAC or a digital signature over the image, checked before release from reset, gives you both.
 
 ## 2. HSE Architecture Primer

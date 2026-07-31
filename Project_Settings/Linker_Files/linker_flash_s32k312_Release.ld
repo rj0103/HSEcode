@@ -43,7 +43,7 @@ ENTRY(Reset_Handler)
 
 MEMORY
 {
-    int_pflash              : ORIGIN = 0x00482000, LENGTH = 0x00080000    /* 512kb app*/
+    int_pflash              : ORIGIN = 0x00482000, LENGTH = 0x00020000    /* 128kb app main*/
     int_dflash              : ORIGIN = 0x10000000, LENGTH = 0x00016000    /* 88KB */
     int_itcm                : ORIGIN = 0x00000000, LENGTH = 0x00008000    /* 32KB */
     int_dtcm                : ORIGIN = 0x20000000, LENGTH = 0x0000F000    /* 60KB */
@@ -109,9 +109,78 @@ SECTIONS
         KEEP(*(.zero_table))
     } > int_pflash
 
+    /* Exception-unwind index table. Must be its OWN output section, not folded into .pflash
+       above - .ARM.exidx input sections carry SHF_LINK_ORDER ("ordered") attributes tied to
+       their .text pieces, and GNU ld hard-errors ("has both ordered and unordered sections") if
+       an output section mixes those with regular ("unordered") input sections like .zero_table.
+       This used to be an implicit orphan section (the linker placed it wherever its default
+       heuristics chose, right after .pflash); now explicit so it lands here, before the
+       fixed-size pad below, instead of competing with it for the same leftover space.
+       extract_app_slice.bat already extracts this alongside .pflash (objcopy -j .pflash
+       -j .ARM.exidx) since it's real flashed content that must be part of what gets
+       authenticated/signed. */
+    .ARM.exidx :
+    {
+        . = ALIGN(4);
+        __exidx_start = .;
+        *(.ARM.exidx*)
+        . = ALIGN(4);
+        __exidx_end = .;
+    } > int_pflash
+
+    /* Real compiled content ends here - for extract_app_slice.bat's __text_end symbol lookup.
+       NOT used for __sram_data_rom below - the fixed-size pad immediately following physically
+       owns every byte up to the end of int_pflash, so anything else needing flash storage has to
+       be placed after that, not inside it. */
     . = ALIGN(4);
     __text_end = .;
-    __sram_data_rom = __text_end;
+
+    /* Explicitly zero-fill the rest of int_pflash's own declared region, so these bytes are real
+       ELF content instead of an implicit gap. Main app is flashed by loading this .elf directly
+       via a debugger: only bytes belonging to an actual section get written, so leaving this as
+       a gap would leave flash holding whatever was there from a previous build instead of the
+       zero bytes tools/sign_tool.py's slice --pad-to assumes when computing the SMR signature
+       (see HSE_AppSmrProvision2.c's APP_SMR_REGION_START/SIZE, and extract_app_slice.bat). Sized
+       off the MEMORY declaration above, not a literal, so it can never overflow the region.
+       KEEP(*(.appsmr_pad)) below pulls in AppSmr_RegionPad.c's tiny anchor array FIRST - a
+       location-counter advance with no real input-section content becomes an SHT_NOBITS section
+       (like .bss), which the debugger's elf-flash step has nothing to actually write for; the
+       anchor's real bytes force this whole section to PROGBITS, so the FILL-covered remainder
+       gets materialized as real zero bytes too (confirmed empirically: without the anchor,
+       readelf -S showed .appsmr_pad as NOBITS with 0 bytes in the file despite a nonzero size). */
+    .appsmr_pad :
+    {
+        KEEP(*(.appsmr_pad))
+        FILL(0x00000000);
+        . = ORIGIN(int_pflash) + LENGTH(int_pflash);
+    } > int_pflash
+
+    /* .data's flash-resident init storage - deliberately placed AFTER the fixed-size pad above,
+       not at the tight __text_end boundary, since that pad now physically owns every byte up to
+       the end of int_pflash's own declared 128KB. This spills .data's (small) LMA storage a few
+       bytes past that nominal boundary, into the still-unclaimed flash between here and the
+       Provisioning app at 0x004C2000 - plenty of headroom, and still real, valid flash. */
+    __sram_data_rom = ORIGIN(int_pflash) + LENGTH(int_pflash);
+
+    /* Holds AppSmr_PublicKeyXY/SignatureR/SignatureS (HSE_AppSmrProvision.c) - deliberately
+       placed in a wholly separate physical flash bank (Data Flash) from the SMR-measured region
+       [__text_start, __text_end) in int_pflash above. HSE_SRV_ID_SMR_ENTRY_INSTALL (with
+       HSE_SMR_CFG_FLAG_INSTALL_AUTH) re-checks the live bytes at [__text_start, __text_end)
+       against the supplied signature AT INSTALL TIME, not just at verify time - so if this key/
+       signature data lived inside that measured range, embedding a real (non-zero) signature
+       would itself change the bytes being checked, and install would never succeed (confirmed:
+       HSE_SRV_RSP_VERIFY_FAILED every time, and the entry was never actually recorded - checked
+       directly via HSE_SMR_CORE_BOOT_STATUS_ATTR_ID). Keeping this data here means the measured
+       region is identical bit-for-bit regardless of whether real or placeholder key/signature
+       data is compiled in. */
+    .appsmr_keydata :
+    {
+        . = ALIGN(4);
+        __appsmr_keydata_start = .;
+        KEEP(*(.appsmr_keydata))
+        . = ALIGN(4);
+        __appsmr_keydata_end = .;
+    } > int_dflash
 
     .sram_bss (NOLOAD) :
     {

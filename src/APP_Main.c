@@ -26,7 +26,7 @@ extern "C"{
 #include "HSE_FlashStorage_Example.h"
 #include "HSE_SecureBoot.h"
 #include "HSE_Mac_Ecc_Example.h"
-#include "HSE_AppSmrProvision.h"
+#include "HSE_AppSmrProvision2.h"
 #include "UART_Print.h"
 #include "LED.h"
 
@@ -37,10 +37,6 @@ extern "C"{
 
 //#define RUN_SECURE_BOOT_PHASE1_DEMO
 //#define RUN_MAC_ECC_EXAMPLE
-/* RUN_APP_SMR_PROVISIONING is toggled in HSE_AppSmrProvision.h instead of here - that file's
-   entire body (not just this call site) must disappear when it's off, so the macro needs to be
-   visible to that translation unit too, not just this one. See that header's file-level
-   @details for the required two-build sequence before flipping it on. */
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
@@ -110,14 +106,43 @@ extern "C"{
 	    	 	 HSE_Init();
 //	    	 	 uint32_t lpuart1FreqAfter = (uint32_t)Clock_Ip_GetClockFrequency(LPUART1_CLK);
 //	    	 	 UART_Print_Status("HSE_Status", (uint32_t)HSE_Status, (uint32_t)HSE_VER_OK);
-	    	 	 /* Confirms whether RUN_FORMAT_KEY_CATALOGS_IN_INIT actually reformatted the
-	    	 	    catalogs this boot, or silently skipped because HSE_STATUS_INSTALL_OK was
-	    	 	    already set from an earlier provisioning run - see HSE_Main.c's own comment
-	    	 	    right before this call. Always safe to print: defaults to GENERAL_ERROR when
-	    	 	    that macro is off. */
-	    	 	 UART_Print_HseResponse("HSE FormatKeyCatalogs", HSE_FormatKeyCatalogsResponse);
-	    	 	 UART_Print_Bool("HSE CatalogsWereAlreadyInstalled", HSE_CatalogsWereAlreadyInstalled);
 //	    	 	 HSE_Example_StoreEncryptedDataDemo();
+#ifdef PROVISION_APP_BUILD
+		    	 	 /* Only the Provisioning app actually formats/reformats NVM catalogs - see
+		    	 	    HSE_Main.c's PROVISION_APP_BUILD gating right before this call. Main app
+		    	 	    never runs that path at all, so these prints are Provisioning-app-only too -
+		    	 	    they'd otherwise always read back OK/true for Main app without meaning
+		    	 	    anything, since it unconditionally skips the real format call. */
+		    	 	 UART_Print_HseResponse("HSE FormatKeyCatalogs", HSE_FormatKeyCatalogsResponse);
+		    	 	 UART_Print_Bool("HSE CatalogsWereAlreadyInstalled", HSE_CatalogsWereAlreadyInstalled);
+		    	 	 /* Flash_Load_KEY build only (see HSE_AppSmrProvision2.h) - import Main app's
+		    	 	    real verify key and install its SMR entry, then halt and report. Never jumps
+		    	 	    into Main app itself - the operator resets and uses SW1 for that. */
+		    	 	 HSE_AppSmr2_Provision();
+		    	 	 UART_Print_HseResponse("AppSmr2 HseInit", HSE_AppSmr2_HseInitResponse);
+		    	 	 UART_Print_HseResponse("AppSmr2 GetVerifyKeyInfo", HSE_AppSmr2_GetVerifyKeyInfoResponse);
+		    	 	 UART_Print_HseResponse("AppSmr2 ImportVerifyKey", HSE_AppSmr2_ImportVerifyKeyResponse);
+		    	 	 UART_Print_HseResponse("AppSmr2 InstallEntry", HSE_AppSmr2_InstallEntryResponse);
+		    	 	 UART_Print_String("=== Provisioning complete - halting ===\r\n");
+		    	 	 LED_AllOff();
+		    	 	 for(;;)
+		    	 	 {
+		    	 		 LED_ToggleLED(LED_CYAN_PIN);
+		    	 		 for(uint32_t count=0; count < 1000000U; count++)
+		    	 		 {
+		    	 			 __asm volatile ("nop");
+		    	 		 }
+		    	 	 }
+#else
+	    	 	 /* Main app (Release_FLASH/Debug_FLASH) never installs or verifies its own SMR
+	    	 	    entry, and never formats/checks the NVM key catalog either - the Provisioning
+	    	 	    app (this same project's "Flash_Load_KEY" build config, above) owns both, and
+	    	 	    Bootlaoder owns verification before this app is ever jumped into. Report actual
+	    	 	    HSE state here instead of a static string - HSE_Status is set inside HSE_Init()
+	    	 	    itself: HSE_VER_OK means the driver came up AND HSE_checkHseVersion() confirmed
+	    	 	    the firmware version matches what this build expects (HSE_VER_NOK or NO_HSE
+	    	 	    otherwise - see HSE_Main.c's HSE_Init()). */
+	    	 	 UART_Print_Status("HSE Init", (uint32_t)HSE_Status, (uint32_t)HSE_VER_OK);
 #ifdef RUN_SECURE_BOOT_PHASE1_DEMO
 	    	 	 HSE_SecureBoot_Phase1_Demo();
 	    	 	 UART_Print_HseResponse("SecureBoot ImportSmrSignKeyRam", HSE_ImportSmrSignKeyRamResponse);
@@ -137,28 +162,13 @@ extern "C"{
 	    	 	 UART_Print_Bool("Mac FlashRoundTripVerified", HSE_Mac_FlashRoundTripVerified);
 	    	 	 UART_Print_Bool("Ecc FlashRoundTripVerified", HSE_Ecc_FlashRoundTripVerified);
 #endif // RUN_MAC_ECC_EXAMPLE
-#ifdef RUN_APP_SMR_PROVISIONING
-	    	 	 /* One-time provisioning build (BOOTLOADER_SECURE_BOOT_PLAN.md Stage 2) - see
-	    	 	    HSE_AppSmrProvision.h's file-level @details. Flash this once, confirm
-	    	 	    HSE_AppSmr_ImportVerifyKeyResponse and HSE_AppSmr_InstallEntryResponse ==
-	    	 	    HSE_SRV_RSP_OK via debugger, then flip the flag back OFF in
-	    	 	    HSE_AppSmrProvision.h and reflash the original all-zero build (the one you
-	    	 	    actually ran tools/sign_tool.py against) permanently - that's what Bootlaoder
-	    	 	    will check going forward. Also needs the NVM ECC_PUB catalog group added in
-	    	 	    HSE_Main.c, same reformat caveat as the RAM ECC groups. */
-	    	 	 HSE_AppSmr_Provision_Demo();
-	    	 	 UART_Print_HseResponse("AppSmr GetVerifyKeyInfo", HSE_AppSmr_GetVerifyKeyInfoResponse);
-	    	 	 UART_Print_HseResponse("AppSmr ImportVerifyKey", HSE_AppSmr_ImportVerifyKeyResponse);
-	    	 	 UART_Print_HseResponse("AppSmr InstallEntry", HSE_AppSmr_InstallEntryResponse);
-#endif // RUN_APP_SMR_PROVISIONING
-#ifdef RUN_APP_SMR_SIGNATURE_UPDATE
-	    	 	 /* Re-enters just a new signature (same already-imported key) - the normal path
-	    	 	    after a rebuild that changed __text_start..__text_end, once app_smr_provision_
-	    	 	    data.h has been regenerated with tools/sign_tool.py's sign+header commands. */
-	    	 	 HSE_AppSmr_UpdateSignature();
-	    	 	 UART_Print_HseResponse("AppSmr UpdateSignature", HSE_AppSmr_UpdateSignatureResponse);
-#endif // RUN_APP_SMR_SIGNATURE_UPDATE
+	    	 	 /* Main app (Release_FLASH/Debug_FLASH) never installs or verifies its own SMR
+	    	 	    entry - the Provisioning app (this same project's "Flash_Load_KEY" build config,
+	    	 	    above) owns installation, and Bootlaoder owns verification before this app is
+	    	 	    ever jumped into. No install-capable code, key, or signature data is compiled
+	    	 	    into this build at all. */
 	    	 	 UART_Print_String("=== Provisioning/demo sequence complete ===\r\n");
+#endif // PROVISION_APP_BUILD
 	    	 	 /* Diagnostic: is HSE_Init() changing the LPUART1 functional clock? Both readings
 	    	 	    are reported through this known-clean print call rather than the currently
 	    	 	    corrupted HSE_Status one, so the comparison itself can't be hidden by whatever
@@ -195,6 +205,10 @@ extern "C"{
 	    	 {
 	    		 LED_ToggleLED(LED_CYAN_PIN);
 	    	 }
+//	    	 else
+//	    	 {
+//	    		 LED_ToggleLED(LED_CYAN_PIN);
+//	    	 }
 
 
 	     }

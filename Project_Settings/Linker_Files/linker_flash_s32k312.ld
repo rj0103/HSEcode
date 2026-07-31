@@ -113,6 +113,26 @@ SECTIONS
     __text_end = .;
     __sram_data_rom = __text_end;
 
+    /* Holds AppSmr_PublicKeyXY/SignatureR/SignatureS (HSE_AppSmrProvision.c) - deliberately
+       placed in a wholly separate physical flash bank (Data Flash) from the SMR-measured region
+       [__text_start, __text_end) in int_pflash above. HSE_SRV_ID_SMR_ENTRY_INSTALL (with
+       HSE_SMR_CFG_FLAG_INSTALL_AUTH) re-checks the live bytes at [__text_start, __text_end)
+       against the supplied signature AT INSTALL TIME, not just at verify time - so if this key/
+       signature data lived inside that measured range, embedding a real (non-zero) signature
+       would itself change the bytes being checked, and install would never succeed (confirmed:
+       HSE_SRV_RSP_VERIFY_FAILED every time, and the entry was never actually recorded - checked
+       directly via HSE_SMR_CORE_BOOT_STATUS_ATTR_ID). Keeping this data here means the measured
+       region is identical bit-for-bit regardless of whether real or placeholder key/signature
+       data is compiled in. */
+    .appsmr_keydata :
+    {
+        . = ALIGN(4);
+        __appsmr_keydata_start = .;
+        KEEP(*(.appsmr_keydata))
+        . = ALIGN(4);
+        __appsmr_keydata_end = .;
+    } > int_dflash
+
     .sram_bss (NOLOAD) :
     {
         . = ALIGN(8);

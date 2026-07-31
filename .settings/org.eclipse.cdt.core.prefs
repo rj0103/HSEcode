@@ -9,6 +9,11 @@ environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.debug.ram.
 environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.debug.ram.190671820/PATH/value=
 environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.debug.ram.190671820/append=true
 environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.debug.ram.190671820/appendContributed=true
+environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.release.986767161.401198835/PATH/delimiter=;
+environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.release.986767161.401198835/PATH/operation=prepend
+environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.release.986767161.401198835/PATH/value=
+environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.release.986767161.401198835/append=true
+environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.release.986767161.401198835/appendContributed=true
 environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.release.986767161/PATH/delimiter=;
 environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.release.986767161/PATH/operation=prepend
 environment/project/com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.release.986767161/PATH/value=

@@ -142,11 +142,11 @@ extern "C"{
 const Lpuart_Uart_Ip_UserConfigType Lpuart_Uart_Ip_xHwConfigPB_1 =
 {
     /* Actual baudrate */
-    115384U,
+    38412U,
     /* Baudrate mantissa*/
-    10U,
+    71U,
     /* Baudrate Divisor*/
-    26U,
+    11U,
     /* Parity type */
     LPUART_UART_IP_PARITY_DISABLED,
     /* Number of stop bits, 1 stop bit (default) or 2 stop bits */
